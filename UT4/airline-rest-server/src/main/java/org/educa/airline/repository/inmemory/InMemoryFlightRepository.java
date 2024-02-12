@@ -3,13 +3,14 @@ package org.educa.airline.repository.inmemory;
 import org.educa.airline.entity.Flight;
 import org.educa.airline.repository.FlightRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Component
+@Repository
 public class InMemoryFlightRepository implements FlightRepository {
     private final Map<String, Flight> flights = new HashMap<>();
 

@@ -8,4 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LuggageDTO {
+    private int id;
+    private String nif;
+    private String flightId;
+    private String description;
 }

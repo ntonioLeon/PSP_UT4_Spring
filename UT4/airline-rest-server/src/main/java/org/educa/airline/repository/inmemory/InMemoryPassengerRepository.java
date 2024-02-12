@@ -3,6 +3,7 @@ package org.educa.airline.repository.inmemory;
 import org.educa.airline.entity.Passenger;
 import org.educa.airline.repository.PassengerRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Component
+@Repository
 public class InMemoryPassengerRepository implements PassengerRepository {
     // Por cada vuelo, habrá un mapa de pasajeros
     private final Map<String, Map<String, Passenger>> passengers = new HashMap<>();
