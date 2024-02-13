@@ -2,8 +2,6 @@ package org.educa.airline.services;
 
 import org.educa.airline.entity.Flight;
 import org.educa.airline.repository.inmemory.InMemoryFlightRepository;
-import org.educa.airline.repository.inmemory.InMemoryLuggageRepository;
-import org.educa.airline.repository.inmemory.InMemoryPassengerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +30,13 @@ public class FlightService {
 
     public List<Flight> obtenerVuelosPorOriYDes(String origin, String destination) {
         return inMemoryFlightRepository.list(origin, destination);
+    }
+
+    public Flight getAFlight(String idVuelo) {
+        return inMemoryFlightRepository.getFlight(idVuelo);
+    }
+
+    public boolean agregar(Flight flight) {
+        return inMemoryFlightRepository.add(flight);
     }
 }
