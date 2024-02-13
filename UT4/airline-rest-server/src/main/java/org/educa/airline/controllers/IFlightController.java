@@ -26,15 +26,9 @@ public interface IFlightController {
     //POST
     public ResponseEntity<Void> addAFlight(@RequestBody FlightDTO flightDTO);
 
-    //GET
-    public ResponseEntity<FlightDTO> isAPassengerOnAFlight(@PathVariable("id_vuelo") String id_vuelo, @PathVariable("nif") String nif);
-
     //PUT
-    public ResponseEntity<Void> updatePassengerInAFlight(@PathVariable("id_vuelo") String id_vuelo, @PathVariable("nif") String nif, @RequestBody PassengerDTO passengerDTO);
+    public ResponseEntity<Void> updateFlight(@PathVariable("id_vuelo") String id_vuelo, @RequestBody FlightDTO flightDTO);
 
     //DELETE
-    public ResponseEntity<Void> deletePassegerFromAFlight(@PathVariable("id_vuelo") String id_vuelo, @PathVariable("nif") String nif);
-
-    //GET
-    public ResponseEntity<List<PassengerDTO>> getAllPassengerOnAFlight(@PathVariable("id_vuelo") String id_vuelo);
+    public ResponseEntity<Void> deleteFlight(@PathVariable("id_vuelo") String id_vuelo);
 }

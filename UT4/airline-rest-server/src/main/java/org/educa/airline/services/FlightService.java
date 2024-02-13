@@ -39,4 +39,12 @@ public class FlightService {
     public boolean agregar(Flight flight) {
         return inMemoryFlightRepository.add(flight);
     }
+
+    public boolean update(String idVuelo, Flight flight) {
+        return inMemoryFlightRepository.updateFlight(idVuelo, flight);
+    }
+
+    public boolean delete(String idVuelo) {
+        return inMemoryFlightRepository.delete(idVuelo);
+    }
 }
