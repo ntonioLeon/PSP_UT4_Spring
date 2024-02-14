@@ -1,5 +1,6 @@
 package org.educa.airline.controllers.implecontroller;
 
+import jakarta.validation.Valid;
 import org.educa.airline.controllers.IFlightController;
 import org.educa.airline.dto.FlightDTO;
 import org.educa.airline.dto.PassengerDTO;
@@ -71,7 +72,7 @@ public class FlightController implements IFlightController {
      */
     @Override
     @PostMapping(path = "/flights/add")
-    public ResponseEntity<Void> addAFlight(@RequestBody FlightDTO flightDTO) {
+    public ResponseEntity<Void> addAFlight(@Valid @RequestBody FlightDTO flightDTO) {
         if (flightService.agregar(flightMapper.toEntity(flightDTO))) {
             return ResponseEntity.ok().build();
         } else {

@@ -1,8 +1,8 @@
 package org.educa.airline.controllers.implecontroller;
 
 import org.educa.airline.controllers.IPassengerController;
-import org.educa.airline.dto.FlightDTO;
 import org.educa.airline.dto.PassengerDTO;
+import org.educa.airline.entity.Passenger;
 import org.educa.airline.exceptions.MiValidacionException;
 import org.educa.airline.mappers.PassengerMapper;
 import org.educa.airline.services.PassengerService;
@@ -38,34 +38,86 @@ public class PassengerControler implements IPassengerController {
         } catch (MiValidacionException ex) {
             return ResponseEntity.badRequest().build();
         }
-        /*
-        Se devolverá un HTTP Status CREATED si ha sido creado.
-        Si no existe el vuelo se devolverá un NOT_FOUND
-        Si hay algún tipo de error en la validación del pasajero se devolverá un HTTP Status BAD REQUEST
-         */
     }
 
+    /**
+     * GET
+     * @param id_vuelo
+     * @param nif
+     * @return
+     */
     @Override
     @GetMapping(path = "/flights/{id_vuelo}/passenger/{nif}")
-    public ResponseEntity<FlightDTO> isAPassengerOnAFlight(@PathVariable("id_vuelo") String id_vuelo, @PathVariable("nif") String nif) {
-        return null;
+    public ResponseEntity<PassengerDTO> isAPassengerOnAFlight(@PathVariable("id_vuelo") String id_vuelo, @PathVariable("nif") String nif) {
+        Passenger passenger = passengerService.getPassengerByIdAndNif(id_vuelo, nif);
+        if (passenger != null) {
+            return ResponseEntity.ok(passengerMapper.toDTO(passenger));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
+    /**
+     * PUT
+     * @param id_vuelo
+     * @param nif
+     * @param passengerDTO
+     * @return
+     */
     @Override
     @PutMapping(path = "/flights/{id_vuelo}/passenger/{nif}")
     public ResponseEntity<Void> updatePassengerInAFlight(@PathVariable("id_vuelo") String id_vuelo, @PathVariable("nif") String nif, @RequestBody PassengerDTO passengerDTO) {
-        return null;
+        try {
+            if (passengerService.update(id_vuelo, nif, passengerMapper.toEntity(passengerDTO))) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (MiValidacionException ex) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
+    /**
+     * DELETE
+     * @param id_vuelo
+     * @param nif
+     * @return
+     */
     @Override
     @DeleteMapping(path = "/flights/{id_vuelo}/passenger/{nif}")
     public ResponseEntity<Void> deletePassegerFromAFlight(@PathVariable("id_vuelo") String id_vuelo, @PathVariable("nif") String nif) {
-        return null;
+        if (passengerService.delete(id_vuelo, nif)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
+    /**
+     * GET
+     * @param id_vuelo
+     * @return
+     */
     @Override
     @GetMapping(path = "/flights/{id_vuelo}/passenger")
     public ResponseEntity<List<PassengerDTO>> getAllPassengerOnAFlight(@PathVariable("id_vuelo") String id_vuelo) {
-        return null;
+        List<Passenger> passengers = passengerService.getAllPassengersOfAFlight(id_vuelo);
+        if (!passengers.isEmpty()) {
+            return ResponseEntity.ok(passengerMapper.toDTOs(passengers));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @Override
+    @GetMapping(path = "/flights/passenger/all")
+    public ResponseEntity<List<PassengerDTO>> getAllPassenger() {
+        List<Passenger> passengers = passengerService.getAllPassengers();
+        if (!passengers.isEmpty()) {
+            return ResponseEntity.ok(passengerMapper.toDTOs(passengers));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
