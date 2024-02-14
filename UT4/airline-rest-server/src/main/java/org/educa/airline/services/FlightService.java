@@ -2,6 +2,7 @@ package org.educa.airline.services;
 
 import org.educa.airline.entity.Flight;
 import org.educa.airline.repository.inmemory.InMemoryFlightRepository;
+import org.educa.airline.services.validador.ValidadorDeCampos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +12,13 @@ import java.util.List;
 @Service
 public class FlightService {
 
-    private InMemoryFlightRepository inMemoryFlightRepository;
+    private final InMemoryFlightRepository inMemoryFlightRepository;
+    private final ValidadorDeCampos validadorDeCampos;
 
     @Autowired
-    public FlightService(InMemoryFlightRepository inMemoryFlightRepository) {
+    public FlightService(InMemoryFlightRepository inMemoryFlightRepository, ValidadorDeCampos validadorDeCampos) {
         this.inMemoryFlightRepository = inMemoryFlightRepository;
+        this.validadorDeCampos = validadorDeCampos;
     }
 
     public Flight UnVueloPorFecha(String idVuelo, Date date) {

@@ -3,16 +3,10 @@ package org.educa.airline.controllers.implecontroller;
 import jakarta.validation.Valid;
 import org.educa.airline.controllers.IFlightController;
 import org.educa.airline.dto.FlightDTO;
-import org.educa.airline.dto.PassengerDTO;
 import org.educa.airline.entity.Flight;
-import org.educa.airline.exceptions.MiValidacionException;
 import org.educa.airline.mappers.FlightMapper;
-import org.educa.airline.mappers.PassengerMapper;
 import org.educa.airline.services.FlightService;
-import org.educa.airline.services.PassengerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +16,8 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/flights")
 public class FlightController implements IFlightController {
-    private FlightService flightService;
-    private FlightMapper flightMapper;
+    private final FlightService flightService;
+    private final FlightMapper flightMapper;
 
     @Autowired
     public FlightController(FlightService flightService, FlightMapper flightMapper) {

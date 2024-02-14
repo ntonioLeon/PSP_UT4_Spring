@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
 public class PassengerControler implements IPassengerController {
 
-    PassengerService passengerService;
+    private final PassengerService passengerService;
 
-    PassengerMapper passengerMapper;
+    private final PassengerMapper passengerMapper;
 
     @Autowired
     PassengerControler(PassengerService passengerService, PassengerMapper passengerMapper) {

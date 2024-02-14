@@ -5,6 +5,7 @@ import org.educa.airline.entity.Passenger;
 import org.educa.airline.exceptions.MiValidacionException;
 import org.educa.airline.repository.inmemory.InMemoryFlightRepository;
 import org.educa.airline.repository.inmemory.InMemoryPassengerRepository;
+import org.educa.airline.services.validador.ValidadorDeCampos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,14 +14,16 @@ import java.util.List;
 @Service
 public class PassengerService {
 
-    InMemoryPassengerRepository inMemoryPassengerRepository;
-    InMemoryFlightRepository inMemoryFlightRepository;
+    private final InMemoryPassengerRepository inMemoryPassengerRepository;
+    private final InMemoryFlightRepository inMemoryFlightRepository;
+    private final ValidadorDeCampos validadorDeCampos;
 
 
     @Autowired
-    PassengerService(InMemoryPassengerRepository inMemoryPassengerRepository, InMemoryFlightRepository inMemoryFlightRepository) {
+    PassengerService(InMemoryPassengerRepository inMemoryPassengerRepository, InMemoryFlightRepository inMemoryFlightRepository, ValidadorDeCampos validadorDeCampos) {
         this.inMemoryPassengerRepository = inMemoryPassengerRepository;
         this.inMemoryFlightRepository = inMemoryFlightRepository;
+        this.validadorDeCampos = validadorDeCampos;
     }
 
     public boolean asociarVueloYPasagero(String idVuelo, Passenger passenger) throws MiValidacionException {
