@@ -18,7 +18,7 @@ public class FlightMapper {
     public List<FlightDTO> toDTOs(List<Flight> vuelos) {
         List<FlightDTO> vuelosDTO = new ArrayList<>();
         for (Flight vuelo : vuelos) {
-            vuelosDTO.add(new FlightDTO(vuelo.getId(), vuelo.getOrigin(), vuelo.getDestination(), vuelo.getDate()));
+            vuelosDTO.add(new FlightDTO(vuelo.getCod(), vuelo.getId(), vuelo.getOrigin(), vuelo.getDestination(), vuelo.getDate()));
         }
         return vuelosDTO;
     }
@@ -29,7 +29,7 @@ public class FlightMapper {
      * @return
      */
     public FlightDTO toDTO(Flight vuelo) {
-        return new FlightDTO(vuelo.getId(), vuelo.getOrigin(), vuelo.getDestination(), vuelo.getDate());
+        return new FlightDTO(vuelo.getCod(), vuelo.getId(), vuelo.getOrigin(), vuelo.getDestination(), vuelo.getDate());
     }
 
     /**
@@ -38,7 +38,7 @@ public class FlightMapper {
      * @return
      */
     public Flight toEntity(FlightDTO flightDTO) {
-        return new Flight(flightDTO.getId(), flightDTO.getOrigin(), flightDTO.getDestination(), flightDTO.getDate());
+        return new Flight(flightDTO.getCod(), flightDTO.getId(), flightDTO.getOrigin(), flightDTO.getDestination(), flightDTO.getDate());
     }
 
     /**
@@ -49,7 +49,7 @@ public class FlightMapper {
     public List<Flight> toEntities(List<FlightDTO> vuelos) {
         List<Flight> vuelosENT = new ArrayList<>();
         for (FlightDTO vuelo : vuelos) {
-            vuelosENT.add(new Flight(vuelo.getId(), vuelo.getOrigin(), vuelo.getDestination(), vuelo.getDate()));
+            vuelosENT.add(new Flight(vuelo.getCod(), vuelo.getId(), vuelo.getOrigin(), vuelo.getDestination(), vuelo.getDate()));
         }
         return vuelosENT;
     }

@@ -8,6 +8,12 @@ public class Cliente {
     private ClientePassenger clientePassenger;
     private ClienteLuggage clienteLuggage;
 
+    public Cliente() {
+        this.clienteFlight = new ClienteFlight();
+        this.clientePassenger = new ClientePassenger();
+        this.clienteLuggage = new ClienteLuggage();
+    }
+
     public void run() throws Exception {
         int opt = -1;
         System.out.println("Bienvenido al cliente de la tarea UT4!");

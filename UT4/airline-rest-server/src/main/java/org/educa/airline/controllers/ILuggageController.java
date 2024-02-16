@@ -10,10 +10,10 @@ import java.util.List;
 public interface ILuggageController {
 
     //GET
-    public ResponseEntity<LuggageDTO> getALulaggeFromAFlight(@PathVariable("id") int id, @PathVariable("id_vuelo") String id_vuelo, @PathVariable("nif") String nif);
+    public ResponseEntity<LuggageDTO> getALulaggeFromAFlight(@PathVariable("id") int id, @PathVariable("cod") String cod, @PathVariable("nif") String nif);
 
     //GET
-    public ResponseEntity<List<LuggageDTO>> getAllLulaggesFromAFlight(@PathVariable("id_vuelo") String id_vuelo);
+    public ResponseEntity<List<LuggageDTO>> getAllLulaggesFromAFlight(@PathVariable("cod") String cod);
 
     //POST
     public ResponseEntity<Void> addALuggageFromAFlight(@RequestBody LuggageDTO luggageDTO); //Sacare el id de vuelo y el nif del propio objeto
@@ -22,5 +22,5 @@ public interface ILuggageController {
     public ResponseEntity<Void> updateALuggageFromAFlight(@RequestBody LuggageDTO luggageDTO); //Sacare el id de vuelo y el nif del propio objeto
 
     //DELETE
-    public ResponseEntity<Void> deleteLuggageFromAFlight(@PathVariable("id") int id, @PathVariable("id_vuelo") String id_vuelo);
+    public ResponseEntity<Void> deleteLuggageFromAFlight(@PathVariable("id") int id, @PathVariable("cod") String cod);
 }

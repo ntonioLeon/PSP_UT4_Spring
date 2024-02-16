@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PassengerDTO {
     private String nif;
-    private String flightId;
+    private String flightCod;
     private String name;
     private String surname;
     private String email;

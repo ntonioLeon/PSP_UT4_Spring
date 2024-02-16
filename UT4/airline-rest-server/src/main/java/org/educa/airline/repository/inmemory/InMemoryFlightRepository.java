@@ -27,15 +27,15 @@ public class InMemoryFlightRepository implements FlightRepository {
 
     @Override
     public Flight getFlight(
-            String flightId
+            String cod
     ) {
-        return flights.get(flightId);
+        return flights.get(cod);
     }
 
     @Override
     public boolean add(Flight flight) {
-        if (!flights.containsKey(flight.getId())) {
-            flights.put(flight.getId(), flight);
+        if (!flights.containsKey(flight.getCod())) {
+            flights.put(flight.getCod(), flight);
             return true;
         } else {
             return false;
@@ -44,14 +44,14 @@ public class InMemoryFlightRepository implements FlightRepository {
 
     @Override
     public boolean updateFlight(
-            String flightId,
+            String cod,
             Flight flight
     ) {
         // 3 -> Madrid - Londres
         // 4 -> 1 Madrid - Berlin
-        if (flights.containsKey(flightId)) {
-            flights.remove(flightId);
-            flights.put(flight.getId(), flight);
+        if (flights.containsKey(cod)) {
+            flights.remove(cod);
+            flights.put(flight.getCod(), flight);
             return true;
         } else {
             return false;
@@ -59,9 +59,9 @@ public class InMemoryFlightRepository implements FlightRepository {
     }
 
     @Override
-    public boolean delete(String flightId) {
-        if (flights.containsKey(flightId)) {
-            flights.remove(flightId);
+    public boolean delete(String cod) {
+        if (flights.containsKey(cod)) {
+            flights.remove(cod);
             return true;
         } else {
             return false;

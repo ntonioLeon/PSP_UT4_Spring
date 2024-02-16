@@ -16,7 +16,7 @@ public class PassengerMapper {
      * @return
      */
     public Passenger toEntity(PassengerDTO passengerDTO) {
-        return new Passenger(passengerDTO.getNif(), passengerDTO.getFlightId(), passengerDTO.getName(), passengerDTO.getSurname(), passengerDTO.getEmail(), passengerDTO.getSeatNumber());
+        return new Passenger(passengerDTO.getNif(), passengerDTO.getFlightCod(), passengerDTO.getName(), passengerDTO.getSurname(), passengerDTO.getEmail(), passengerDTO.getSeatNumber());
     }
 
     /**
@@ -25,7 +25,7 @@ public class PassengerMapper {
      * @return
      */
     public PassengerDTO toDTO(Passenger passenger) {
-        return new PassengerDTO(passenger.getNif(), passenger.getFlightId(), passenger.getName(), passenger.getSurname(), passenger.getEmail(), passenger.getSeatNumber());
+        return new PassengerDTO(passenger.getNif(), passenger.getFlightCod(), passenger.getName(), passenger.getSurname(), passenger.getEmail(), passenger.getSeatNumber());
     }
 
     /**
@@ -36,7 +36,7 @@ public class PassengerMapper {
     public List<PassengerDTO> toDTOs(List<Passenger> passengers) {
         List<PassengerDTO> passengerDTOs = new ArrayList<>();
         for (Passenger passenger : passengers) {
-            passengerDTOs.add(new PassengerDTO(passenger.getNif(), passenger.getFlightId(), passenger.getName(), passenger.getSurname(), passenger.getEmail(), passenger.getSeatNumber()));
+            passengerDTOs.add(new PassengerDTO(passenger.getNif(), passenger.getFlightCod(), passenger.getName(), passenger.getSurname(), passenger.getEmail(), passenger.getSeatNumber()));
 
         }
         return passengerDTOs;
@@ -50,7 +50,7 @@ public class PassengerMapper {
     public List<Passenger> toEntities(List<PassengerDTO> passengersDTO) {
         List<Passenger> passengers = new ArrayList<>();
         for (PassengerDTO passengerDTO : passengersDTO) {
-            passengers.add(new Passenger(passengerDTO.getNif(), passengerDTO.getFlightId(), passengerDTO.getName(), passengerDTO.getSurname(), passengerDTO.getEmail(), passengerDTO.getSeatNumber()));
+            passengers.add(new Passenger(passengerDTO.getNif(), passengerDTO.getFlightCod(), passengerDTO.getName(), passengerDTO.getSurname(), passengerDTO.getEmail(), passengerDTO.getSeatNumber()));
 
         }
         return passengers;

@@ -16,7 +16,7 @@ public class LuggageMapper {
      * @return
      */
     public Luggage toEntity(LuggageDTO luggageDTO) {
-        return new Luggage(luggageDTO.getId(), luggageDTO.getNif(), luggageDTO.getFlightId(), luggageDTO.getDescription());
+        return new Luggage(luggageDTO.getId(), luggageDTO.getNif(), luggageDTO.getFlightCod(), luggageDTO.getDescription());
     }
 
     /**
@@ -25,7 +25,7 @@ public class LuggageMapper {
      * @return
      */
     public LuggageDTO toDTO(Luggage luggage) {
-        return new LuggageDTO(luggage.getId(), luggage.getNif(), luggage.getFlightId(), luggage.getDescription());
+        return new LuggageDTO(luggage.getId(), luggage.getNif(), luggage.getFlightCod(), luggage.getDescription());
     }
 
     /**
@@ -36,7 +36,7 @@ public class LuggageMapper {
     public List<LuggageDTO> toDTOs(List<Luggage> luggages) {
         List<LuggageDTO> luggageDTOs = new ArrayList<>();
         for (Luggage luggage : luggages) {
-            luggageDTOs.add(new LuggageDTO(luggage.getId(), luggage.getNif(), luggage.getFlightId(), luggage.getDescription()));
+            luggageDTOs.add(new LuggageDTO(luggage.getId(), luggage.getNif(), luggage.getFlightCod(), luggage.getDescription()));
 
         }
         return luggageDTOs;
@@ -50,7 +50,7 @@ public class LuggageMapper {
     public List<Luggage> toEntities(List<LuggageDTO> luggagesDTO) {
         List<Luggage> luggages = new ArrayList<>();
         for (LuggageDTO luggageDTO : luggagesDTO) {
-            luggages.add(new Luggage(luggageDTO.getId(), luggageDTO.getNif(), luggageDTO.getFlightId(), luggageDTO.getDescription()));
+            luggages.add(new Luggage(luggageDTO.getId(), luggageDTO.getNif(), luggageDTO.getFlightCod(), luggageDTO.getDescription()));
         }
         return luggages;
     }

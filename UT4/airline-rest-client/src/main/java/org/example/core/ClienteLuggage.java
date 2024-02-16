@@ -8,33 +8,28 @@ public class ClienteLuggage {
     LuggageService luggageService = new LuggageService();
 
     public void run(Scanner scanner) throws Exception {
-        int opt = -1;
-        while (opt != 0) {
+        String opt = "-1";
+        while (!"0".equals(opt)) {
             menuLuggage();
-            try {
-                opt = scanner.nextInt();
-            } catch (Exception ex) {
-                System.out.println("Introduzca únicamente números enteros ");
-            }
-            scanner.nextLine();
+            opt = scanner.nextLine();
             switch (opt) {
-                case 0:
+                case "0":
                     System.out.println("Volviendo al menu principal.");
                     break;
-                case 1:
+                case "1":
 
                     break;
-                case 2:
+                case "2":
 
                     break;
-                case 3:
+                case "3":
 
                     break;
-                case 4:
+                case "4":
 
                     break;
                 default:
-                    System.err.println("opción no valida");
+                    System.err.println("opción no valida.");
             }
         }
     }

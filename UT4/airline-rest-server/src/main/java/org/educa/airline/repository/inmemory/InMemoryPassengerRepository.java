@@ -73,10 +73,10 @@ public class InMemoryPassengerRepository implements PassengerRepository {
      */
     @Override
     public boolean addPassenger(Passenger passenger) {
-        if (existPassenger(passenger.getFlightId(), passenger.getNif())) {
+        if (existPassenger(passenger.getFlightCod(), passenger.getNif())) {
             return false;
         } else {
-            getFlightPassengers(passenger.getFlightId()).put(passenger.getNif(), passenger);
+            getFlightPassengers(passenger.getFlightCod()).put(passenger.getNif(), passenger);
             return true;
         }
     }
@@ -90,8 +90,8 @@ public class InMemoryPassengerRepository implements PassengerRepository {
      */
     @Override
     public void updatePassenger(String nif, Passenger passenger) {
-        getFlightPassengers(passenger.getFlightId()).remove(nif);
-        getFlightPassengers(passenger.getFlightId()).put(passenger.getNif(), passenger);
+        getFlightPassengers(passenger.getFlightCod()).remove(nif);
+        getFlightPassengers(passenger.getFlightCod()).put(passenger.getNif(), passenger);
     }
 
     private Map<String, Passenger> getFlightPassengers(String flightId) {

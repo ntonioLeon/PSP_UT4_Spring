@@ -63,7 +63,7 @@ public class Connection {
         }
     }
 
-    public String doDelete(String url) throws Exception {
+    public String doDelete(String url) throws Exception  {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .DELETE()
@@ -77,8 +77,8 @@ public class Connection {
                 return respuesta.body();
             } else if (respuesta.statusCode() == 404) {
                 throw new NotFoundException();
-            } else {
-                throw new Exception("Error: " + respuesta.statusCode());
+            }  else {
+                throw new Exception();
             }
         }
     }

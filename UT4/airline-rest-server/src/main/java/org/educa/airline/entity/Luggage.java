@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class Luggage {
     private int id;
     private String nif;
-    private String flightId;
+    private String flightCod;
     private String description;
 }

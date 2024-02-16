@@ -9,29 +9,30 @@ public class ClientePassenger {
     PassengerService passengerService = new PassengerService();
 
     public void run(Scanner scanner) throws Exception {
-        int opt = -1;
-        while (opt != 0) {
+        String opt = "-1";
+        while (!"0".equals(opt)) {
             menuPassenger();
-            try {
-                opt = scanner.nextInt();
-            } catch (Exception ex) {
-                System.out.println("Introduzca únicamente números enteros.");
-            }
-            scanner.nextLine();
+            opt = scanner.nextLine();
             switch (opt) {
-                case 0:
+                case "0":
                     System.out.println("Volviendo al menu principal.");
                     break;
-                case 1:
+                case "1":
+                    passengerService.createPassenger(scanner);
+                    break;
+                case "2":
+                    passengerService.associatePassenger(scanner);
+                    break;
+                case "3":
+                    passengerService.findAPassengerFromAFlight(scanner);
+                    break;
+                case "4":
 
                     break;
-                case 2:
+                case "5":
 
                     break;
-                case 3:
-
-                    break;
-                case 4:
+                case "6":
 
                     break;
                 default:
@@ -43,11 +44,12 @@ public class ClientePassenger {
     private void menuPassenger() {
         System.out.println("Menu de pasajeros:");
         System.out.println("0. Salir.");
-        System.out.println("1. ");
-        System.out.println("2. ");
-        System.out.println("3. ");
-        System.out.println("4. ");
-        System.out.println("4. ");
+        System.out.println("1. Crear pasajero.");
+        System.out.println("2. Asociar pasajero a un vuelo.");
+        System.out.println("3. Consultar si un pasajero esta en un vuelo.");
+        System.out.println("4. Actualizar un pasajero de un vuelo.");
+        System.out.println("5. Eliminar un pasajero de un vuelo.");
+        System.out.println("6. Obtener todos los psasajeros de un vuelo.");
         System.out.println("Introduzca una opción:");
     }
 }

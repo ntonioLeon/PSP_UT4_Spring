@@ -28,10 +28,10 @@ public class PassengerControler implements IPassengerController {
 
     //POST
     @Override
-    @PostMapping(path = "/flights/{id_vuelo}/passenger")
-    public ResponseEntity<Void> associatePassengerToFlight(@PathVariable("id_vuelo")String id_vuelo, @RequestBody PassengerDTO passengerDTO) {
+    @PostMapping(path = "/flights/{cod}/passenger")
+    public ResponseEntity<Void> associatePassengerToFlight(@PathVariable("cod")String cod, @RequestBody PassengerDTO passengerDTO) {
         try {
-            if (passengerService.asociarVueloYPasagero(id_vuelo, passengerMapper.toEntity(passengerDTO))) {
+            if (passengerService.asociarVueloYPasagero(cod, passengerMapper.toEntity(passengerDTO))) {
                 return ResponseEntity.status(HttpStatus.CREATED).build();
             } else {
                 return ResponseEntity.notFound().build();
@@ -43,14 +43,14 @@ public class PassengerControler implements IPassengerController {
 
     /**
      * GET
-     * @param id_vuelo
+     * @param cod
      * @param nif
      * @return
      */
     @Override
-    @GetMapping(path = "/flights/{id_vuelo}/passenger/{nif}")
-    public ResponseEntity<PassengerDTO> isAPassengerOnAFlight(@PathVariable("id_vuelo") String id_vuelo, @PathVariable("nif") String nif) {
-        Passenger passenger = passengerService.getPassengerByIdAndNif(id_vuelo, nif);
+    @GetMapping(path = "/flights/{cod}/passenger/{nif}")
+    public ResponseEntity<PassengerDTO> isAPassengerOnAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif) {
+        Passenger passenger = passengerService.getPassengerByIdAndNif(cod, nif);
         if (passenger != null) {
             return ResponseEntity.ok(passengerMapper.toDTO(passenger));
         } else {
@@ -60,16 +60,16 @@ public class PassengerControler implements IPassengerController {
 
     /**
      * PUT
-     * @param id_vuelo
+     * @param cod
      * @param nif
      * @param passengerDTO
      * @return
      */
     @Override
-    @PutMapping(path = "/flights/{id_vuelo}/passenger/{nif}")
-    public ResponseEntity<Void> updatePassengerInAFlight(@PathVariable("id_vuelo") String id_vuelo, @PathVariable("nif") String nif, @RequestBody PassengerDTO passengerDTO) {
+    @PutMapping(path = "/flights/{cod}/passenger/{nif}")
+    public ResponseEntity<Void> updatePassengerInAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif, @RequestBody PassengerDTO passengerDTO) {
         try {
-            if (passengerService.update(id_vuelo, nif, passengerMapper.toEntity(passengerDTO))) {
+            if (passengerService.update(cod, nif, passengerMapper.toEntity(passengerDTO))) {
                 return ResponseEntity.ok().build();
             } else {
                 return ResponseEntity.notFound().build();
@@ -81,14 +81,14 @@ public class PassengerControler implements IPassengerController {
 
     /**
      * DELETE
-     * @param id_vuelo
+     * @param cod
      * @param nif
      * @return
      */
     @Override
-    @DeleteMapping(path = "/flights/{id_vuelo}/passenger/{nif}")
-    public ResponseEntity<Void> deletePassegerFromAFlight(@PathVariable("id_vuelo") String id_vuelo, @PathVariable("nif") String nif) {
-        if (passengerService.delete(id_vuelo, nif)) {
+    @DeleteMapping(path = "/flights/{cod}/passenger/{nif}")
+    public ResponseEntity<Void> deletePassegerFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif) {
+        if (passengerService.delete(cod, nif)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
@@ -97,13 +97,13 @@ public class PassengerControler implements IPassengerController {
 
     /**
      * GET
-     * @param id_vuelo
+     * @param cod
      * @return
      */
     @Override
-    @GetMapping(path = "/flights/{id_vuelo}/passenger")
-    public ResponseEntity<List<PassengerDTO>> getAllPassengerOnAFlight(@PathVariable("id_vuelo") String id_vuelo) {
-        List<Passenger> passengers = passengerService.getAllPassengersOfAFlight(id_vuelo);
+    @GetMapping(path = "/flights/{cod}/passenger")
+    public ResponseEntity<List<PassengerDTO>> getAllPassengerOnAFlight(@PathVariable("cod") String cod) {
+        List<Passenger> passengers = passengerService.getAllPassengersOfAFlight(cod);
         if (!passengers.isEmpty()) {
             return ResponseEntity.ok(passengerMapper.toDTOs(passengers));
         } else {

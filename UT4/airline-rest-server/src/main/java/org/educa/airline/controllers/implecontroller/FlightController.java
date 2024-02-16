@@ -1,6 +1,7 @@
 package org.educa.airline.controllers.implecontroller;
 
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import org.educa.airline.controllers.IFlightController;
 import org.educa.airline.dto.FlightDTO;
 import org.educa.airline.entity.Flight;
@@ -14,7 +15,6 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/flights")
 public class FlightController implements IFlightController {
     private final FlightService flightService;
     private final FlightMapper flightMapper;
@@ -32,8 +32,8 @@ public class FlightController implements IFlightController {
      * @return
      */
     @Override
-    @GetMapping(path = "/flights{origin}{destination}")
-    public ResponseEntity<List<FlightDTO>> getFlights(@PathVariable("origin") String origin, @PathVariable("destination") String destination) {
+    @GetMapping(path = "/flights")
+    public ResponseEntity<List<FlightDTO>> getFlights(@RequestParam(value = "ori") String origin, @RequestParam(value = "des") String destination) {
         List<Flight> vuelos = flightService.obtenerVuelosPorOriYDes(origin, destination);
         if (!vuelos.isEmpty()) {
             return ResponseEntity.ok(flightMapper.toDTOs(vuelos));
@@ -44,14 +44,14 @@ public class FlightController implements IFlightController {
 
     /**
      * GET
-     * @param id_vuelo
+     * @param cod
      * @param date
      * @return
      */
     @Override
-    @GetMapping(path = "/flights/{id_vuelo}{date}")
-    public ResponseEntity<FlightDTO> getOneFlight(@PathVariable("id_vuelo") String id_vuelo, @PathVariable("date") Date date) {
-        Flight vuelo = flightService.UnVueloPorFecha(id_vuelo, date);
+    @GetMapping(path = "/flights/{cod}")
+    public ResponseEntity<FlightDTO> getOneFlight(@PathVariable("cod") String cod, @RequestParam(value = "date") String date) {
+        Flight vuelo = flightService.UnVueloPorFecha(cod, date);
         if (vuelo != null) {
             return ResponseEntity.ok(flightMapper.toDTO(vuelo));
         } else {
@@ -76,13 +76,13 @@ public class FlightController implements IFlightController {
 
     /**
      * GET
-     * @param id_vuelo
+     * @param cod
      * @return
      */
     @Override
-    @GetMapping(path = "/flights/get/{id_vuelo}")
-    public ResponseEntity<FlightDTO> getOneFlightbyId(@PathVariable("id_vuelo") String id_vuelo) {
-        Flight vuelo = flightService.getAFlight(id_vuelo);
+    @GetMapping(path = "/flights/get/{cod}")
+    public ResponseEntity<FlightDTO> getOneFlightbyId(@PathVariable("cod") String cod) {
+        Flight vuelo = flightService.getAFlight(cod);
         if (vuelo != null) {
             return ResponseEntity.ok(flightMapper.toDTO(vuelo));
         } else {
@@ -92,9 +92,9 @@ public class FlightController implements IFlightController {
 
     //PUT
     @Override
-    @PutMapping(path = "/flights/delete/{id_vuelo}")
-    public ResponseEntity<Void> updateFlight(@PathVariable("id_vuelo") String id_vuelo, @RequestBody FlightDTO flightDTO){
-        if (flightService.update(id_vuelo, flightMapper.toEntity(flightDTO))) {
+    @PutMapping(path = "/flights/update/{cod}")
+    public ResponseEntity<Void> updateFlight(@PathVariable("cod") String cod, @RequestBody FlightDTO flightDTO){
+        if (flightService.update(cod, flightMapper.toEntity(flightDTO))) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
@@ -103,9 +103,9 @@ public class FlightController implements IFlightController {
 
     //DELETE
     @Override
-    @DeleteMapping(path = "/flights/update/{id_vuelo}")
-    public ResponseEntity<Void> deleteFlight(@PathVariable("id_vuelo") String id_vuelo){
-        if (flightService.delete(id_vuelo)) {
+    @DeleteMapping(path = "/flights/delete/{cod}")
+    public ResponseEntity<Void> deleteFlight(@PathVariable("cod") String cod){
+        if (flightService.delete(cod)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();

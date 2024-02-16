@@ -21,7 +21,7 @@ public class FlightService {
         this.validadorDeCampos = validadorDeCampos;
     }
 
-    public Flight UnVueloPorFecha(String idVuelo, Date date) {
+    public Flight UnVueloPorFecha(String idVuelo, String date) {
         Flight vuelo = inMemoryFlightRepository.getFlight(idVuelo);
         if (date.equals(vuelo.getDate())) {
             return vuelo;
