@@ -45,7 +45,7 @@ public class PassengerService extends Service {
             String codigo = utiles.checkCampo(scanner, "Codigo de vuelo", 25);
             System.out.println();
 
-            if (pasajeros.containsKey(nif) ) {
+            if (pasajeros.containsKey(nif)) {
                 apiPassengerService.asociar(codigo, pasajeros.get(nif));
             }
 
@@ -77,11 +77,12 @@ public class PassengerService extends Service {
 
     public void updatePasengerFromFlight(Scanner scanner) {
         PassengerDTO passengerDTO = null;
+        String codigo = "";
         try {
             System.out.println("Introduce el NIF del pasajero y el codigo de vuelo para encontrar al pasajero para la modificacion.");
             String nif = utiles.checkDni(scanner);
             System.out.println();
-            String codigo = utiles.checkCampo(scanner, "Codigo de vuelo", 25);
+            codigo = utiles.checkCampo(scanner, "Codigo de vuelo", 25);
             System.out.println();
 
             passengerDTO = apiPassengerService.findFromNif(codigo, nif);
@@ -95,31 +96,58 @@ public class PassengerService extends Service {
 
         if (passengerDTO != null) {
             System.out.println("Pasajero encontrado");
-            modificacion(scanner, passengerDTO);
+            try {
+                modificacion(scanner, passengerDTO);
+                apiPassengerService.updatePassenger(codigo, passengerDTO);
+            } catch (ValidationFailException ex) {
+                System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
+            } catch (Exception ex) {
+                System.out.println("Fallo en la creacion del vuelo.");
+            }
         }
     }
 
-    private void modificacion(Scanner scanner, PassengerDTO passengerDTO) {
+    private void modificacion(Scanner scanner, PassengerDTO passengerDTO) throws ValidationFailException {
         String elec = "";
         while (!"0".equals(elec)) {
             menuModif();
             elec = scanner.nextLine();
             switch (elec) {
                 case "0":
+                    System.out.println();
                     break;
-                case "1":
+                case "1": //nif
+                    String nueNif = utiles.checkDni(scanner);
+                    passengerDTO.setNif(nueNif);
+                    System.out.println("Modificacion realizada");
                     break;
-                case "2":
+                case "2": //cod
+                    String nueCodigo = utiles.checkCampo(scanner, "Codigo de vuelo", 25);
+                    passengerDTO.setFlightCod(nueCodigo);
+                    System.out.println("Modificacion realizada");
                     break;
-                case "3":
-                    break;
+                case "3": //nomb
+                    String nueNombre = utiles.checkCampo(scanner, "Nombre", 25);
+                    passengerDTO.setName(nueNombre);
+                    System.out.println("Modificacion realizada");
+                    break; //ape
                 case "4":
-                    break;
+                    String nueApe = utiles.checkCampo(scanner, "Apellido", 25);
+                    passengerDTO.setSurname(nueApe);
+                    System.out.println("Modificacion realizada");
+                    break; //email
                 case "5":
-                    break;
+                    String nueMail = utiles.checkCampo(scanner, "Email", 25);
+                    passengerDTO.setEmail(nueMail);
+                    System.out.println("Modificacion realizada");
+                    break; //seat
                 case "6":
+                    int nueSeat = utiles.checkNumber(scanner, "Numero de asiento", 100);
+                    passengerDTO.setSeatNumber(nueSeat);
+                    System.out.println("Modificacion realizada");
                     break;
                 default:
+                    System.out.println("Opcion no valida.");
                     break;
             }
         }
