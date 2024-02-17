@@ -11,8 +11,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Flight {
-    private String cod;
-    private String id;
+    private String cod; //Identifica el vuelo
+    private String id; //Identifica el avion
     private String origin;
     private String destination;
     private String date;

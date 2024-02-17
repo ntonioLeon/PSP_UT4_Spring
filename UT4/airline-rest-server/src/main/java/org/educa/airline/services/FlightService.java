@@ -1,10 +1,12 @@
 package org.educa.airline.services;
 
 import org.educa.airline.entity.Flight;
+import org.educa.airline.exceptions.VueloYaExistente;
 import org.educa.airline.repository.inmemory.InMemoryFlightRepository;
 import org.educa.airline.services.validador.ValidadorDeCampos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.yaml.snakeyaml.error.YAMLException;
 
 import java.util.Date;
 import java.util.List;
@@ -21,13 +23,14 @@ public class FlightService {
         this.validadorDeCampos = validadorDeCampos;
     }
 
-    public Flight UnVueloPorFecha(String idVuelo, String date) {
-        Flight vuelo = inMemoryFlightRepository.getFlight(idVuelo);
-        if (date.equals(vuelo.getDate())) {
-            return vuelo;
-        } else {
-            return null;
+    public Flight UnVueloPorFecha(String cod, String date) {
+        Flight vuelo = inMemoryFlightRepository.getFlight(cod);
+        if (vuelo != null) {
+            if (date.equals(vuelo.getDate())) {
+                return vuelo;
+            }
         }
+        return null;
     }
 
 
@@ -35,19 +38,23 @@ public class FlightService {
         return inMemoryFlightRepository.list(origin, destination);
     }
 
-    public Flight getAFlight(String idVuelo) {
-        return inMemoryFlightRepository.getFlight(idVuelo);
+    public Flight getAFlight(String cod) {
+        return inMemoryFlightRepository.getFlight(cod);
     }
 
-    public boolean agregar(Flight flight) {
-        return inMemoryFlightRepository.add(flight);
+    public boolean agregar(Flight flight) throws VueloYaExistente {
+        if (inMemoryFlightRepository.getFlight(flight.getCod()) == null) {
+            return inMemoryFlightRepository.add(flight);
+        } else {
+            throw new VueloYaExistente();
+        }
     }
 
-    public boolean update(String idVuelo, Flight flight) {
-        return inMemoryFlightRepository.updateFlight(idVuelo, flight);
+    public boolean update(String cod, Flight flight) {
+        return inMemoryFlightRepository.updateFlight(cod, flight);
     }
 
-    public boolean delete(String idVuelo) {
-        return inMemoryFlightRepository.delete(idVuelo);
+    public boolean delete(String cod) {
+        return inMemoryFlightRepository.delete(cod);
     }
 }

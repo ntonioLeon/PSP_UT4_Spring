@@ -9,9 +9,8 @@ import java.util.*;
 public class PassengerService extends Service {
 
     private final ApiPassengerService apiPassengerService = new ApiPassengerService();
-    private Map<String, PassengerDTO> pasajeros = new HashMap<>();
 
-    public void createPassenger(Scanner scanner) {
+    public void associatePassenger(Scanner scanner) {
         try {
             System.out.println("Indroduce ");
             String nif = utiles.checkDni(scanner);
@@ -27,27 +26,9 @@ public class PassengerService extends Service {
             int number = utiles.checkNumber(scanner, "Numero de asiento", 100);
             System.out.println();
 
-            pasajeros.put(nif, new PassengerDTO(nif, codigo, nombre, apellido, email, number));
+            PassengerDTO passengerDTO = new PassengerDTO(nif, codigo, nombre, apellido, email, number);
 
-            System.out.println("Pasajero creado");
-        } catch (ValidationFailException ex) {
-            System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
-        } catch (Exception ex) {
-            System.out.println("Fallo en la creacion del vuelo.");
-        }
-    }
-
-    public void associatePassenger(Scanner scanner) {
-        try {
-            System.out.println("Introduce el NIF del pasajero y el codigo de vuelo para ");
-            String nif = utiles.checkDni(scanner);
-            System.out.println();
-            String codigo = utiles.checkCampo(scanner, "Codigo de vuelo", 25);
-            System.out.println();
-
-            if (pasajeros.containsKey(nif)) {
-                apiPassengerService.asociar(codigo, pasajeros.get(nif));
-            }
+            apiPassengerService.asociar(passengerDTO.getFlightCod(), passengerDTO);
 
             System.out.println("Pasajero asociado...");
         } catch (ValidationFailException ex) {

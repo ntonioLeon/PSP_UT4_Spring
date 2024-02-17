@@ -5,6 +5,7 @@ import jakarta.websocket.server.PathParam;
 import org.educa.airline.controllers.IFlightController;
 import org.educa.airline.dto.FlightDTO;
 import org.educa.airline.entity.Flight;
+import org.educa.airline.exceptions.VueloYaExistente;
 import org.educa.airline.mappers.FlightMapper;
 import org.educa.airline.services.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,10 +68,14 @@ public class FlightController implements IFlightController {
     @Override
     @PostMapping(path = "/flights/add")
     public ResponseEntity<Void> addAFlight(@Valid @RequestBody FlightDTO flightDTO) {
-        if (flightService.agregar(flightMapper.toEntity(flightDTO))) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.badRequest().build();
+        try {
+            if (flightService.agregar(flightMapper.toEntity(flightDTO))) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
+        } catch (VueloYaExistente e) {
+            return ResponseEntity.status(412).build();
         }
     }
 

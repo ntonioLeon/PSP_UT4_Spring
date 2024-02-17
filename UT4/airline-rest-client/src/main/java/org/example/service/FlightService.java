@@ -32,7 +32,11 @@ public class FlightService extends Service {
         } catch (ValidationFailException ex) {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
         } catch (Exception ex) {
-            System.out.println("Fallo en la creacion del vuelo.");
+            if (ex.getClass().getName().equals("YaExisteException")) {
+                System.out.println("Ya existe un vuelo con ese codigo de vuelo.");
+            } else {
+                System.out.println("Fallo en la creacion del vuelo.");
+            }
         }
     }
 

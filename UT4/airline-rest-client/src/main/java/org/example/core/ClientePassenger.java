@@ -18,22 +18,19 @@ public class ClientePassenger {
                     System.out.println("Volviendo al menu principal.");
                     break;
                 case "1":
-                    passengerService.createPassenger(scanner);
-                    break;
-                case "2":
                     passengerService.associatePassenger(scanner);
                     break;
-                case "3":
+                case "2":
                     passengerService.findAPassengerFromAFlight(scanner);
                     break;
+                case "3":
+                    passengerService.updatePasengerFromFlight(scanner);
+                    break;
                 case "4":
-
+                    passengerService.deletePassengerFromFlight(scanner);
                     break;
                 case "5":
-
-                    break;
-                case "6":
-
+                    passengerService.findAllFromAFlight(scanner);
                     break;
                 default:
                     System.err.println("opción no valida.");
@@ -44,12 +41,11 @@ public class ClientePassenger {
     private void menuPassenger() {
         System.out.println("Menu de pasajeros:");
         System.out.println("0. Salir.");
-        System.out.println("1. Crear pasajero.");
-        System.out.println("2. Asociar pasajero a un vuelo.");
-        System.out.println("3. Consultar si un pasajero esta en un vuelo.");
-        System.out.println("4. Actualizar un pasajero de un vuelo.");
-        System.out.println("5. Eliminar un pasajero de un vuelo.");
-        System.out.println("6. Obtener todos los psasajeros de un vuelo.");
+        System.out.println("1. Asociar pasajero a un vuelo.");
+        System.out.println("2. Consultar si un pasajero esta en un vuelo.");
+        System.out.println("3. Actualizar un pasajero de un vuelo.");
+        System.out.println("4. Eliminar un pasajero de un vuelo.");
+        System.out.println("5. Obtener todos los psasajeros de un vuelo.");
         System.out.println("Introduzca una opción:");
     }
 }

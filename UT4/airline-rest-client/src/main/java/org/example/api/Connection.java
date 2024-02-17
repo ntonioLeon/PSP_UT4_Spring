@@ -1,6 +1,8 @@
 package org.example.api;
 
 import org.example.exception.NotFoundException;
+import org.example.exception.ValidationFailException;
+import org.example.exception.YaExisteException;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -36,9 +38,14 @@ public class Connection {
                 .header("Content-Type", "application/json")
                 .build();
 
-        try (HttpClient client = HttpClient.newHttpClient()){
+        try (HttpClient client = HttpClient.newHttpClient()) {
             HttpResponse<String> respuesta = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(respuesta.body());
+            if (respuesta.statusCode() == 400) {
+                throw new ValidationFailException();
+            }else if (respuesta.statusCode() == 412) {
+                throw new YaExisteException();
+            }
         }
     }
 
