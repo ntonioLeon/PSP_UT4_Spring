@@ -15,15 +15,15 @@ public class FlightService extends Service {
     public void createFlight(Scanner scanner) {
         try {
             System.out.println("Indroduce ");
-            String codigo = utiles.checkCampo(scanner, "Codigo de vuelo", 25);
+            String codigo = utiles.checkCampo(scanner, "Codigo de vuelo");
             System.out.println();
-            String id = utiles.checkCampo(scanner, "Id de vuelo", 25);
+            String id = utiles.checkCampo(scanner, "Id de vuelo");
             System.out.println();
-            String origin = utiles.checkCampo(scanner, "Origen", 25);
+            String origin = utiles.checkCampo(scanner, "Origen");
             System.out.println();
-            String destination = utiles.checkCampo(scanner, "Destino", 25);
+            String destination = utiles.checkCampo(scanner, "Destino");
             System.out.println();
-            String date = utiles.checkfecha(scanner);
+            String date = utiles.checkCampo(scanner, "fecha");
             System.out.println();
 
             FlightDTO flightDTO = new FlightDTO(codigo, id, origin, destination, date);
@@ -47,7 +47,7 @@ public class FlightService extends Service {
     public void deleteFlight(Scanner scanner) {
         System.out.println("Introduce el codigo de vuelo del vuelo que desea eliminar.");
         try {
-            String cod = utiles.checkCampo(scanner, "Codigo de vuelo", 25);
+            String cod = utiles.checkCampo(scanner, "Codigo de vuelo");
 
             apiFlightService.delete(cod);
             System.out.println("Vuelo borrado.");
@@ -64,9 +64,9 @@ public class FlightService extends Service {
     public void findFlightFromDate(Scanner scanner) {
         System.out.println("Introduce el codigo de vuelo y la fecha.");
         try {
-            String codigo = utiles.checkCampo(scanner, "Codigo de vuelo", 25);
+            String codigo = utiles.checkCampo(scanner, "Codigo de vuelo");
             System.out.println();
-            String date = utiles.checkfecha(scanner);
+            String date = utiles.checkCampo(scanner, "fecha");
             System.out.println();
 
             FlightDTO flightDTO = apiFlightService.getFlightsFromCodAndDate(codigo, date);
@@ -85,9 +85,9 @@ public class FlightService extends Service {
     public void getFlightsFromOriAndDest(Scanner scanner) {
         System.out.println("Introduce el origen y destino de los vuelos que deseas buscar.");
         try {
-            String origin = utiles.checkCampo(scanner, "Origen", 25);
+            String origin = utiles.checkCampo(scanner, "Origen");
             System.out.println();
-            String destination = utiles.checkCampo(scanner, "Destino", 25);
+            String destination = utiles.checkCampo(scanner, "Destino");
             System.out.println();
 
             FlightDTO[] flightDTOlist = apiFlightService.getFlightFromOriAndDest(origin, destination);

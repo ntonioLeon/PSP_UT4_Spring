@@ -13,17 +13,17 @@ public class PassengerService extends Service {
     public void associatePassenger(Scanner scanner) {
         try {
             System.out.println("Indroduce ");
-            String nif = utiles.checkDni(scanner);
+            String nif = utiles.checkCampo(scanner, "nif");
             System.out.println();
-            String codigo = utiles.checkCampo(scanner, "Codigo de vuelo", 25);
+            String codigo = utiles.checkCampo(scanner, "Codigo de vuelo");
             System.out.println();
-            String nombre = utiles.checkCampo(scanner, "nombre", 25);
+            String nombre = utiles.checkCampo(scanner, "nombre");
             System.out.println();
-            String apellido = utiles.checkCampo(scanner, "Apellido", 25);
+            String apellido = utiles.checkCampo(scanner, "Apellido");
             System.out.println();
-            String email = utiles.checkCampo(scanner, "Email", 25);
+            String email = utiles.checkCampo(scanner, "Email");
             System.out.println();
-            int number = utiles.checkNumber(scanner, "Numero de asiento", 100);
+            String number = utiles.checkCampo(scanner, "Numero de asiento");
             System.out.println();
 
             PassengerDTO passengerDTO = new PassengerDTO(nif, codigo, nombre, apellido, email, number);

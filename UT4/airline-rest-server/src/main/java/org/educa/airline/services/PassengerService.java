@@ -37,19 +37,17 @@ public class PassengerService {
         return inMemoryPassengerRepository.getPassenger(idVuelo, nif);
     }
 
-    public boolean  update(String cod, String nif, Passenger passenger) throws MiValidacionException {
+    public boolean update(String cod, String nif, Passenger passenger) throws MiValidacionException {
         if (flightPassengerService.getInMemoryFlightRepository().getFlight(cod) != null && inMemoryPassengerRepository.existPassenger(cod, nif)) {
-            if (!inMemoryPassengerRepository.addPassenger(passenger)) {
-                throw new MiValidacionException();
-            } else {
-                return true;
-            }
+            inMemoryPassengerRepository.updatePassenger(nif, passenger);
+            return true;
         }
         return false;
     }
 
     public boolean delete(String idVuelo, String nif) {
-        return inMemoryPassengerRepository.deletePassenger(idVuelo, nif);   }
+        return inMemoryPassengerRepository.deletePassenger(idVuelo, nif);
+    }
 
     public List<Passenger> getAllPassengersOfAFlight(String idVuelo) {
         return inMemoryPassengerRepository.listPassengers(idVuelo);

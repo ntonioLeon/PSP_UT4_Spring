@@ -15,5 +15,5 @@ public class Flight {
     private String id; //Identifica el avion
     private String origin;
     private String destination;
-    private String date;
+    private Date date;
 }

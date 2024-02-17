@@ -2,13 +2,15 @@ package org.educa.airline.mappers;
 
 import org.educa.airline.dto.PassengerDTO;
 import org.educa.airline.entity.Passenger;
+import org.educa.airline.exceptions.MiValidacionException;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class PassengerMapper {
+public class PassengerMapper extends Mapper{
 
     /**
      *
@@ -54,5 +56,18 @@ public class PassengerMapper {
 
         }
         return passengers;
+    }
+
+    private int toStringToInt(String seatNumber) throws MiValidacionException {
+        if (validadorDeCampos.isANumber(seatNumber)) {
+            return Integer.parseInt(seatNumber);
+        } else {
+            throw new MiValidacionException();
+        }
+
+    }
+
+    private String toIntTOString(int seatNumber) {
+        return String.valueOf(seatNumber);
     }
 }

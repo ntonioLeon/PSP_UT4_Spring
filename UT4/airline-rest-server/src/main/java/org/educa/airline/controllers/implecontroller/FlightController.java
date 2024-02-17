@@ -5,6 +5,7 @@ import jakarta.websocket.server.PathParam;
 import org.educa.airline.controllers.IFlightController;
 import org.educa.airline.dto.FlightDTO;
 import org.educa.airline.entity.Flight;
+import org.educa.airline.exceptions.MiValidacionException;
 import org.educa.airline.exceptions.VueloYaExistente;
 import org.educa.airline.mappers.FlightMapper;
 import org.educa.airline.services.FlightService;
@@ -74,9 +75,10 @@ public class FlightController implements IFlightController {
             } else {
                 return ResponseEntity.badRequest().build();
             }
-        } catch (VueloYaExistente e) {
+        } catch (VueloYaExistente | MiValidacionException e) {
             return ResponseEntity.status(412).build();
         }
+
     }
 
     /**
@@ -99,10 +101,14 @@ public class FlightController implements IFlightController {
     @Override
     @PutMapping(path = "/flights/update/{cod}")
     public ResponseEntity<Void> updateFlight(@PathVariable("cod") String cod, @RequestBody FlightDTO flightDTO){
-        if (flightService.update(cod, flightMapper.toEntity(flightDTO))) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
+        try {
+            if (flightService.update(cod, flightMapper.toEntity(flightDTO))) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (MiValidacionException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 

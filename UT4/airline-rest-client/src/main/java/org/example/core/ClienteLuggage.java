@@ -37,11 +37,10 @@ public class ClienteLuggage {
     private void menuLuggage() {
         System.out.println("Menu de equipajes:");
         System.out.println("0. Salir");
-        System.out.println("1. ");
-        System.out.println("2. ");
-        System.out.println("3. ");
-        System.out.println("4. ");
-        System.out.println("5. ");
+        System.out.println("1. Crear un equipaje");
+        System.out.println("2. Borrar un equipaje");
+        System.out.println("3. Mostrar el equipale de un pasajero");
+        System.out.println("4. Mostrar todos los equipajes de un vuelo");
         System.out.println("Introduzca una opción");
     }
 }

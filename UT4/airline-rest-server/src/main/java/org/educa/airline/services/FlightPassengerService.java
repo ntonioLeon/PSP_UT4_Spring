@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Getter
 public class FlightPassengerService {
 
-    private InMemoryFlightRepository inMemoryFlightRepository;
+    private final InMemoryFlightRepository inMemoryFlightRepository;
 
     FlightPassengerService(InMemoryFlightRepository inMemoryFlightRepository) {
         this.inMemoryFlightRepository = inMemoryFlightRepository;

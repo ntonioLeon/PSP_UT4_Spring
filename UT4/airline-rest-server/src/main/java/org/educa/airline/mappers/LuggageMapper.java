@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class LuggageMapper {
+public class LuggageMapper  extends Mapper{
 
     /**
      *
-     * @param LuggageDTO
+     * @param luggageDTO
      * @return
      */
     public Luggage toEntity(LuggageDTO luggageDTO) {
@@ -21,7 +21,7 @@ public class LuggageMapper {
 
     /**
      *
-     * @param Luggage
+     * @param luggage
      * @return
      */
     public LuggageDTO toDTO(Luggage luggage) {
