@@ -41,6 +41,7 @@ public class Connection {
         try (HttpClient client = HttpClient.newHttpClient()) {
             HttpResponse<String> respuesta = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(respuesta.body());
+
             if (respuesta.statusCode() == 400) {
                 throw new ValidationFailException();
             }else if (respuesta.statusCode() == 412) {
@@ -64,7 +65,9 @@ public class Connection {
                 return respuesta.body();
             } else if (respuesta.statusCode() == 404) {
                 throw new NotFoundException();
-            } else {
+            } else if (respuesta.statusCode() == 400) {
+                throw new ValidationFailException();
+            }else {
                 throw new Exception("Error: " + respuesta.statusCode());
             }
         }

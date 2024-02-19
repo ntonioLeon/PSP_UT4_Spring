@@ -2,6 +2,8 @@ package org.example.service;
 
 import org.example.api.ApiPassengerService;
 import org.example.dto.PassengerDTO;
+import org.example.exception.BadRequestException;
+import org.example.exception.NotFoundException;
 import org.example.exception.ValidationFailException;
 
 import java.util.*;
@@ -41,9 +43,9 @@ public class PassengerService extends Service {
     public void findAPassengerFromAFlight(Scanner scanner) {
         try {
             System.out.println("Introduce el NIF del pasajero y el codigo de vuelo para encontrar al pasajero.");
-            String nif = utiles.checkDni(scanner);
+            String nif = utiles.checkCampo(scanner, "Nif");
             System.out.println();
-            String codigo = utiles.checkCampo(scanner, "Codigo de vuelo", 25);
+            String codigo = utiles.checkCampo(scanner, "Codigo de vuelo");
             System.out.println();
 
             PassengerDTO passengerDTO = apiPassengerService.findFromNif(codigo, nif);
@@ -61,9 +63,9 @@ public class PassengerService extends Service {
         String codigo = "";
         try {
             System.out.println("Introduce el NIF del pasajero y el codigo de vuelo para encontrar al pasajero para la modificacion.");
-            String nif = utiles.checkDni(scanner);
+            String nif = utiles.checkCampo(scanner, "Nif");
             System.out.println();
-            codigo = utiles.checkCampo(scanner, "Codigo de vuelo", 25);
+            codigo = utiles.checkCampo(scanner, "Codigo de vuelo");
             System.out.println();
 
             passengerDTO = apiPassengerService.findFromNif(codigo, nif);
@@ -71,6 +73,8 @@ public class PassengerService extends Service {
             printearPassenger(passengerDTO);
         } catch (ValidationFailException ex) {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
+        } catch (NotFoundException e) {
+            System.out.println("No se encontro el pasajero que se deseaba modificar.");
         } catch (Exception ex) {
             System.out.println("Fallo en la creacion del vuelo.");
         }
@@ -80,10 +84,19 @@ public class PassengerService extends Service {
             try {
                 modificacion(scanner, passengerDTO);
                 apiPassengerService.updatePassenger(codigo, passengerDTO);
+                System.out.println("Modificacion realizada con existo.");
             } catch (ValidationFailException ex) {
+                System.out.println("ERROR EN LA MODIFICACION:");
                 System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
-            } catch (Exception ex) {
-                System.out.println("Fallo en la creacion del vuelo.");
+            } catch (BadRequestException e) {
+                System.out.println("ERROR EN LA MODIFICACION:");
+                System.out.println("Los campos enviados no eran validos.");
+            } catch (NotFoundException e) {
+                System.out.println("ERROR EN LA MODIFICACION:");
+                System.out.println("No se encontro el vuelo en el que desea asignar al pasajero. ");
+            }catch (Exception ex) {
+                System.out.println("ERROR EN LA MODIFICACION:");
+                System.out.println("Error inesperado.");
             }
         }
     }
@@ -98,32 +111,32 @@ public class PassengerService extends Service {
                     System.out.println();
                     break;
                 case "1": //nif
-                    String nueNif = utiles.checkDni(scanner);
+                    String nueNif = utiles.checkCampo(scanner, "Nif");
                     passengerDTO.setNif(nueNif);
                     System.out.println("Modificacion realizada");
                     break;
                 case "2": //cod
-                    String nueCodigo = utiles.checkCampo(scanner, "Codigo de vuelo", 25);
+                    String nueCodigo = utiles.checkCampo(scanner, "Codigo de vuelo");
                     passengerDTO.setFlightCod(nueCodigo);
                     System.out.println("Modificacion realizada");
                     break;
                 case "3": //nomb
-                    String nueNombre = utiles.checkCampo(scanner, "Nombre", 25);
+                    String nueNombre = utiles.checkCampo(scanner, "Nombre");
                     passengerDTO.setName(nueNombre);
                     System.out.println("Modificacion realizada");
                     break; //ape
                 case "4":
-                    String nueApe = utiles.checkCampo(scanner, "Apellido", 25);
+                    String nueApe = utiles.checkCampo(scanner, "Apellido");
                     passengerDTO.setSurname(nueApe);
                     System.out.println("Modificacion realizada");
                     break; //email
                 case "5":
-                    String nueMail = utiles.checkCampo(scanner, "Email", 25);
+                    String nueMail = utiles.checkCampo(scanner, "Email");
                     passengerDTO.setEmail(nueMail);
                     System.out.println("Modificacion realizada");
                     break; //seat
                 case "6":
-                    int nueSeat = utiles.checkNumber(scanner, "Numero de asiento", 100);
+                    String nueSeat = utiles.checkCampo(scanner, "Numero de asiento");
                     passengerDTO.setSeatNumber(nueSeat);
                     System.out.println("Modificacion realizada");
                     break;
@@ -137,9 +150,9 @@ public class PassengerService extends Service {
     public void deletePassengerFromFlight(Scanner scanner) {
         try {
             System.out.println("Introduce el NIF del pasajero y el codigo de vuelo para encontrar al pasajero.");
-            String nif = utiles.checkDni(scanner);
+            String nif = utiles.checkCampo(scanner, "Nif");
             System.out.println();
-            String codigo = utiles.checkCampo(scanner, "Codigo de vuelo", 25);
+            String codigo = utiles.checkCampo(scanner, "Codigo de vuelo");
             System.out.println();
 
             apiPassengerService.desAsociar(codigo, nif);
@@ -147,7 +160,9 @@ public class PassengerService extends Service {
             System.out.println("Borrado...");
         } catch (ValidationFailException ex) {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
-        } catch (Exception ex) {
+        } catch (NotFoundException e) {
+            System.out.println("Vuelo o pasajero no encontrado.");
+        }catch (Exception ex) {
             System.out.println("Fallo en la creacion del vuelo.");
         }
     }
@@ -155,7 +170,7 @@ public class PassengerService extends Service {
     public void findAllFromAFlight(Scanner scanner) {
         try {
             System.out.println("Introduce el codigo de vuelo.");
-            String codigo = utiles.checkCampo(scanner, "Codigo de vuelo", 25);
+            String codigo = utiles.checkCampo(scanner, "Codigo de vuelo");
             System.out.println();
 
             PassengerDTO[] passengerDTOs = apiPassengerService.findAllFromCod(codigo);
@@ -166,7 +181,7 @@ public class PassengerService extends Service {
         } catch (ValidationFailException ex) {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
         } catch (Exception ex) {
-            System.out.println("Fallo en la creacion del vuelo.");
+            System.out.println("Ha ocurrido un error inesperado.");
         }
     }
 

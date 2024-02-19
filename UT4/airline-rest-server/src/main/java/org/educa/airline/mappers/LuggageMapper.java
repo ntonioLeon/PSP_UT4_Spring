@@ -2,6 +2,7 @@ package org.educa.airline.mappers;
 
 import org.educa.airline.dto.LuggageDTO;
 import org.educa.airline.entity.Luggage;
+import org.educa.airline.exceptions.MiValidacionException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,8 +16,8 @@ public class LuggageMapper  extends Mapper{
      * @param luggageDTO
      * @return
      */
-    public Luggage toEntity(LuggageDTO luggageDTO) {
-        return new Luggage(luggageDTO.getId(), luggageDTO.getNif(), luggageDTO.getFlightCod(), luggageDTO.getDescription());
+    public Luggage toEntity(LuggageDTO luggageDTO) throws MiValidacionException {
+        return new Luggage(fromStringToInt(luggageDTO.getId()), luggageDTO.getNif(), luggageDTO.getFlightCod(), luggageDTO.getDescription());
     }
 
     /**
@@ -25,7 +26,7 @@ public class LuggageMapper  extends Mapper{
      * @return
      */
     public LuggageDTO toDTO(Luggage luggage) {
-        return new LuggageDTO(luggage.getId(), luggage.getNif(), luggage.getFlightCod(), luggage.getDescription());
+        return new LuggageDTO(fromIntTOString(luggage.getId()), luggage.getNif(), luggage.getFlightCod(), luggage.getDescription());
     }
 
     /**
@@ -36,7 +37,7 @@ public class LuggageMapper  extends Mapper{
     public List<LuggageDTO> toDTOs(List<Luggage> luggages) {
         List<LuggageDTO> luggageDTOs = new ArrayList<>();
         for (Luggage luggage : luggages) {
-            luggageDTOs.add(new LuggageDTO(luggage.getId(), luggage.getNif(), luggage.getFlightCod(), luggage.getDescription()));
+            luggageDTOs.add(new LuggageDTO(fromIntTOString(luggage.getId()), luggage.getNif(), luggage.getFlightCod(), luggage.getDescription()));
 
         }
         return luggageDTOs;
@@ -47,10 +48,10 @@ public class LuggageMapper  extends Mapper{
      * @param luggagesDTO
      * @return
      */
-    public List<Luggage> toEntities(List<LuggageDTO> luggagesDTO) {
+    public List<Luggage> toEntities(List<LuggageDTO> luggagesDTO) throws MiValidacionException {
         List<Luggage> luggages = new ArrayList<>();
         for (LuggageDTO luggageDTO : luggagesDTO) {
-            luggages.add(new Luggage(luggageDTO.getId(), luggageDTO.getNif(), luggageDTO.getFlightCod(), luggageDTO.getDescription()));
+            luggages.add(new Luggage(fromStringToInt(luggageDTO.getId()), luggageDTO.getNif(), luggageDTO.getFlightCod(), luggageDTO.getDescription()));
         }
         return luggages;
     }

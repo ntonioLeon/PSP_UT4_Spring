@@ -53,7 +53,12 @@ public class FlightController implements IFlightController {
     @Override
     @GetMapping(path = "/flights/{cod}")
     public ResponseEntity<FlightDTO> getOneFlight(@PathVariable("cod") String cod, @RequestParam(value = "date") String date) {
-        Flight vuelo = flightService.UnVueloPorFecha(cod, date);
+        Flight vuelo = null;
+        try {
+            vuelo = flightService.UnVueloPorFecha(cod, date);
+        } catch (MiValidacionException e) {
+            return ResponseEntity.notFound().build();
+        }
         if (vuelo != null) {
             return ResponseEntity.ok(flightMapper.toDTO(vuelo));
         } else {
@@ -71,14 +76,15 @@ public class FlightController implements IFlightController {
     public ResponseEntity<Void> addAFlight(@Valid @RequestBody FlightDTO flightDTO) {
         try {
             if (flightService.agregar(flightMapper.toEntity(flightDTO))) {
-                return ResponseEntity.ok().build();
+                return ResponseEntity.status(201).build();
             } else {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.status(412).build();
             }
-        } catch (VueloYaExistente | MiValidacionException e) {
+        } catch (VueloYaExistente e) {
             return ResponseEntity.status(412).build();
+        } catch (MiValidacionException e) {
+            return ResponseEntity.badRequest().build();
         }
-
     }
 
     /**

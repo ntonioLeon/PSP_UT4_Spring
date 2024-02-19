@@ -16,11 +16,8 @@ public interface ILuggageController {
     public ResponseEntity<List<LuggageDTO>> getAllLulaggesFromAFlight(@PathVariable("cod") String cod);
 
     //POST
-    public ResponseEntity<Void> addALuggageFromAFlight(@RequestBody LuggageDTO luggageDTO); //Sacare el id de vuelo y el nif del propio objeto
-
-    //PUT
-    public ResponseEntity<Void> updateALuggageFromAFlight(@RequestBody LuggageDTO luggageDTO); //Sacare el id de vuelo y el nif del propio objeto
+    public ResponseEntity<Void> addALuggageFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif, @RequestBody LuggageDTO luggageDTO);
 
     //DELETE
-    public ResponseEntity<Void> deleteLuggageFromAFlight(@PathVariable("id") int id, @PathVariable("cod") String cod);
+    public ResponseEntity<Void> deleteLuggageFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif, @PathVariable("id") String id);
 }

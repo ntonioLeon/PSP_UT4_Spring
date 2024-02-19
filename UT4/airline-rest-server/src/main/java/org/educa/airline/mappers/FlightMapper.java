@@ -60,17 +60,5 @@ public class FlightMapper extends Mapper{
         return vuelosENT;
     }
 
-    private String fromDateToString(Date date) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return dateFormat.format(date);
-    }
 
-    private Date fromStringToDate(String fecha) throws MiValidacionException {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-        try {
-            return formatter.parse(fecha);
-        } catch (ParseException e) {
-            throw new MiValidacionException();
-        }
-    }
 }

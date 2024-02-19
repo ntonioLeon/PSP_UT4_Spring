@@ -17,16 +17,16 @@ public class ClienteLuggage {
                     System.out.println("Volviendo al menu principal.");
                     break;
                 case "1":
-
+                    luggageService.crearLuggage(scanner);
                     break;
                 case "2":
-
+                    luggageService.borrarLuggage(scanner);
                     break;
                 case "3":
-
+                    luggageService.mostarLuggageDeUnPasajero(scanner);
                     break;
                 case "4":
-
+                    luggageService.MostrarTodosLosEquipajesDeUnVuelo(scanner);
                     break;
                 default:
                     System.err.println("opción no valida.");

@@ -21,20 +21,16 @@ public class ApiFlightService extends ApiService {
     }
 
     public FlightDTO[] getFlightFromOriAndDest(String origin, String destination) throws Exception {
-        String body = connection.doGet(URL+"?ori="+origin+"des="+destination);
+        String body = connection.doGet(URL+"?ori="+origin+"&des="+destination);
         Gson gson = new Gson();
 
-        FlightDTO[] flightDTO = gson.fromJson(body, FlightDTO[].class);
-
-        return flightDTO;
+        return gson.fromJson(body, FlightDTO[].class);
     }
 
     public FlightDTO getFlightsFromCodAndDate(String codigo, String date) throws Exception {
         String body = connection.doGet(URL+"/"+codigo+"?date="+date);
         Gson gson = new Gson();
 
-        FlightDTO flightDTO = gson.fromJson(body, FlightDTO.class);
-
-        return flightDTO;
+        return gson.fromJson(body, FlightDTO.class);
     }
 }

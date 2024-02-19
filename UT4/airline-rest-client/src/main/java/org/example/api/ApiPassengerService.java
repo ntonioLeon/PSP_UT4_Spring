@@ -32,7 +32,7 @@ public class ApiPassengerService extends ApiService {
     public void updatePassenger(String codigo, PassengerDTO passengerDTO) throws Exception {
         Gson gson = new Gson();
         String body = gson.toJson(passengerDTO);
-        connection.doUpdate(body, URL+codigo+"/"+passengerDTO.getNif());
+        connection.doUpdate(body, URL+codigo+TRAS_CODE_URL+"/"+passengerDTO.getNif());
     }
 
     public void desAsociar(String codigo, String nif) throws  Exception{

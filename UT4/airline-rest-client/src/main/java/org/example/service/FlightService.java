@@ -4,6 +4,7 @@ import org.example.api.ApiFlightService;
 import org.example.dto.FlightDTO;
 import org.example.exception.NotFoundException;
 import org.example.exception.ValidationFailException;
+import org.example.exception.YaExisteException;
 
 import java.util.Date;
 import java.util.Scanner;
@@ -31,12 +32,10 @@ public class FlightService extends Service {
             System.out.println("Vuelo creado");
         } catch (ValidationFailException ex) {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
+        } catch (YaExisteException e) {
+            System.out.println("Ya existe un vuelo con ese codigo de vuelo.");
         } catch (Exception ex) {
-            if (ex.getClass().getName().equals("YaExisteException")) {
-                System.out.println("Ya existe un vuelo con ese codigo de vuelo.");
-            } else {
-                System.out.println("Fallo en la creacion del vuelo.");
-            }
+            System.out.println("Fallo en la creacion del vuelo.");
         }
     }
 

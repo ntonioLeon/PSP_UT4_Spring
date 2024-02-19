@@ -15,8 +15,7 @@ public class Utiles {
             campo = scanner.nextLine();
             if (!campo.trim().isEmpty()) {
                 campo = campo.trim();
-                if (campo.contains("/") || noContieneEspacios(campo) || campo.contains("=") || campo.contains("?")) {
-                    System.out.println(contexto + " valido");
+                if (caracteresDeControl(campo) && noContieneEspacios(campo)) {
                     return campo;
                 } else {
                     fallos += 1;
@@ -30,6 +29,9 @@ public class Utiles {
             }
         }
         throw new ValidationFailException();
+    }
+
+    private boolean caracteresDeControl(String campo) {
     }
 
     private boolean noContieneEspacios(String campo) {

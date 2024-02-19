@@ -24,36 +24,29 @@ public class LuggageControler implements ILuggageController {
 
     //GET
     @Override
-    @GetMapping(path = "/fights/passengerslugage/one/{id}{cod}{nif}")
+    @GetMapping(path = "/fights/{cod}/passenger/{nif}/luggage/{id}")
     public ResponseEntity<LuggageDTO> getALulaggeFromAFlight(@PathVariable("id") int id, @PathVariable("cod") String cod, @PathVariable("nif") String nif) {
         return null;
     }
 
     //GET
     @Override
-    @GetMapping(path = "/fights/passengerslugage/all/{cod}")
+    @GetMapping(path = "/fights/{cod}/passengers/lugage")
     public ResponseEntity<List<LuggageDTO>> getAllLulaggesFromAFlight(@PathVariable("cod") String cod) {
         return null;
     }
 
     //POST
     @Override
-    @PostMapping(path = "/fights/passengerslugage/add")
-    public ResponseEntity<Void> addALuggageFromAFlight(@RequestBody LuggageDTO luggageDTO) {
-        return null;
-    }
-
-    //PUT
-    @Override
-    @PutMapping(path = "/fights/passengerslugage/update")
-    public ResponseEntity<Void> updateALuggageFromAFlight(@RequestBody LuggageDTO luggageDTO) {
+    @PostMapping(path = "/fights/{cod}/passenger/{nif}/lugage")
+    public ResponseEntity<Void> addALuggageFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif, @RequestBody LuggageDTO luggageDTO) {
         return null;
     }
 
     //DELETE
     @Override
-    @DeleteMapping(path = "/fights/passengerslugage/delete/{id}{flightCod}")
-    public ResponseEntity<Void> deleteLuggageFromAFlight(@PathVariable("id") int id, @PathVariable("flightCod") String flightCod) {
+    @DeleteMapping(path = "/fights/{cod}/passenger/{nif}/luggage/{id}")
+    public ResponseEntity<Void> deleteLuggageFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif, @PathVariable("id") String id) {
         return null;
     }
 }

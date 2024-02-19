@@ -1,6 +1,7 @@
 package org.educa.airline.services;
 
 import org.educa.airline.entity.Flight;
+import org.educa.airline.exceptions.MiValidacionException;
 import org.educa.airline.exceptions.VueloYaExistente;
 import org.educa.airline.repository.inmemory.InMemoryFlightRepository;
 import org.educa.airline.services.validador.ValidadorDeCampos;
@@ -8,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.error.YAMLException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class FlightService {
@@ -23,10 +27,11 @@ public class FlightService {
         this.validadorDeCampos = validadorDeCampos;
     }
 
-    public Flight UnVueloPorFecha(String cod, String date) {
+    public Flight UnVueloPorFecha(String cod, String date) throws MiValidacionException {
         Flight vuelo = inMemoryFlightRepository.getFlight(cod);
         if (vuelo != null) {
-            if (date.equals(vuelo.getDate())) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+            if (date.equals(formatter.format(vuelo.getDate()))) {
                 return vuelo;
             }
         }
