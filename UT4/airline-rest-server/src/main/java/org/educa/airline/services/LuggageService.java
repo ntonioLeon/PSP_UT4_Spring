@@ -1,7 +1,9 @@
 package org.educa.airline.services;
 
+import lombok.Getter;
 import org.educa.airline.entity.Luggage;
 import org.educa.airline.exceptions.FlightNotFoundException;
+import org.educa.airline.exceptions.LuggageNotFoundException;
 import org.educa.airline.exceptions.LuggageYaExisteException;
 import org.educa.airline.exceptions.PassengerNotFoundException;
 import org.educa.airline.repository.inmemory.InMemoryFlightRepository;
@@ -15,28 +17,32 @@ import org.yaml.snakeyaml.error.YAMLException;
 import java.util.List;
 
 @Service
-public class LuggageService extends Repositories{
+@Getter
+public class LuggageService {
 
+    private InMemoryLuggageRepository inMemoryLuggageRepository;
+    private PassengerService passengerService;
 
     @Autowired
-    LuggageService(InMemoryFlightRepository inMemoryFlightRepository, InMemoryLuggageRepository inMemoryLuggageRepository, InMemoryPassengerRepository inMemoryPassengerRepository, ValidadorDeCampos validadorDeCampos) {
-        super(inMemoryFlightRepository, inMemoryLuggageRepository, inMemoryPassengerRepository, validadorDeCampos);
+    LuggageService(PassengerService passengerService, InMemoryLuggageRepository inMemoryLuggageRepository) {
+        this.inMemoryLuggageRepository = inMemoryLuggageRepository;
+        this.passengerService = passengerService;
     }
 
     public Luggage getALuggageFromAFlight(int id, String cod, String nif) {
-        return getInMemoryLuggageRepository().getLuggage(cod, nif, id);
+        return inMemoryLuggageRepository.getLuggage(cod, nif, id);
     }
 
 
     public List<Luggage> getAllLuggageFromAFlight(String cod, String nif) {
-        return getInMemoryLuggageRepository().listLuggage(cod, nif);
+        return inMemoryLuggageRepository.listLuggage(cod, nif);
     }
 
 
     public boolean create(String cod, String nif, Luggage entity) throws FlightNotFoundException, PassengerNotFoundException, LuggageYaExisteException {
-        if (getInMemoryFlightRepository().getFlight(cod) != null) {
-            if (getInMemoryPassengerRepository().getPassenger(cod, nif) != null) {
-                if (getInMemoryLuggageRepository().addLuggage(cod, nif, entity)) {
+        if (passengerService.getFlightService().getAFlight(cod) != null) {
+            if (passengerService.getPassengerByIdAndNif(cod, nif) != null) {
+                if (inMemoryLuggageRepository.addLuggage(cod, nif, entity)) {
                     return true;
                 } else {
                     throw new LuggageYaExisteException();
@@ -47,5 +53,13 @@ public class LuggageService extends Repositories{
         } else {
             throw new FlightNotFoundException();
         }
+    }
+
+    public boolean deleteLuggage(String cod, String nif, int id) throws LuggageNotFoundException {
+        return inMemoryLuggageRepository.deleteLuggage(cod, nif, id);
+    }
+
+    public List<Luggage> listLuggage(String cod, String nif) {
+        return inMemoryLuggageRepository.listLuggage(cod, nif);
     }
 }

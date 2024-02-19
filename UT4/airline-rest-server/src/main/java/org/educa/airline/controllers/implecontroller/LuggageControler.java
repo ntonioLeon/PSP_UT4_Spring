@@ -3,19 +3,19 @@ package org.educa.airline.controllers.implecontroller;
 import org.educa.airline.controllers.ILuggageController;
 import org.educa.airline.dto.LuggageDTO;
 import org.educa.airline.entity.Luggage;
-import org.educa.airline.exceptions.FlightNotFoundException;
-import org.educa.airline.exceptions.LuggageYaExisteException;
-import org.educa.airline.exceptions.MiValidacionException;
-import org.educa.airline.exceptions.PassengerNotFoundException;
+import org.educa.airline.exceptions.*;
 import org.educa.airline.mappers.LuggageMapper;
 import org.educa.airline.services.LuggageService;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
+@RequestMapping(path = "/flights/{cod}/passengers/{nif}")
 public class LuggageControler implements ILuggageController {
 
     private final LuggageService luggageService;
@@ -29,7 +29,7 @@ public class LuggageControler implements ILuggageController {
 
     //GET
     @Override
-    @GetMapping(path = "/fights/{cod}/passengers/{nif}/luggages/{id}")
+    @GetMapping(path = "/luggage/{id}")
     public ResponseEntity<LuggageDTO> getALulaggeFromAFlight(@PathVariable("id") int id, @PathVariable("cod") String cod, @PathVariable("nif") String nif) {
         Luggage luggage = luggageService.getALuggageFromAFlight(id, cod, nif);
         try {
@@ -45,8 +45,8 @@ public class LuggageControler implements ILuggageController {
 
     //GET
     @Override
-    @GetMapping(path = "/fights/{cod}/passengers/{nif}/luggages")
-    public ResponseEntity<List<LuggageDTO>> getAllLulaggesFromAFlight(@PathVariable("cod") String cod, @PathVariable String nif) {
+    @GetMapping(path = "/luggages")
+    public ResponseEntity<List<LuggageDTO>> getAllLulaggesFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif) {
         List<Luggage> luggages = luggageService.getAllLuggageFromAFlight(cod, nif);
         try {
             if (!luggages.isEmpty()) {
@@ -61,7 +61,7 @@ public class LuggageControler implements ILuggageController {
 
     //POST
     @Override
-    @PostMapping(path = "/fights/{cod}/passengers/{nif}/luggages")
+    @PostMapping(path = "/luggage")
     public ResponseEntity<Void> addALuggageFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif, @RequestBody LuggageDTO luggageDTO) {
         try {
             if (luggageService.create(cod, nif, luggageMapper.toEntity(luggageDTO))) {
@@ -82,8 +82,18 @@ public class LuggageControler implements ILuggageController {
 
     //DELETE
     @Override
-    @DeleteMapping(path = "/fights/{cod}/passenger/{nif}/luggage/{id}")
+    @DeleteMapping(path = "/luggage/{id}")
     public ResponseEntity<Void> deleteLuggageFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif, @PathVariable("id") String id) {
-        return null;
+        try {
+            if (luggageService.deleteLuggage(cod, nif, Integer.parseInt(id))) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
+        } catch (LuggageNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (NumberFormatException  e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package org.educa.airline.repository.inmemory;
 
 import org.educa.airline.entity.Luggage;
+import org.educa.airline.exceptions.LuggageNotFoundException;
 import org.educa.airline.repository.LuggageRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -62,9 +63,11 @@ public class InMemoryLuggageRepository implements LuggageRepository {
     /**
      *
      */
-    public void deleteLuggage(String flightId, String nif, int luggageId) {
+    public boolean deleteLuggage(String flightId, String nif, int luggageId) throws LuggageNotFoundException {
         if (existLuggage(flightId, nif, luggageId)) {
-            luggage.get(flightId).get(nif).remove(luggageId);
+            return luggage.get(flightId).get(nif).remove(luggageId) != null;
+        } else {
+            throw new LuggageNotFoundException();
         }
     }
 }

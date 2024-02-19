@@ -1,5 +1,6 @@
 package org.educa.airline.services;
 
+import lombok.Getter;
 import org.educa.airline.entity.Luggage;
 import org.educa.airline.entity.Passenger;
 import org.educa.airline.exceptions.MiValidacionException;
@@ -12,16 +13,21 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PassengerService extends Repositories{
+@Getter
+public class PassengerService{
+
+    private final InMemoryPassengerRepository inMemoryPassengerRepository;
+    private FlightService flightService;
 
     @Autowired
-    PassengerService(InMemoryFlightRepository inMemoryFlightRepository, InMemoryLuggageRepository inMemoryLuggageRepository, InMemoryPassengerRepository inMemoryPassengerRepository, ValidadorDeCampos validadorDeCampos) {
-        super(inMemoryFlightRepository, inMemoryLuggageRepository, inMemoryPassengerRepository, validadorDeCampos);
+    PassengerService(InMemoryPassengerRepository inMemoryPassengerRepository, FlightService flightService) {
+        this.flightService = flightService;
+        this.inMemoryPassengerRepository = inMemoryPassengerRepository;
     }
 
     public boolean asociarVueloYPasagero(String cod, Passenger passenger) throws MiValidacionException {
-        if (getInMemoryFlightRepository().getFlight(cod) != null) {
-            if (getInMemoryPassengerRepository().addPassenger(passenger)) {
+        if (flightService.getAFlight(cod) != null) {
+            if (inMemoryPassengerRepository.addPassenger(passenger)) {
                 return true;
             } else {
                 throw new MiValidacionException();
@@ -33,35 +39,24 @@ public class PassengerService extends Repositories{
     }
 
     public Passenger getPassengerByIdAndNif(String idVuelo, String nif) {
-        return getInMemoryPassengerRepository().getPassenger(idVuelo, nif);
+        return inMemoryPassengerRepository.getPassenger(idVuelo, nif);
     }
 
     public boolean update(String cod, String nif, Passenger passenger) throws MiValidacionException {
-        if (getInMemoryFlightRepository().getFlight(cod) != null && getInMemoryPassengerRepository().existPassenger(cod, nif)) {
-            getInMemoryPassengerRepository().updatePassenger(nif, passenger);
+        if (flightService.getAFlight(cod) != null && inMemoryPassengerRepository.existPassenger(cod, nif)) {
+            inMemoryPassengerRepository.updatePassenger(nif, passenger);
             return true;
         }
         return false;
     }
 
     public boolean delete(String idVuelo, String nif) {
-        if (getInMemoryPassengerRepository().deletePassenger(idVuelo, nif)) {
-            borrarLosEquipajesDeUnPasajeroEnUnVuelo(idVuelo, nif);
-            return true;
-        } else {
-            return false;
-        }
+        return inMemoryPassengerRepository.deletePassenger(idVuelo, nif);
+
 
     }
 
     public List<Passenger> getAllPassengersOfAFlight(String idVuelo) {
-        return getInMemoryPassengerRepository().listPassengers(idVuelo);
-    }
-
-    private void borrarLosEquipajesDeUnPasajeroEnUnVuelo(String cod, String nif) {
-        List<Luggage> equipajes = getInMemoryLuggageRepository().listLuggage(cod, nif);
-        for (int i = 0; i < equipajes.size(); i++) {
-            getInMemoryLuggageRepository().deleteLuggage(equipajes.get(i).getFlightCod(), equipajes.get(i).getNif(), equipajes.get(i).getId());
-        }
+        return inMemoryPassengerRepository.listPassengers(idVuelo);
     }
 }

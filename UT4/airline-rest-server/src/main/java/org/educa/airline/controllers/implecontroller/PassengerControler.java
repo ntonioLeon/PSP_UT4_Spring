@@ -3,6 +3,7 @@ package org.educa.airline.controllers.implecontroller;
 import org.educa.airline.controllers.IPassengerController;
 import org.educa.airline.dto.PassengerDTO;
 import org.educa.airline.entity.Passenger;
+import org.educa.airline.exceptions.LuggageNotFoundException;
 import org.educa.airline.exceptions.MiValidacionException;
 import org.educa.airline.mappers.PassengerMapper;
 import org.educa.airline.services.PassengerService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping(path = "/flights/{cod}")
 public class PassengerControler implements IPassengerController {
 
     private final PassengerService passengerService;
@@ -28,7 +30,7 @@ public class PassengerControler implements IPassengerController {
 
     //POST
     @Override
-    @PostMapping(path = "/flights/{cod}/passengers")
+    @PostMapping(path = "/passenger")
     public ResponseEntity<Void> associatePassengerToFlight(@PathVariable("cod")String cod, @RequestBody PassengerDTO passengerDTO) {
         try {
             if (passengerService.asociarVueloYPasagero(cod, passengerMapper.toEntity(passengerDTO))) {
@@ -48,7 +50,7 @@ public class PassengerControler implements IPassengerController {
      * @return
      */
     @Override
-    @GetMapping(path = "/flights/{cod}/passengers/{nif}")
+    @GetMapping(path = "/passenger/{nif}")
     public ResponseEntity<PassengerDTO> isAPassengerOnAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif) {
         Passenger passenger = passengerService.getPassengerByIdAndNif(cod, nif);
         if (passenger != null) {
@@ -70,7 +72,7 @@ public class PassengerControler implements IPassengerController {
      * @return
      */
     @Override
-    @PutMapping(path = "/flights/{cod}/passengers/{nif}")
+    @PutMapping(path = "/passenger/{nif}")
     public ResponseEntity<Void> updatePassengerInAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif, @RequestBody PassengerDTO passengerDTO) {
         try {
             if (passengerService.update(cod, nif, passengerMapper.toEntity(passengerDTO))) {
@@ -90,7 +92,7 @@ public class PassengerControler implements IPassengerController {
      * @return
      */
     @Override
-    @DeleteMapping(path = "/flights/{cod}/passengers/{nif}")
+    @DeleteMapping(path = "/passenger/{nif}")
     public ResponseEntity<Void> deletePassegerFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif) {
         if (passengerService.delete(cod, nif)) {
             return ResponseEntity.ok().build();
@@ -105,7 +107,7 @@ public class PassengerControler implements IPassengerController {
      * @return
      */
     @Override
-    @GetMapping(path = "/flights/{cod}/passengers")
+    @GetMapping(path = "/passengers")
     public ResponseEntity<List<PassengerDTO>> getAllPassengerOnAFlight(@PathVariable("cod") String cod) {
         List<Passenger> passengers = passengerService.getAllPassengersOfAFlight(cod);
         if (!passengers.isEmpty()) {

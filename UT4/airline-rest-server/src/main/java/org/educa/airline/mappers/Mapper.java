@@ -2,6 +2,7 @@ package org.educa.airline.mappers;
 
 import org.educa.airline.exceptions.MiValidacionException;
 import org.educa.airline.services.validador.ValidadorDeCampos;
+import org.springframework.stereotype.Component;
 
 import java.sql.SQLOutput;
 import java.text.DateFormat;
@@ -10,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+@Component
 public abstract class Mapper {
     public final ValidadorDeCampos validadorDeCampos = new ValidadorDeCampos();
 

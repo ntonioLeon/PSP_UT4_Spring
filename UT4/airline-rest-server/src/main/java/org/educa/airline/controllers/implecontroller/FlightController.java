@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
+@RequestMapping(path = "/flights")
 public class FlightController implements IFlightController {
     private final FlightService flightService;
     private final FlightMapper flightMapper;
@@ -34,7 +35,7 @@ public class FlightController implements IFlightController {
      * @return
      */
     @Override
-    @GetMapping(path = "/flights")
+    @GetMapping(path = "")
     public ResponseEntity<List<FlightDTO>> getFlights(@RequestParam(value = "ori") String origin, @RequestParam(value = "des") String destination) {
         List<Flight> vuelos = flightService.obtenerVuelosPorOriYDes(origin, destination);
         if (!vuelos.isEmpty()) {
@@ -51,7 +52,7 @@ public class FlightController implements IFlightController {
      * @return
      */
     @Override
-    @GetMapping(path = "/flights/{cod}")
+    @GetMapping(path = "/{cod}")
     public ResponseEntity<FlightDTO> getOneFlight(@PathVariable("cod") String cod, @RequestParam(value = "date") String date) {
         Flight vuelo = null;
         try {
@@ -72,7 +73,7 @@ public class FlightController implements IFlightController {
      * @return
      */
     @Override
-    @PostMapping(path = "/flights/add")
+    @PostMapping(path = "/add")
     public ResponseEntity<Void> addAFlight(@Valid @RequestBody FlightDTO flightDTO) {
         try {
             if (flightService.agregar(flightMapper.toEntity(flightDTO))) {
@@ -93,7 +94,7 @@ public class FlightController implements IFlightController {
      * @return
      */
     @Override
-    @GetMapping(path = "/flights/get/{cod}")
+    @GetMapping(path = "/get/{cod}")
     public ResponseEntity<FlightDTO> getOneFlightbyId(@PathVariable("cod") String cod) {
         Flight vuelo = flightService.getAFlight(cod);
         if (vuelo != null) {
@@ -105,7 +106,7 @@ public class FlightController implements IFlightController {
 
     //PUT
     @Override
-    @PutMapping(path = "/flights/update/{cod}")
+    @PutMapping(path = "/update/{cod}")
     public ResponseEntity<Void> updateFlight(@PathVariable("cod") String cod, @RequestBody FlightDTO flightDTO){
         try {
             if (flightService.update(cod, flightMapper.toEntity(flightDTO))) {
@@ -120,7 +121,7 @@ public class FlightController implements IFlightController {
 
     //DELETE
     @Override
-    @DeleteMapping(path = "/flights/delete/{cod}")
+    @DeleteMapping(path = "/delete/{cod}")
     public ResponseEntity<Void> deleteFlight(@PathVariable("cod") String cod){
         if (flightService.delete(cod)) {
             return ResponseEntity.ok().build();
