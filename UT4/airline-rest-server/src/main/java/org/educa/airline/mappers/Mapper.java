@@ -3,6 +3,7 @@ package org.educa.airline.mappers;
 import org.educa.airline.exceptions.MiValidacionException;
 import org.educa.airline.services.validador.ValidadorDeCampos;
 
+import java.sql.SQLOutput;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

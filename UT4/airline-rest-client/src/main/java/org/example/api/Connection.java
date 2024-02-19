@@ -1,5 +1,6 @@
 package org.example.api;
 
+import org.example.exception.BadRequestException;
 import org.example.exception.NotFoundException;
 import org.example.exception.ValidationFailException;
 import org.example.exception.YaExisteException;
@@ -41,9 +42,10 @@ public class Connection {
         try (HttpClient client = HttpClient.newHttpClient()) {
             HttpResponse<String> respuesta = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(respuesta.body());
-
             if (respuesta.statusCode() == 400) {
-                throw new ValidationFailException();
+                throw new BadRequestException();
+            } else if (respuesta.statusCode() == 404) {
+                throw new NotFoundException();
             }else if (respuesta.statusCode() == 412) {
                 throw new YaExisteException();
             }
@@ -87,7 +89,7 @@ public class Connection {
                 return respuesta.body();
             } else if (respuesta.statusCode() == 404) {
                 throw new NotFoundException();
-            }  else {
+            } else {
                 throw new Exception();
             }
         }

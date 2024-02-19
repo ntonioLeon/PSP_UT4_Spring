@@ -52,11 +52,10 @@ public class FlightService extends Service {
             System.out.println("Vuelo borrado.");
         } catch (ValidationFailException vfe) {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
-        }catch (Exception nfe) {
-            nfe.printStackTrace();
-            if (nfe.getClass().getName().equals("NotFoundException")) {
-                System.out.println("No se encontro el vuelo que se deseaba borrar.");
-            }
+        }catch  (NotFoundException e) {
+            System.out.println("No se encontro el vuelo que se deseaba borrar.");
+        }catch(Exception nfe) {
+            System.out.println("Ocurrio un error inesperado.");
         }
     }
 
@@ -73,11 +72,10 @@ public class FlightService extends Service {
             printearVuelo(flightDTO);
         } catch (ValidationFailException vfe) {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
-        }catch (Exception nfe) {
-            nfe.printStackTrace();
-            if (nfe.getClass().getName().equals("NotFoundException")) {
-                System.out.println("No se encontro el vuelo que se deseaba buscar.");
-            }
+        }catch (NotFoundException e) {
+            System.out.println("No se encontro el vuelo que se deseaba buscar.");
+        } catch (Exception e) {
+            System.out.println("Ha ocurrido un erro inesperado");
         }
     }
 
@@ -96,11 +94,10 @@ public class FlightService extends Service {
             }
         } catch (ValidationFailException ex) {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
+        } catch (NotFoundException e) {
+            System.out.println("No se encontro el vuelo que se deseaba buscar.");
         } catch (Exception nfe) {
-            nfe.printStackTrace();
-            if (nfe.getClass().getName().equals("NotFoundException")) {
-                System.out.println("No se encontro el vuelo que se deseaba buscar.");
-            }
+            System.out.println("Un error inesperado a ocurrido");
         }
     }
 

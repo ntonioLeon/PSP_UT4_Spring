@@ -24,7 +24,4 @@ public interface IPassengerController {
 
     //GET
     public ResponseEntity<List<PassengerDTO>> getAllPassengerOnAFlight(@PathVariable("cod") String cod);
-
-    //GET
-    public ResponseEntity<List<PassengerDTO>> getAllPassenger();
 }

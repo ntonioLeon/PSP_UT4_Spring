@@ -17,7 +17,7 @@ public class LuggageMapper  extends Mapper{
      * @return
      */
     public Luggage toEntity(LuggageDTO luggageDTO) throws MiValidacionException {
-        return new Luggage(fromStringToInt(luggageDTO.getId()), luggageDTO.getNif(), luggageDTO.getFlightCod(), luggageDTO.getDescription());
+        return new Luggage(fromStringToInt(luggageDTO.getId()), validadorDeCampos.checkDni(luggageDTO.getNif()), luggageDTO.getFlightCod(), luggageDTO.getDescription());
     }
 
     /**
@@ -25,8 +25,8 @@ public class LuggageMapper  extends Mapper{
      * @param luggage
      * @return
      */
-    public LuggageDTO toDTO(Luggage luggage) {
-        return new LuggageDTO(fromIntTOString(luggage.getId()), luggage.getNif(), luggage.getFlightCod(), luggage.getDescription());
+    public LuggageDTO toDTO(Luggage luggage) throws MiValidacionException{
+        return new LuggageDTO(fromIntTOString(luggage.getId()), validadorDeCampos.checkDni(luggage.getNif()), luggage.getFlightCod(), luggage.getDescription());
     }
 
     /**
@@ -34,10 +34,10 @@ public class LuggageMapper  extends Mapper{
      * @param luggages
      * @return
      */
-    public List<LuggageDTO> toDTOs(List<Luggage> luggages) {
+    public List<LuggageDTO> toDTOs(List<Luggage> luggages) throws MiValidacionException {
         List<LuggageDTO> luggageDTOs = new ArrayList<>();
         for (Luggage luggage : luggages) {
-            luggageDTOs.add(new LuggageDTO(fromIntTOString(luggage.getId()), luggage.getNif(), luggage.getFlightCod(), luggage.getDescription()));
+            luggageDTOs.add(new LuggageDTO(fromIntTOString(luggage.getId()), validadorDeCampos.checkDni(luggage.getNif()), luggage.getFlightCod(), luggage.getDescription()));
 
         }
         return luggageDTOs;
@@ -51,7 +51,7 @@ public class LuggageMapper  extends Mapper{
     public List<Luggage> toEntities(List<LuggageDTO> luggagesDTO) throws MiValidacionException {
         List<Luggage> luggages = new ArrayList<>();
         for (LuggageDTO luggageDTO : luggagesDTO) {
-            luggages.add(new Luggage(fromStringToInt(luggageDTO.getId()), luggageDTO.getNif(), luggageDTO.getFlightCod(), luggageDTO.getDescription()));
+            luggages.add(new Luggage(fromStringToInt(luggageDTO.getId()), validadorDeCampos.checkDni(luggageDTO.getNif()), luggageDTO.getFlightCod(), luggageDTO.getDescription()));
         }
         return luggages;
     }

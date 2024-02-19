@@ -17,11 +17,11 @@ public class LuggageService  extends Service {
     public void crearLuggage(Scanner scanner) {
         try {
             System.out.println();
-            String id = utiles.checkCampo(scanner, "Id.");
+            String id = utiles.checkCampo(scanner, "Id");
             System.out.println();
-            String nif = utiles.checkCampo(scanner, "Nif.");
+            String nif = utiles.checkCampo(scanner, "Nif");
             System.out.println();
-            String cod = utiles.checkCampo(scanner, "Codigo de vuelo.");
+            String cod = utiles.checkCampo(scanner, "Codigo de vuelo");
             System.out.println();
             String descripcion = utiles.checkCampo(scanner, "Descripcion");
 
@@ -31,9 +31,9 @@ public class LuggageService  extends Service {
 
             System.out.println("Equipaje creado.");
         } catch (ValidationFailException e) {
-            System.out.println();
+            System.out.println("Fallo en la validacion de campos");
         } catch (BadRequestException e) {
-            System.out.println();
+            System.out.println("El equipaje esta mal construido");
         } catch (YaExisteException e) {
             System.out.println("Ya existe un equipaje con ese id.");
         } catch (NotFoundException e) {
@@ -50,11 +50,11 @@ public class LuggageService  extends Service {
     public void mostarLuggageDeUnPasajero(Scanner scanner) {
         try {
             System.out.println();
-            String id = utiles.checkCampo(scanner, "Id.");
+            String id = utiles.checkCampo(scanner, "Id");
             System.out.println();
-            String nif = utiles.checkCampo(scanner, "Nif.");
+            String nif = utiles.checkCampo(scanner, "Nif");
             System.out.println();
-            String cod = utiles.checkCampo(scanner, "Codigo de vuelo.");
+            String cod = utiles.checkCampo(scanner, "Codigo de vuelo");
             System.out.println();
 
             LuggageDTO luggageDTO = apiLuggageService.getALuggageFromAPassenger(id, nif, cod);
@@ -73,9 +73,9 @@ public class LuggageService  extends Service {
         }
     }
 
-    public void MostrarTodosLosEquipajesDeUnVuelo(Scanner scanner) {
+    public void MostrarTodosLosEquipajesDeUnPasajeroVuelo(Scanner scanner) {
         try {
-            String cod = utiles.checkCampo(scanner, "Codigo de vuelo.");
+            String cod = utiles.checkCampo(scanner, "Codigo de vuelo");
             System.out.println();
 
             LuggageDTO[] luggageDTOs = apiLuggageService.getAllLuggagesFromAFlight(cod);

@@ -7,8 +7,8 @@ import org.example.dto.PassengerDTO;
 public class ApiLuggageService extends ApiService {
 
     private final String URL = super.URL + "/flights/";
-    private final String TRAS_CODE_URL = "/passenger";
-    private final String TRAS_NIF_URL = "/luggage";
+    private final String TRAS_CODE_URL = "/passengers";
+    private final String TRAS_NIF_URL = "/luggages";
 
 
     public void create(LuggageDTO luggageDTO) throws Exception {

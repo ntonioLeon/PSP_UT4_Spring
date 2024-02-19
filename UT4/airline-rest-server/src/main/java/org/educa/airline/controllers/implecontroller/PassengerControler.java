@@ -28,7 +28,7 @@ public class PassengerControler implements IPassengerController {
 
     //POST
     @Override
-    @PostMapping(path = "/flights/{cod}/passenger")
+    @PostMapping(path = "/flights/{cod}/passengers")
     public ResponseEntity<Void> associatePassengerToFlight(@PathVariable("cod")String cod, @RequestBody PassengerDTO passengerDTO) {
         try {
             if (passengerService.asociarVueloYPasagero(cod, passengerMapper.toEntity(passengerDTO))) {
@@ -48,11 +48,15 @@ public class PassengerControler implements IPassengerController {
      * @return
      */
     @Override
-    @GetMapping(path = "/flights/{cod}/passenger/{nif}")
+    @GetMapping(path = "/flights/{cod}/passengers/{nif}")
     public ResponseEntity<PassengerDTO> isAPassengerOnAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif) {
         Passenger passenger = passengerService.getPassengerByIdAndNif(cod, nif);
         if (passenger != null) {
-            return ResponseEntity.ok(passengerMapper.toDTO(passenger));
+            try {
+                return ResponseEntity.ok(passengerMapper.toDTO(passenger));
+            } catch (MiValidacionException e) {
+                return ResponseEntity.notFound().build();
+            }
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -66,7 +70,7 @@ public class PassengerControler implements IPassengerController {
      * @return
      */
     @Override
-    @PutMapping(path = "/flights/{cod}/passenger/{nif}")
+    @PutMapping(path = "/flights/{cod}/passengers/{nif}")
     public ResponseEntity<Void> updatePassengerInAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif, @RequestBody PassengerDTO passengerDTO) {
         try {
             if (passengerService.update(cod, nif, passengerMapper.toEntity(passengerDTO))) {
@@ -86,7 +90,7 @@ public class PassengerControler implements IPassengerController {
      * @return
      */
     @Override
-    @DeleteMapping(path = "/flights/{cod}/passenger/{nif}")
+    @DeleteMapping(path = "/flights/{cod}/passengers/{nif}")
     public ResponseEntity<Void> deletePassegerFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif) {
         if (passengerService.delete(cod, nif)) {
             return ResponseEntity.ok().build();
@@ -101,22 +105,15 @@ public class PassengerControler implements IPassengerController {
      * @return
      */
     @Override
-    @GetMapping(path = "/flights/{cod}/passenger")
+    @GetMapping(path = "/flights/{cod}/passengers")
     public ResponseEntity<List<PassengerDTO>> getAllPassengerOnAFlight(@PathVariable("cod") String cod) {
         List<Passenger> passengers = passengerService.getAllPassengersOfAFlight(cod);
         if (!passengers.isEmpty()) {
-            return ResponseEntity.ok(passengerMapper.toDTOs(passengers));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @Override
-    @GetMapping(path = "/flights/passenger/all")
-    public ResponseEntity<List<PassengerDTO>> getAllPassenger() {
-        List<Passenger> passengers = passengerService.getAllPassengers();
-        if (!passengers.isEmpty()) {
-            return ResponseEntity.ok(passengerMapper.toDTOs(passengers));
+            try {
+                return ResponseEntity.ok(passengerMapper.toDTOs(passengers));
+            } catch (MiValidacionException e) {
+                return ResponseEntity.notFound().build();
+            }
         } else {
             return ResponseEntity.notFound().build();
         }

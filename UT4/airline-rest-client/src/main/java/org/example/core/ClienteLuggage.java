@@ -26,7 +26,7 @@ public class ClienteLuggage {
                     luggageService.mostarLuggageDeUnPasajero(scanner);
                     break;
                 case "4":
-                    luggageService.MostrarTodosLosEquipajesDeUnVuelo(scanner);
+                    luggageService.MostrarTodosLosEquipajesDeUnPasajeroVuelo(scanner);
                     break;
                 default:
                     System.err.println("opción no valida.");
@@ -39,8 +39,8 @@ public class ClienteLuggage {
         System.out.println("0. Salir");
         System.out.println("1. Crear un equipaje");
         System.out.println("2. Borrar un equipaje");
-        System.out.println("3. Mostrar el equipale de un pasajero");
-        System.out.println("4. Mostrar todos los equipajes de un vuelo");
+        System.out.println("3. Mostrar un equipaje");
+        System.out.println("4. Mostrar todos los equipajes de un pasajero");
         System.out.println("Introduzca una opción");
     }
 }

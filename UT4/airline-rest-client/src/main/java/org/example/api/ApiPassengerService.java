@@ -6,7 +6,7 @@ import org.example.dto.PassengerDTO;
 public class ApiPassengerService extends ApiService {
 
     private final String URL = super.URL + "/flights/";
-    private final String TRAS_CODE_URL = "/passenger";
+    private final String TRAS_CODE_URL = "/passengers";
 
 
     public void asociar(String codigo, PassengerDTO passengerDTO) throws Exception {
@@ -29,10 +29,10 @@ public class ApiPassengerService extends ApiService {
         return gson.fromJson(body, PassengerDTO[].class);
     }
 
-    public void updatePassenger(String codigo, PassengerDTO passengerDTO) throws Exception {
+    public void updatePassenger(String codigo, String nif, PassengerDTO passengerDTO) throws Exception {
         Gson gson = new Gson();
         String body = gson.toJson(passengerDTO);
-        connection.doUpdate(body, URL+codigo+TRAS_CODE_URL+"/"+passengerDTO.getNif());
+        connection.doUpdate(body, URL+codigo+TRAS_CODE_URL+"/"+nif);
     }
 
     public void desAsociar(String codigo, String nif) throws  Exception{

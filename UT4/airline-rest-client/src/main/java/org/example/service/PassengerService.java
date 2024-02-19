@@ -35,8 +35,12 @@ public class PassengerService extends Service {
             System.out.println("Pasajero asociado...");
         } catch (ValidationFailException ex) {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
-        } catch (Exception ex) {
-            System.out.println("Fallo en la creacion del vuelo.");
+        } catch (BadRequestException e) {
+            System.out.println("Los campos del pasajero no son validos.");
+        }catch (NotFoundException e) {
+            System.out.println("Vuelo no encontrado");
+        }catch (Exception ex) {
+            System.out.println("Fallo en la creacion del pasajero.");
         }
     }
 
@@ -53,6 +57,8 @@ public class PassengerService extends Service {
             printearPassenger(passengerDTO);
         } catch (ValidationFailException ex) {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
+        } catch (NotFoundException e) {
+            System.out.println("No se encontro el vuelo.");
         } catch (Exception ex) {
             System.out.println("Fallo en la creacion del vuelo.");
         }
@@ -61,9 +67,10 @@ public class PassengerService extends Service {
     public void updatePasengerFromFlight(Scanner scanner) {
         PassengerDTO passengerDTO = null;
         String codigo = "";
+        String nif = "";
         try {
             System.out.println("Introduce el NIF del pasajero y el codigo de vuelo para encontrar al pasajero para la modificacion.");
-            String nif = utiles.checkCampo(scanner, "Nif");
+            nif = utiles.checkCampo(scanner, "Nif");
             System.out.println();
             codigo = utiles.checkCampo(scanner, "Codigo de vuelo");
             System.out.println();
@@ -83,7 +90,7 @@ public class PassengerService extends Service {
             System.out.println("Pasajero encontrado");
             try {
                 modificacion(scanner, passengerDTO);
-                apiPassengerService.updatePassenger(codigo, passengerDTO);
+                apiPassengerService.updatePassenger(codigo, nif, passengerDTO);
                 System.out.println("Modificacion realizada con existo.");
             } catch (ValidationFailException ex) {
                 System.out.println("ERROR EN LA MODIFICACION:");
@@ -180,18 +187,20 @@ public class PassengerService extends Service {
             }
         } catch (ValidationFailException ex) {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
-        } catch (Exception ex) {
+        } catch (NotFoundException e) {
+            System.out.println("No se encontro el vuelo.");
+        }catch (Exception ex) {
             System.out.println("Ha ocurrido un error inesperado.");
         }
     }
 
     private void printearPassenger(PassengerDTO passengerDTO) {
-        System.out.println("NIF:" + passengerDTO.getNif());
-        System.out.println("Codigo de vuelo" + passengerDTO.getFlightCod());
-        System.out.println("Nombre" + passengerDTO.getName());
-        System.out.println("Apellido" + passengerDTO.getSurname());
-        System.out.println("Email" + passengerDTO.getEmail());
-        System.out.println("Numero de asiento" + passengerDTO.getSeatNumber());
+        System.out.println("NIF: " + passengerDTO.getNif());
+        System.out.println("Codigo de vuelo: " + passengerDTO.getFlightCod());
+        System.out.println("Nombre: " + passengerDTO.getName());
+        System.out.println("Apellido: " + passengerDTO.getSurname());
+        System.out.println("Email: " + passengerDTO.getEmail());
+        System.out.println("Numero de asiento: " + passengerDTO.getSeatNumber());
         System.out.println();
     }
 

@@ -18,7 +18,7 @@ public class PassengerMapper extends Mapper{
      * @return
      */
     public Passenger toEntity(PassengerDTO passengerDTO) throws MiValidacionException{
-        return new Passenger(passengerDTO.getNif(), passengerDTO.getFlightCod(), passengerDTO.getName(), passengerDTO.getSurname(), passengerDTO.getEmail(), fromStringToInt(passengerDTO.getSeatNumber()));
+        return new Passenger(validadorDeCampos.checkDni(passengerDTO.getNif()), passengerDTO.getFlightCod(), passengerDTO.getName(), passengerDTO.getSurname(), passengerDTO.getEmail(), fromStringToInt(passengerDTO.getSeatNumber()));
     }
 
     /**
@@ -26,8 +26,8 @@ public class PassengerMapper extends Mapper{
      * @param passenger
      * @return
      */
-    public PassengerDTO toDTO(Passenger passenger) {
-        return new PassengerDTO(passenger.getNif(), passenger.getFlightCod(), passenger.getName(), passenger.getSurname(), passenger.getEmail(), fromIntTOString(passenger.getSeatNumber()));
+    public PassengerDTO toDTO(Passenger passenger) throws MiValidacionException{
+        return new PassengerDTO(validadorDeCampos.checkDni(passenger.getNif()), passenger.getFlightCod(), passenger.getName(), passenger.getSurname(), passenger.getEmail(), fromIntTOString(passenger.getSeatNumber()));
     }
 
     /**
@@ -35,10 +35,10 @@ public class PassengerMapper extends Mapper{
      * @param passengers
      * @return
      */
-    public List<PassengerDTO> toDTOs(List<Passenger> passengers) {
+    public List<PassengerDTO> toDTOs(List<Passenger> passengers) throws MiValidacionException {
         List<PassengerDTO> passengerDTOs = new ArrayList<>();
         for (Passenger passenger : passengers) {
-            passengerDTOs.add(new PassengerDTO(passenger.getNif(), passenger.getFlightCod(), passenger.getName(), passenger.getSurname(), passenger.getEmail(), fromIntTOString(passenger.getSeatNumber())));
+            passengerDTOs.add(new PassengerDTO(validadorDeCampos.checkDni(passenger.getNif()), passenger.getFlightCod(), passenger.getName(), passenger.getSurname(), passenger.getEmail(), fromIntTOString(passenger.getSeatNumber())));
 
         }
         return passengerDTOs;
@@ -52,9 +52,10 @@ public class PassengerMapper extends Mapper{
     public List<Passenger> toEntities(List<PassengerDTO> passengersDTO) throws MiValidacionException {
         List<Passenger> passengers = new ArrayList<>();
         for (PassengerDTO passengerDTO : passengersDTO) {
-            passengers.add(new Passenger(passengerDTO.getNif(), passengerDTO.getFlightCod(), passengerDTO.getName(), passengerDTO.getSurname(), passengerDTO.getEmail(), fromStringToInt(passengerDTO.getSeatNumber())));
+            passengers.add(new Passenger(validadorDeCampos.checkDni(passengerDTO.getNif()), passengerDTO.getFlightCod(), passengerDTO.getName(), passengerDTO.getSurname(), passengerDTO.getEmail(), fromStringToInt(passengerDTO.getSeatNumber())));
 
         }
         return passengers;
     }
+
 }

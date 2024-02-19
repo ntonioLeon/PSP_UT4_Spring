@@ -58,4 +58,13 @@ public class InMemoryLuggageRepository implements LuggageRepository {
         luggage.get(flightId).putIfAbsent(nif, new HashMap<>());
         return luggage.get(flightId).get(nif);
     }
+
+    /**
+     *
+     */
+    public void deleteLuggage(String flightId, String nif, int luggageId) {
+        if (existLuggage(flightId, nif, luggageId)) {
+            luggage.get(flightId).get(nif).remove(luggageId);
+        }
+    }
 }
