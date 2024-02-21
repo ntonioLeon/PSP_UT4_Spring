@@ -14,7 +14,7 @@ public interface IPassengerController {
     public ResponseEntity<Void> associatePassengerToFlight(@PathVariable("cod")String cod, @RequestBody PassengerDTO passengerDTO);
 
     //GET
-    public ResponseEntity<PassengerDTO> isAPassengerOnAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif);
+    public ResponseEntity<PassengerDTO> getAPassengerOfAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif);
 
     //PUT
     public ResponseEntity<Void> updatePassengerInAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif, @RequestBody PassengerDTO passengerDTO);

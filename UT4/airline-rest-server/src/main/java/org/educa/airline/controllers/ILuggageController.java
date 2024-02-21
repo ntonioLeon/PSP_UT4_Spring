@@ -19,5 +19,5 @@ public interface ILuggageController {
     public ResponseEntity<Void> addALuggageFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif, @RequestBody LuggageDTO luggageDTO);
 
     //DELETE
-    public ResponseEntity<Void> deleteLuggageFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif, @PathVariable("id") String id);
+    public ResponseEntity<Void> deleteALuggageFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif, @PathVariable("id") String id);
 }

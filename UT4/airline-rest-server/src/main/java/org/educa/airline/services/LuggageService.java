@@ -2,17 +2,11 @@ package org.educa.airline.services;
 
 import lombok.Getter;
 import org.educa.airline.entity.Luggage;
-import org.educa.airline.exceptions.FlightNotFoundException;
-import org.educa.airline.exceptions.LuggageNotFoundException;
-import org.educa.airline.exceptions.LuggageYaExisteException;
-import org.educa.airline.exceptions.PassengerNotFoundException;
-import org.educa.airline.repository.inmemory.InMemoryFlightRepository;
+import org.educa.airline.exceptions.luggage.LuggageNotFoundException;
+import org.educa.airline.exceptions.luggage.LuggageYaExisteException;
 import org.educa.airline.repository.inmemory.InMemoryLuggageRepository;
-import org.educa.airline.repository.inmemory.InMemoryPassengerRepository;
-import org.educa.airline.services.validador.ValidadorDeCampos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.yaml.snakeyaml.error.YAMLException;
 
 import java.util.List;
 
@@ -21,12 +15,10 @@ import java.util.List;
 public class LuggageService {
 
     private InMemoryLuggageRepository inMemoryLuggageRepository;
-    private PassengerService passengerService;
 
     @Autowired
     LuggageService(PassengerService passengerService, InMemoryLuggageRepository inMemoryLuggageRepository) {
         this.inMemoryLuggageRepository = inMemoryLuggageRepository;
-        this.passengerService = passengerService;
     }
 
     public Luggage getALuggageFromAFlight(int id, String cod, String nif) {
@@ -39,19 +31,11 @@ public class LuggageService {
     }
 
 
-    public boolean create(String cod, String nif, Luggage entity) throws FlightNotFoundException, PassengerNotFoundException, LuggageYaExisteException {
-        if (passengerService.getFlightService().getAFlight(cod) != null) {
-            if (passengerService.getPassengerByIdAndNif(cod, nif) != null) {
-                if (inMemoryLuggageRepository.addLuggage(cod, nif, entity)) {
-                    return true;
-                } else {
-                    throw new LuggageYaExisteException();
-                }
-            } else {
-                throw new PassengerNotFoundException();
-            }
+    public boolean create(String cod, String nif, Luggage entity) throws LuggageYaExisteException {
+        if (inMemoryLuggageRepository.addLuggage(cod, nif, entity)) {
+            return true;
         } else {
-            throw new FlightNotFoundException();
+            throw new LuggageYaExisteException();
         }
     }
 

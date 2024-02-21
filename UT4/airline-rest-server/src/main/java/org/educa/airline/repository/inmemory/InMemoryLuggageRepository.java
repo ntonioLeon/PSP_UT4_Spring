@@ -1,9 +1,8 @@
 package org.educa.airline.repository.inmemory;
 
 import org.educa.airline.entity.Luggage;
-import org.educa.airline.exceptions.LuggageNotFoundException;
+import org.educa.airline.exceptions.luggage.LuggageNotFoundException;
 import org.educa.airline.repository.LuggageRepository;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

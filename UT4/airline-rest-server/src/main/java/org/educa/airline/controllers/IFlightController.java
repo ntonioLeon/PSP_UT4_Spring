@@ -15,20 +15,11 @@ public interface IFlightController {
 
 
     //GET
-    public ResponseEntity<List<FlightDTO>> getFlights(@PathVariable("origin") String origin, @PathVariable("destination") String destination);
+    public ResponseEntity<List<FlightDTO>> getFlightsByOriAndDes(@PathVariable("origin") String origin, @PathVariable("destination") String destination);
 
     //GET
-    public ResponseEntity<FlightDTO> getOneFlight(@PathVariable("cod") String cod, @PathVariable("date") String date);
-
-    //GET
-    public ResponseEntity<FlightDTO> getOneFlightbyId(@PathVariable("cod") String cod);
+    public ResponseEntity<FlightDTO> getOneFlightByDate(@PathVariable("cod") String cod, @PathVariable("date") String date);
 
     //POST
     public ResponseEntity<Void> addAFlight(@RequestBody FlightDTO flightDTO);
-
-    //PUT
-    public ResponseEntity<Void> updateFlight(@PathVariable("cod") String cod, @RequestBody FlightDTO flightDTO);
-
-    //DELETE
-    public ResponseEntity<Void> deleteFlight(@PathVariable("cod") String cod);
 }
