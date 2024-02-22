@@ -57,13 +57,13 @@ public class LuggageService  extends Service {
 
             System.out.println("Equipaje borrado...");
         } catch (ValidationFailException e) {
-            System.out.println();
+            System.out.println("Fallaste 5 veces al introducir un campo");
         } catch (BadRequestException e) {
-            System.out.println();
+            System.out.println("Datos no validos");
         } catch (YaExisteException e) {
             System.out.println("Ya existe un equipaje con ese id.");
         } catch (NotFoundException e) {
-            System.out.println("vuelo o pasajero no encontrado.");
+            System.out.println("vuelo, pasajero o equipaje no encontrado.");
         } catch (Exception e) {
             System.out.println("Error inesperado.");
         }
@@ -83,13 +83,13 @@ public class LuggageService  extends Service {
 
             printearLuggage(luggageDTO);
         } catch (ValidationFailException e) {
-            System.out.println();
+            System.out.println("Fallaste 5 veces al introducir un campo");
         } catch (BadRequestException e) {
-            System.out.println();
+            System.out.println("Datos incorrectos");
         } catch (YaExisteException e) {
             System.out.println("Ya existe un equipaje con ese id.");
         } catch (NotFoundException e) {
-            System.out.println("vuelo o pasajero no encontrado.");
+            System.out.println("vuelo, pasajero o equipaje no encontrado.");
         } catch (Exception e) {
             System.out.println("Error inesperado.");
         }
@@ -106,13 +106,13 @@ public class LuggageService  extends Service {
                 printearLuggage(luggageDTO);
             }
         } catch (ValidationFailException e) {
-            System.out.println();
+            System.out.println("Fallaste 5 veces al tratar de meter el campo.");
         } catch (BadRequestException e) {
-            System.out.println();
+            System.out.println("Id de vuelo no valida.");
         } catch (YaExisteException e) {
             System.out.println("Ya existe un equipaje con ese id.");
         } catch (NotFoundException e) {
-            System.out.println("vuelo o pasajero no encontrado.");
+            System.out.println("vuelo no encontrado.");
         } catch (Exception e) {
             System.out.println("Error inesperado.");
         }
@@ -131,9 +131,9 @@ public class LuggageService  extends Service {
                 printearLuggage(luggageDTO);
             }
         } catch (ValidationFailException e) {
-            System.out.println("Has fallado 5 veces en no introducir campos no validos");
+            System.out.println("Has fallado 5 veces en no introducir campos no validos.");
         } catch (BadRequestException e) {
-            System.out.println("Campos no validos, chechea el nif");
+            System.out.println("Campos no validos, chechea el nif.");
         } catch (YaExisteException e) {
             System.out.println("Ya existe un equipaje con ese id.");
         } catch (NotFoundException e) {

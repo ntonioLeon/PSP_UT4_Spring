@@ -2,7 +2,6 @@ package org.example.api;
 
 import org.example.exception.BadRequestException;
 import org.example.exception.NotFoundException;
-import org.example.exception.ValidationFailException;
 import org.example.exception.YaExisteException;
 
 import java.net.URI;
@@ -20,7 +19,7 @@ public class Connection {
 
         try (HttpClient client = HttpClient.newHttpClient()){
             HttpResponse<String> respuesta = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(respuesta.body());
+            //System.out.println(respuesta.body());
 
             if (respuesta.statusCode() == 200) {
                 return respuesta.body();
@@ -43,7 +42,7 @@ public class Connection {
 
         try (HttpClient client = HttpClient.newHttpClient()) {
             HttpResponse<String> respuesta = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(respuesta.body());
+            //System.out.println(respuesta.body());
 
             if (respuesta.statusCode() == 201) {
 
@@ -68,7 +67,7 @@ public class Connection {
 
         try (HttpClient client = HttpClient.newHttpClient()){
             HttpResponse<String> respuesta = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(respuesta.body());
+            //System.out.println(respuesta.body());
 
             if (respuesta.statusCode() == 200) {
 
@@ -92,7 +91,7 @@ public class Connection {
 
         try (HttpClient client = HttpClient.newHttpClient()){
             HttpResponse<String> respuesta = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(respuesta.body());
+            //System.out.println(respuesta.body());
 
             if (respuesta.statusCode() == 200) {
 
