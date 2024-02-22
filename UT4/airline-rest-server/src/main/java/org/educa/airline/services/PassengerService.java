@@ -56,4 +56,12 @@ public class PassengerService{
     public List<Passenger> getAllPassengersOfAFlight(String idVuelo) {
         return inMemoryPassengerRepository.listPassengers(idVuelo);
     }
+
+    public boolean existPassenger(String cod, String nif) throws PassengerNotFoundException {
+        if (inMemoryPassengerRepository.existPassenger(cod, nif)) {
+            return true;
+        } else {
+            throw new PassengerNotFoundException();
+        }
+    }
 }

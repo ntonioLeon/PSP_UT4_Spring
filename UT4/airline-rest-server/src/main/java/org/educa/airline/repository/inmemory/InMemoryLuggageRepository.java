@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryLuggageRepository implements LuggageRepository {
@@ -52,7 +53,6 @@ public class InMemoryLuggageRepository implements LuggageRepository {
             return false;
         }
     }
-
     private Map<Integer, Luggage> getLuggage(String flightId, String nif) {
         luggage.putIfAbsent(flightId, new HashMap<>());
         luggage.get(flightId).putIfAbsent(nif, new HashMap<>());
@@ -60,7 +60,12 @@ public class InMemoryLuggageRepository implements LuggageRepository {
     }
 
     /**
-     *
+     * Metodo que borra un equipaje
+     * @param flightId del vuelo
+     * @param nif del pasajero
+     * @param luggageId del equipaje
+     * @return true si se borra.
+     * @throws LuggageNotFoundException si no existe el equipaje a borrar
      */
     public boolean deleteLuggage(String flightId, String nif, int luggageId) throws LuggageNotFoundException {
         if (existLuggage(flightId, nif, luggageId)) {
@@ -68,5 +73,31 @@ public class InMemoryLuggageRepository implements LuggageRepository {
         } else {
             throw new LuggageNotFoundException();
         }
+    }
+
+    /**
+     * Metodo que lista todos los luggages de un vuelo
+     * @param cod del vuelo
+     * @return una lista con todos los luggages de un vuelo
+     */
+    public List<Luggage> listLuggageOfAFlight(String cod) {
+        List<Luggage> luggages = new ArrayList<>();
+        if (vueloExisteYTieneEquipajes(cod)) {
+            Map<String, Map<Integer, Luggage>> pasajeros = luggage.get(cod);  //Mapa con los nifs de los pasajeros y sus respectivos equipajes
+            luggages = pasajeros.values()
+                                .stream()
+                                .flatMap(x -> x.values().stream())
+                                .collect(Collectors.toList());  //Basandonos en la lambda de InMemoryPassengerRepositoru.
+        }
+        return luggages;
+    }
+
+    /**
+     * Metodo que comprueba si el vuelo existe dentro del "luggage"
+     * @param cod del vuelo
+     * @return un boolean si el vuelo existe
+     */
+    private boolean vueloExisteYTieneEquipajes(String cod) {
+        return luggage.get(cod) != null;
     }
 }

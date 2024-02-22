@@ -12,7 +12,6 @@ import org.educa.airline.entity.Luggage;
 import org.educa.airline.entity.Passenger;
 import org.educa.airline.exceptions.*;
 import org.educa.airline.exceptions.flight.FlightNotFoundException;
-import org.educa.airline.exceptions.flight.FilightYaExistenteException;
 import org.educa.airline.exceptions.luggage.LuggageNotFoundException;
 import org.educa.airline.exceptions.luggage.LuggageYaExisteException;
 import org.educa.airline.exceptions.passenger.PassengerNotFoundException;
@@ -23,7 +22,6 @@ import org.educa.airline.services.FlightService;
 import org.educa.airline.services.LuggageService;
 import org.educa.airline.services.PassengerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,10 +48,10 @@ public class FlightController implements IFlightController, IPassengerController
     }
 
     /**
-     * GET
-     * @param origin
-     * @param destination
-     * @return
+     * Metodo que lista todos los vuelo con el mismo destino y los devuelve
+     * @param origin del vuelo.
+     * @param destination del vuelo.
+     * @return una lista con los vuelos que compartan ese destino y origen.
      */
     @Override
     @GetMapping(path = "")
@@ -67,10 +65,10 @@ public class FlightController implements IFlightController, IPassengerController
     }
 
     /**
-     * GET
-     * @param cod
-     * @param date
-     * @return
+     * Metodo que busca un vuelo con el id y date y lo devuelve
+     * @param cod del vuelo a buscar
+     * @param date la fecha de buequeda
+     * @return El vuelo correspondiente al codigo y fecha
      */
     @Override
     @GetMapping(path = "/{cod}")
@@ -85,9 +83,9 @@ public class FlightController implements IFlightController, IPassengerController
     }
 
     /**
-     * POST
-     * @param flightDTO
-     * @return
+     * metodo que valida los campos de un vuelo, comprueba que no exista y lo agrega
+     * @param flightDTO del vuelo
+     * @return El status code correspondiente al outcome de la accion (ok, created, not found, badRequest, duplicated...)
      */
     @Override
     @PostMapping(path = "/add")
@@ -105,7 +103,12 @@ public class FlightController implements IFlightController, IPassengerController
 
     //----------------------------------PASSENGERS------------------------------------------------------------
 
-    //POST
+    /**
+     * Metodo que valida los campos de un pasajero, comprueba la existencia del vuelo y crea el pasajero
+     * @param cod del vuelo donde crearlo
+     * @param passengerDTO pasajero a crear
+     * @return El status code correspondiente al outcome de la accion (ok, created, not found, badRequest, duplicated...)
+     */
     @Override
     @PostMapping(path = "/{cod}/passenger")
     public ResponseEntity<Void> associatePassengerToFlight(@PathVariable("cod")String cod, @RequestBody PassengerDTO passengerDTO) {
@@ -126,10 +129,10 @@ public class FlightController implements IFlightController, IPassengerController
     }
 
     /**
-     * GET
-     * @param cod
-     * @param nif
-     * @return
+     * Metodo que busca un pasajero por el cod de vuelo y el nif y lo devuelve
+     * @param cod del vuelo
+     * @param nif del pasajero
+     * @return pasajero a devolver
      */
     @Override
     @GetMapping(path = "/{cod}/passenger/{nif}")
@@ -144,11 +147,11 @@ public class FlightController implements IFlightController, IPassengerController
     }
 
     /**
-     * PUT
-     * @param cod
-     * @param nif
-     * @param passengerDTO
-     * @return
+     * Metodo que actualiza la informacion de un pasajero (pasa las pruebas de creacion)
+     * @param cod del vuelo (dato antiguo)
+     * @param nif del pasajero (dato antiguo)
+     * @param passengerDTO pasajero nuevo para updatear
+     * @return El status code correspondiente al outcome de la accion (ok, created, not found, badRequest, duplicated...)
      */
     @Override
     @PutMapping(path = "/{cod}/passenger/{nif}")
@@ -167,15 +170,22 @@ public class FlightController implements IFlightController, IPassengerController
     }
 
     /**
-     * DELETE
-     * @param cod
-     * @param nif
-     * @return
+     * Metodo que elimina un pasajero y cualquier equipaje que este pudiese tener
+     * @param cod del vuelo
+     * @param nif del pasajero
+     * @return El status code correspondiente al outcome de la accion (ok, created, not found, badRequest, duplicated...)
      */
     @Override
     @DeleteMapping(path = "/{cod}/passenger/{nif}")
     public ResponseEntity<Void> deletePassegerFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif) {
         if (passengerService.delete(cod, nif)) {
+            if (!luggageService.getAllLuggageFromAPassengerOnAFlight(cod, nif).isEmpty()) {
+                try {
+                    luggageService.deleteAllLuggagesFromAPassenger(cod, nif);
+                } catch (LuggageNotFoundException e) {
+                    return ResponseEntity.notFound().build();
+                }
+            }
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
@@ -183,9 +193,9 @@ public class FlightController implements IFlightController, IPassengerController
     }
 
     /**
-     * GET
-     * @param cod
-     * @return
+     * metodo que lista todos los equipajes de un vuelo.
+     * @param cod del vuelo
+     * @return una lista con los pasajero del vuelo
      */
     @Override
     @GetMapping(path = "/{cod}/passengers")
@@ -204,9 +214,16 @@ public class FlightController implements IFlightController, IPassengerController
 
     //---------------------------------Luggage-------------------------------------------------------------
 
+    /**
+     * metodo que busca un equipaje de un pasajero en un vuelo
+     * @param id del equipaje
+     * @param cod del vuelo
+     * @param nif del pasajero
+     * @return un equipaje
+     */
     @Override
     @GetMapping(path = "/{cod}/passengers/{nif}/luggage/{id}")
-    public ResponseEntity<LuggageDTO> getALulaggeFromAFlight(@PathVariable("id") int id, @PathVariable("cod") String cod, @PathVariable("nif") String nif) {
+    public ResponseEntity<LuggageDTO> getALulaggeFromAPassengerOnFlight(@PathVariable("id") int id, @PathVariable("cod") String cod, @PathVariable("nif") String nif) {
         Luggage luggage = luggageService.getALuggageFromAFlight(id, cod, nif);
         try {
             if (luggage != null) {
@@ -219,11 +236,16 @@ public class FlightController implements IFlightController, IPassengerController
         }
     }
 
-    //GET
+    /**
+     * metodo que lista los equipajes de un pasajero en un vuelo
+     * @param cod del vuelo
+     * @param nif del pasajero
+     * @return Una lista de quipajes
+     */
     @Override
     @GetMapping(path = "/{cod}/passengers/{nif}/luggages")
-    public ResponseEntity<List<LuggageDTO>> getAllLulaggesFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif) {
-        List<Luggage> luggages = luggageService.getAllLuggageFromAFlight(cod, nif);
+    public ResponseEntity<List<LuggageDTO>> getAllLuggagesFromPassengerOnAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif) {
+        List<Luggage> luggages = luggageService.getAllLuggageFromAPassengerOnAFlight(cod, nif);
         try {
             if (!luggages.isEmpty()) {
                 return ResponseEntity.ok(luggageMapper.toDTOs(luggages));
@@ -235,34 +257,75 @@ public class FlightController implements IFlightController, IPassengerController
         }
     }
 
-    //POST
+    /**
+     * Metodo que lista todos los equipajes de un vuelo
+     * @param cod del vuelo
+     * @return Una lista de equipajes
+     */
+    @GetMapping(path = "/{cod}/passengers/luggages")
+    public ResponseEntity<List<LuggageDTO>> getAllLuggagesFromAFlight(@PathVariable("cod") String cod) {
+        List<Luggage> luggages = luggageService.getAllLuggagesOfAFlights(cod);
+        try {
+            if (!luggages.isEmpty()) {
+                return ResponseEntity.ok(luggageMapper.toDTOs(luggages));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (MiValidacionException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    /**
+     * Metodo que crea un equipaje. (pruebas de que un equipaje ya existe, vuelo y pasajero valido..)
+     * @param cod del vuelo
+     * @param nif del pasajero
+     * @param luggageDTO El json correspondiente al equipaje
+     * @return El status code correspondiente al outcome de la accion (ok, created, not found, badRequest, duplicated...)
+     */
     @Override
     @PostMapping(path = "/{cod}/passengers/{nif}/luggage")
     public ResponseEntity<Void> addALuggageFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif, @RequestBody LuggageDTO luggageDTO) {
         try {
-            if (luggageService.create(cod, nif, luggageMapper.toEntity(luggageDTO))) {
-                return ResponseEntity.status(201).build();
+            if (flightService.getAFlight(cod) && passengerService.existPassenger(cod, nif)) {
+                if (luggageService.create(cod, nif, luggageMapper.toEntity(luggageDTO))) {
+                    return ResponseEntity.status(201).build();
+                } else {
+                    return ResponseEntity.status(409).build();
+                }
             } else {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.notFound().build();
             }
         } catch (MiValidacionException e) {
             return ResponseEntity.badRequest().build();
         } catch (LuggageYaExisteException e) {
             return ResponseEntity.status(409).build();
+        } catch (FlightNotFoundException | PassengerNotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 
-    //DELETE
+    /**
+     * metodo que borra un equipaje
+     * @param cod del vuelo
+     * @param nif del pasajero
+     * @param id del Luggage
+     * @return El status code correspondiente al outcome de la accion (ok, created, not found, badRequest, duplicated...)
+     */
     @Override
     @DeleteMapping(path = "/{cod}/passengers/{nif}/luggage/{id}")
     public ResponseEntity<Void> deleteALuggageFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif, @PathVariable("id") String id) {
         try {
-            if (luggageService.deleteLuggage(cod, nif, Integer.parseInt(id))) {
-                return ResponseEntity.ok().build();
+            if (flightService.getAFlight(cod) && passengerService.existPassenger(cod, nif)) {
+                if (luggageService.deleteLuggage(cod, nif, Integer.parseInt(id))) {
+                    return ResponseEntity.ok().build();
+                } else {
+                    return ResponseEntity.badRequest().build();
+                }
             } else {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.notFound().build();
             }
-        } catch (LuggageNotFoundException e) {
+        } catch (FlightNotFoundException | PassengerNotFoundException | LuggageNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (NumberFormatException  e) {
             return ResponseEntity.badRequest().build();

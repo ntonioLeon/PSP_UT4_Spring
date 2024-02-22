@@ -26,8 +26,12 @@ public class LuggageService {
     }
 
 
-    public List<Luggage> getAllLuggageFromAFlight(String cod, String nif) {
+    public List<Luggage> getAllLuggageFromAPassengerOnAFlight(String cod, String nif) {
         return inMemoryLuggageRepository.listLuggage(cod, nif);
+    }
+
+    public List<Luggage> getAllLuggagesOfAFlights(String cod) {
+        return inMemoryLuggageRepository.listLuggageOfAFlight(cod);
     }
 
 
@@ -45,5 +49,12 @@ public class LuggageService {
 
     public List<Luggage> listLuggage(String cod, String nif) {
         return inMemoryLuggageRepository.listLuggage(cod, nif);
+    }
+
+    public void deleteAllLuggagesFromAPassenger(String cod, String nif) throws LuggageNotFoundException {
+        List<Luggage> luggagesOfAPassenger = getAllLuggageFromAPassengerOnAFlight(cod, nif);
+        for (int i = 0; i < luggagesOfAPassenger.size(); i++) {
+            inMemoryLuggageRepository.deleteLuggage(luggagesOfAPassenger.get(i).getFlightCod(), luggagesOfAPassenger.get(i).getNif(), luggagesOfAPassenger.get(i).getId());
+        }
     }
 }
