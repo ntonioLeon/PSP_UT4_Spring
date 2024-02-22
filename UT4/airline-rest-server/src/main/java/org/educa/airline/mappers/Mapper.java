@@ -35,6 +35,7 @@ public abstract class Mapper {
 
     public Date fromStringToDate(String fecha) throws MiValidacionException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        formatter.setLenient(false);
         try {
             return formatter.parse(fecha);
         } catch (ParseException e) {

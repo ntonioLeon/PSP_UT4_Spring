@@ -10,6 +10,7 @@ import org.educa.airline.repository.inmemory.InMemoryFlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -25,11 +26,12 @@ public class FlightService{
         this.inMemoryFlightRepository = inMemoryFlightRepository;
     }
 
-    public Flight UnVueloPorFecha(String cod, String date) throws MiValidacionException, FlightNotFoundException {
+    public Flight UnVueloPorFecha(String cod, String date) throws MiValidacionException, FlightNotFoundException, ParseException {
         Flight vuelo = inMemoryFlightRepository.getFlight(cod);
         if (vuelo != null) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-            if (date.equals(formatter.format(vuelo.getDate()))) {
+            formatter.setLenient(false);
+            if (formatter.parse(date).equals(vuelo.getDate())) {
                 return vuelo;
             } else {
                 throw new FlightNotFoundException();

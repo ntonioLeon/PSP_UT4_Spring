@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Utiles {
     private final String DATE_FORMAT = "yyyy-MM-dd";
-    private final String CARACTERES_PROHIBIDOS = "!*'();:@&=+$,/?%#[]";
+    private final String CARACTERES_PROHIBIDOS = "!*'();:&=+$,/?%#[]";
 
     public String checkCampo(Scanner scanner, String contexto) throws ValidationFailException {
         int fallos = 0;

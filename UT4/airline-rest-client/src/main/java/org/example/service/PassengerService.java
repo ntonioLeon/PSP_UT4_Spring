@@ -5,6 +5,7 @@ import org.example.dto.PassengerDTO;
 import org.example.exception.BadRequestException;
 import org.example.exception.NotFoundException;
 import org.example.exception.ValidationFailException;
+import org.example.exception.YaExisteException;
 
 import java.util.*;
 
@@ -15,7 +16,7 @@ public class PassengerService extends Service {
     public void associatePassenger(Scanner scanner) {
         try {
             System.out.println("Indroduce ");
-            String nif = utiles.checkCampo(scanner, "nif");
+            String nif = utiles.checkCampo(scanner, "nif (unique)");
             System.out.println();
             String codigo = utiles.checkCampo(scanner, "Codigo de vuelo");
             System.out.println();
@@ -36,10 +37,12 @@ public class PassengerService extends Service {
         } catch (ValidationFailException ex) {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
         } catch (BadRequestException e) {
-            System.out.println("Los campos del pasajero no son validos.");
-        }catch (NotFoundException e) {
+            System.out.println("Los campos del pasajero no son validos, compruebe que el NIF sea valido y el asiento un numero entero.");
+        } catch (NotFoundException e) {
             System.out.println("Vuelo no encontrado");
-        }catch (Exception ex) {
+        } catch (YaExisteException ex) {
+            System.out.println("Ya existe un pasajero con ese NIF en ese vuelo.");
+        } catch (Exception ex) {
             System.out.println("Fallo en la creacion del pasajero.");
         }
     }
@@ -82,6 +85,10 @@ public class PassengerService extends Service {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
         } catch (NotFoundException e) {
             System.out.println("No se encontro el pasajero que se deseaba modificar.");
+        } catch (BadRequestException ex) {
+            System.out.println("Error en la integridad de los campos compruebe el dni y el nuemro de asiento");
+        } catch (YaExisteException ex) {
+            System.out.println("Ha intentado poner un DNI de un pasajero que existia previamente");
         } catch (Exception ex) {
             System.out.println("Fallo en la creacion del vuelo.");
         }
@@ -101,7 +108,10 @@ public class PassengerService extends Service {
             } catch (NotFoundException e) {
                 System.out.println("ERROR EN LA MODIFICACION:");
                 System.out.println("No se encontro el vuelo en el que desea asignar al pasajero. ");
-            }catch (Exception ex) {
+            } catch (YaExisteException ex) {
+                System.out.println("Ha intentado poner un DNI de un pasajero que existia previamente");
+                System.out.println("ERROR EN LA MODIFICACION:");
+            } catch (Exception ex) {
                 System.out.println("ERROR EN LA MODIFICACION:");
                 System.out.println("Error inesperado.");
             }
@@ -118,7 +128,7 @@ public class PassengerService extends Service {
                     System.out.println();
                     break;
                 case "1": //nif
-                    String nueNif = utiles.checkCampo(scanner, "Nif");
+                    String nueNif = utiles.checkCampo(scanner, "Nif (unique)");
                     passengerDTO.setNif(nueNif);
                     System.out.println("Modificacion realizada");
                     break;

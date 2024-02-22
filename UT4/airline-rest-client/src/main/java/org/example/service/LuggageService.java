@@ -17,7 +17,7 @@ public class LuggageService  extends Service {
     public void crearLuggage(Scanner scanner) {
         try {
             System.out.println();
-            String id = utiles.checkCampo(scanner, "Id");
+            String id = utiles.checkCampo(scanner, "Id (unique)");
             System.out.println();
             String nif = utiles.checkCampo(scanner, "Nif");
             System.out.println();
@@ -44,7 +44,29 @@ public class LuggageService  extends Service {
     }
 
     public void borrarLuggage(Scanner scanner) {
+        try {
+            System.out.println();
+            String id = utiles.checkCampo(scanner, "Id");
+            System.out.println();
+            String nif = utiles.checkCampo(scanner, "Nif");
+            System.out.println();
+            String cod = utiles.checkCampo(scanner, "Codigo de vuelo");
+            System.out.println();
 
+            apiLuggageService.deleteLuggageFromPassenger(id, nif, cod);
+
+            System.out.println("Equipaje borrado...");
+        } catch (ValidationFailException e) {
+            System.out.println();
+        } catch (BadRequestException e) {
+            System.out.println();
+        } catch (YaExisteException e) {
+            System.out.println("Ya existe un equipaje con ese id.");
+        } catch (NotFoundException e) {
+            System.out.println("vuelo o pasajero no encontrado.");
+        } catch (Exception e) {
+            System.out.println("Error inesperado.");
+        }
     }
 
     public void mostarLuggageDeUnPasajero(Scanner scanner) {
@@ -73,7 +95,7 @@ public class LuggageService  extends Service {
         }
     }
 
-    public void MostrarTodosLosEquipajesDeUnPasajeroVuelo(Scanner scanner) {
+    public void mostrarTodosLosEquipajesDeUnVuelo(Scanner scanner) {
         try {
             String cod = utiles.checkCampo(scanner, "Codigo de vuelo");
             System.out.println();
@@ -87,6 +109,31 @@ public class LuggageService  extends Service {
             System.out.println();
         } catch (BadRequestException e) {
             System.out.println();
+        } catch (YaExisteException e) {
+            System.out.println("Ya existe un equipaje con ese id.");
+        } catch (NotFoundException e) {
+            System.out.println("vuelo o pasajero no encontrado.");
+        } catch (Exception e) {
+            System.out.println("Error inesperado.");
+        }
+    }
+
+    public void mostrarTodosLosEquipajesDePasajeroEnUnVuelo(Scanner scanner) {
+        try {
+            String cod = utiles.checkCampo(scanner, "Codigo de vuelo");
+            System.out.println();
+            String nif = utiles.checkCampo(scanner, "Nif");
+            System.out.println();
+
+            LuggageDTO[] luggageDTOs = apiLuggageService.getAllLuggagesFromAPassenger(cod, nif);
+
+            for (LuggageDTO luggageDTO : luggageDTOs) {
+                printearLuggage(luggageDTO);
+            }
+        } catch (ValidationFailException e) {
+            System.out.println("Has fallado 5 veces en no introducir campos no validos");
+        } catch (BadRequestException e) {
+            System.out.println("Campos no validos, chechea el nif");
         } catch (YaExisteException e) {
             System.out.println("Ya existe un equipaje con ese id.");
         } catch (NotFoundException e) {

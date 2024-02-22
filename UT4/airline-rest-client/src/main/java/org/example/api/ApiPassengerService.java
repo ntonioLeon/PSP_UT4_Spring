@@ -6,7 +6,7 @@ import org.example.dto.PassengerDTO;
 public class ApiPassengerService extends ApiService {
 
     private final String URL = super.URL + "/flights/";
-    private final String TRAS_CODE_URL = "/passengers";
+    private final String TRAS_CODE_URL = "/passenger";
 
 
     public void asociar(String codigo, PassengerDTO passengerDTO) throws Exception {
@@ -23,7 +23,7 @@ public class ApiPassengerService extends ApiService {
     }
 
     public PassengerDTO[] findAllFromCod(String codigo) throws Exception {
-        String body = connection.doGet(URL+codigo+TRAS_CODE_URL);
+        String body = connection.doGet(URL+codigo+TRAS_CODE_URL+"s");
         Gson gson = new Gson();
 
         return gson.fromJson(body, PassengerDTO[].class);

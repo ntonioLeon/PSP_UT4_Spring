@@ -8,7 +8,7 @@ public class ApiLuggageService extends ApiService {
 
     private final String URL = super.URL + "/flights/";
     private final String TRAS_CODE_URL = "/passengers";
-    private final String TRAS_NIF_URL = "/luggages";
+    private final String TRAS_NIF_URL = "/luggage";
 
 
     public void create(LuggageDTO luggageDTO) throws Exception {
@@ -19,7 +19,7 @@ public class ApiLuggageService extends ApiService {
 
     public LuggageDTO[] getAllLuggagesFromAFlight(String cod) throws Exception {
         Gson gson = new Gson();
-        String body = connection.doGet(URL+cod+TRAS_CODE_URL+TRAS_NIF_URL);
+        String body = connection.doGet(URL+cod+TRAS_CODE_URL+TRAS_NIF_URL+"s");
         return gson.fromJson(body, LuggageDTO[].class);
     }
 
@@ -27,6 +27,12 @@ public class ApiLuggageService extends ApiService {
         Gson gson = new Gson();
         String body = connection.doGet(URL+cod+TRAS_CODE_URL+"/"+nif+TRAS_NIF_URL+"/"+id);
         return gson.fromJson(body, LuggageDTO.class);
+    }
+
+    public LuggageDTO[] getAllLuggagesFromAPassenger(String cod, String nif) throws Exception {
+        Gson gson = new Gson();
+        String body = connection.doGet(URL+cod+TRAS_CODE_URL+"/"+nif+TRAS_NIF_URL+"s");
+        return gson.fromJson(body, LuggageDTO[].class);
     }
 
     public void deleteLuggageFromPassenger(String id, String nif, String cod) throws Exception {

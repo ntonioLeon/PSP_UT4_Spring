@@ -2,6 +2,7 @@ package org.educa.airline.services;
 
 import lombok.Getter;
 import org.educa.airline.entity.Luggage;
+import org.educa.airline.entity.Passenger;
 import org.educa.airline.exceptions.luggage.LuggageNotFoundException;
 import org.educa.airline.exceptions.luggage.LuggageYaExisteException;
 import org.educa.airline.repository.inmemory.InMemoryLuggageRepository;
@@ -51,7 +52,7 @@ public class LuggageService {
         return inMemoryLuggageRepository.listLuggage(cod, nif);
     }
 
-    public void deleteAllLuggagesFromAPassenger(String cod, String nif) throws LuggageNotFoundException {
+    public void deleteAllLuggagesFromAPassenger(String cod, String nif) {
         List<Luggage> luggagesOfAPassenger = getAllLuggageFromAPassengerOnAFlight(cod, nif);
         for (int i = 0; i < luggagesOfAPassenger.size(); i++) {
             inMemoryLuggageRepository.deleteLuggage(luggagesOfAPassenger.get(i).getFlightCod(), luggagesOfAPassenger.get(i).getNif(), luggagesOfAPassenger.get(i).getId());

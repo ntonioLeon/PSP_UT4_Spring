@@ -65,14 +65,9 @@ public class InMemoryLuggageRepository implements LuggageRepository {
      * @param nif del pasajero
      * @param luggageId del equipaje
      * @return true si se borra.
-     * @throws LuggageNotFoundException si no existe el equipaje a borrar
      */
-    public boolean deleteLuggage(String flightId, String nif, int luggageId) throws LuggageNotFoundException {
-        if (existLuggage(flightId, nif, luggageId)) {
-            return luggage.get(flightId).get(nif).remove(luggageId) != null;
-        } else {
-            throw new LuggageNotFoundException();
-        }
+    public boolean deleteLuggage(String flightId, String nif, int luggageId) {
+        return luggage.get(flightId).get(nif).remove(luggageId) != null;
     }
 
     /**

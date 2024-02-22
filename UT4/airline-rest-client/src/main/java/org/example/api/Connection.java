@@ -26,6 +26,8 @@ public class Connection {
                 return respuesta.body();
             } else if (respuesta.statusCode() == 404) {
                 throw new NotFoundException();
+            } else if (respuesta.statusCode() == 400) {
+                throw new BadRequestException();
             } else {
                 throw new Exception("Error: " + respuesta.statusCode());
             }
@@ -42,17 +44,22 @@ public class Connection {
         try (HttpClient client = HttpClient.newHttpClient()) {
             HttpResponse<String> respuesta = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(respuesta.body());
-            if (respuesta.statusCode() == 400) {
+
+            if (respuesta.statusCode() == 201) {
+
+            }else if (respuesta.statusCode() == 400) {
                 throw new BadRequestException();
             } else if (respuesta.statusCode() == 404) {
                 throw new NotFoundException();
-            }else if (respuesta.statusCode() == 412) {
+            }else if (respuesta.statusCode() == 409) {
                 throw new YaExisteException();
+            } else {
+                throw new Exception();
             }
         }
     }
 
-    public String doUpdate(String body, String url) throws Exception {
+    public void doUpdate(String body, String url) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .PUT(HttpRequest.BodyPublishers.ofString(body))
@@ -64,18 +71,20 @@ public class Connection {
             System.out.println(respuesta.body());
 
             if (respuesta.statusCode() == 200) {
-                return respuesta.body();
+
+            } else if (respuesta.statusCode() == 409) {
+                throw new YaExisteException();
             } else if (respuesta.statusCode() == 404) {
                 throw new NotFoundException();
             } else if (respuesta.statusCode() == 400) {
-                throw new ValidationFailException();
-            }else {
+                throw new BadRequestException();
+            } else {
                 throw new Exception("Error: " + respuesta.statusCode());
             }
         }
     }
 
-    public String doDelete(String url) throws Exception  {
+    public void doDelete(String url) throws Exception  {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .DELETE()
@@ -86,9 +95,11 @@ public class Connection {
             System.out.println(respuesta.body());
 
             if (respuesta.statusCode() == 200) {
-                return respuesta.body();
+
             } else if (respuesta.statusCode() == 404) {
                 throw new NotFoundException();
+            } else if (respuesta.statusCode() == 400) {
+                throw new BadRequestException();
             } else {
                 throw new Exception();
             }

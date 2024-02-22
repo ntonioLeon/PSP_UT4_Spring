@@ -15,6 +15,7 @@ import org.educa.airline.exceptions.flight.FlightNotFoundException;
 import org.educa.airline.exceptions.luggage.LuggageNotFoundException;
 import org.educa.airline.exceptions.luggage.LuggageYaExisteException;
 import org.educa.airline.exceptions.passenger.PassengerNotFoundException;
+import org.educa.airline.exceptions.passenger.PassengerYaExisteException;
 import org.educa.airline.mappers.FlightMapper;
 import org.educa.airline.mappers.LuggageMapper;
 import org.educa.airline.mappers.PassengerMapper;
@@ -25,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -75,7 +77,7 @@ public class FlightController implements IFlightController, IPassengerController
     public ResponseEntity<FlightDTO> getOneFlightByDate(@PathVariable("cod") String cod, @RequestParam(value = "date") String date) {
         try {
             return ResponseEntity.ok(flightMapper.toDTO(flightService.UnVueloPorFecha(cod, date)));
-        } catch (MiValidacionException  e) {
+        } catch (MiValidacionException | ParseException e) {
             return ResponseEntity.badRequest().build();
         } catch (FlightNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -157,16 +159,19 @@ public class FlightController implements IFlightController, IPassengerController
     @PutMapping(path = "/{cod}/passenger/{nif}")
     public ResponseEntity<Void> updatePassengerInAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif, @RequestBody PassengerDTO passengerDTO) {
         try {
-            if (passengerService.update(cod, nif, passengerMapper.toEntity(passengerDTO))) {
-                return ResponseEntity.ok().build();
-            } else {
-                return ResponseEntity.notFound().build();
+            if (flightService.getAFlight(cod)) {
+                if (passengerService.update(cod, nif, passengerMapper.toEntity(passengerDTO))) {
+                    return ResponseEntity.ok().build();
+                }
             }
-        } catch (MiValidacionException  ex) {
-            return ResponseEntity.badRequest().build();
-        } catch (PassengerNotFoundException ex) {
+        } catch (FlightNotFoundException ex) {
             return ResponseEntity.notFound().build();
+        } catch (PassengerYaExisteException ex) {
+            return ResponseEntity.status(409).build();
+        } catch (MiValidacionException ex) {
+            return ResponseEntity.badRequest().build();
         }
+        return ResponseEntity.notFound().build();
     }
 
     /**
@@ -180,11 +185,7 @@ public class FlightController implements IFlightController, IPassengerController
     public ResponseEntity<Void> deletePassegerFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif) {
         if (passengerService.delete(cod, nif)) {
             if (!luggageService.getAllLuggageFromAPassengerOnAFlight(cod, nif).isEmpty()) {
-                try {
-                    luggageService.deleteAllLuggagesFromAPassenger(cod, nif);
-                } catch (LuggageNotFoundException e) {
-                    return ResponseEntity.notFound().build();
-                }
+                luggageService.deleteAllLuggagesFromAPassenger(cod, nif);
             }
             return ResponseEntity.ok().build();
         } else {

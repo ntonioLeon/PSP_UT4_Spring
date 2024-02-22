@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.api.ApiFlightService;
 import org.example.dto.FlightDTO;
+import org.example.exception.BadRequestException;
 import org.example.exception.NotFoundException;
 import org.example.exception.ValidationFailException;
 import org.example.exception.YaExisteException;
@@ -16,10 +17,11 @@ public class FlightService extends Service {
     public void createFlight(Scanner scanner) {
         try {
             System.out.println("Indroduce ");
-            String codigo = utiles.checkCampo(scanner, "Codigo de vuelo");
+            String id = utiles.checkCampo(scanner, "Id del Avion");
             System.out.println();
-            String id = utiles.checkCampo(scanner, "Id de vuelo");
+            String codigo = utiles.checkCampo(scanner, "Codigo de vuelo (unique)");
             System.out.println();
+
             String origin = utiles.checkCampo(scanner, "Origen");
             System.out.println();
             String destination = utiles.checkCampo(scanner, "Destino");
@@ -34,13 +36,11 @@ public class FlightService extends Service {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
         } catch (YaExisteException e) {
             System.out.println("Ya existe un vuelo con ese codigo de vuelo.");
+        } catch (BadRequestException e) {
+            System.out.println("Los campos no son correctos, compruebe que la fecha es valida.");
         } catch (Exception ex) {
             System.out.println("Fallo en la creacion del vuelo.");
         }
-    }
-
-    public void updateFlight(Scanner scanner) {
-
     }
 
     public void deleteFlight(Scanner scanner) {
@@ -54,7 +54,7 @@ public class FlightService extends Service {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
         }catch  (NotFoundException e) {
             System.out.println("No se encontro el vuelo que se deseaba borrar.");
-        }catch(Exception nfe) {
+        } catch(Exception nfe) {
             System.out.println("Ocurrio un error inesperado.");
         }
     }
@@ -72,8 +72,10 @@ public class FlightService extends Service {
             printearVuelo(flightDTO);
         } catch (ValidationFailException vfe) {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
-        }catch (NotFoundException e) {
+        } catch (NotFoundException e) {
             System.out.println("No se encontro el vuelo que se deseaba buscar.");
+        } catch (BadRequestException e) {
+            System.out.println("Los campos no son correctos, compruebe que la fecha es valida.");
         } catch (Exception e) {
             System.out.println("Ha ocurrido un erro inesperado");
         }
