@@ -103,6 +103,30 @@ public class FlightController implements IFlightController, IPassengerController
         }
     }
 
+    @Override
+    @DeleteMapping(path = "{cod}/delete")
+    public ResponseEntity<Void> deleteFlight(@PathVariable("cod") String cod) {
+        if (flightService.delete(cod)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @Override
+    @PutMapping(path = "{cod}/update")
+    public ResponseEntity<Void> updateFlight(@PathVariable("cod") String cod, @RequestBody FlightDTO flightDTO) {
+        try {
+            if (flightService.update(cod, flightMapper.toEntity(flightDTO))) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        }catch (MiValidacionException ex) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     //----------------------------------PASSENGERS------------------------------------------------------------
 
     /**

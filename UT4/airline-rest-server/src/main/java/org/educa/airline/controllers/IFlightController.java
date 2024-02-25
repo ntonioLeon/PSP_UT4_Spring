@@ -22,4 +22,10 @@ public interface IFlightController {
 
     //POST
     public ResponseEntity<Void> addAFlight(@RequestBody FlightDTO flightDTO);
+
+    //DELETE
+    public ResponseEntity<Void> deleteFlight(@PathVariable("cod") String cod);
+
+    //UPDATE
+    public ResponseEntity<Void> updateFlight(@PathVariable("cod") String cod, @RequestBody FlightDTO flightDTO);
 }
