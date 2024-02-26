@@ -1,5 +1,6 @@
 package org.educa.airline.dto;
 
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ public class UserDTO {
     private String nif;
     private String name;
     private String surname;
+    @Email
     private String email;
     private List<Role> roles;
 }

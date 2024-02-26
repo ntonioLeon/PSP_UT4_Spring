@@ -1,15 +1,18 @@
-package org.educa.airline.security;
+package org.educa.airline.configuration;
 
 import lombok.Getter;
-import org.educa.airline.services.UserServiceImpl;
+import org.educa.airline.services.SecurityService;
+import org.educa.airline.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 
 @Getter
@@ -17,10 +20,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SpringSecurityConfig {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
+    private final SecurityService securityService;
 
-    public SpringSecurityConfig(UserServiceImpl userService) {
+    @Autowired
+    public SpringSecurityConfig(UserService userService, SecurityService securityService) {
         this.userService = userService;
+        this.securityService = securityService;
     }
 
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -30,16 +36,20 @@ public class SpringSecurityConfig {
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(AbstractHttpConfigurer::disable).csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(Customizer.withDefaults()).authorizeHttpRequests((
+                .httpBasic(withDefaults()).authorizeHttpRequests((
                         x -> x.requestMatchers("/flights/add", "/flights/{cod}/delete", "/flights/{cod}/update").hasRole("admin")
                                 .requestMatchers("/flights/{cod}/passenger", "/flights/{cod}/passenger({nif}", "/flights/{cod}/passengers").hasAnyRole("admin", "personal")
                                 .requestMatchers("/flights", "/flights/{cod}").authenticated()
+                                .requestMatchers("/user").anonymous()
+                                .requestMatchers("/user/{id}").authenticated()
+                                .requestMatchers("/user/{id}").hasRole("admin")
+                                .anyRequest().authenticated()
                 ));
 
         return http.build();
     }
 
-    public Security passwordEncoder() {
-        return new Security();
+    public SecurityService passwordEncoder() {
+        return securityService;
     }
 }

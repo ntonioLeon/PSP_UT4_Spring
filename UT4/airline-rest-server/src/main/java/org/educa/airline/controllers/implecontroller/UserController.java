@@ -5,20 +5,26 @@ import org.educa.airline.dto.UserDTO;
 import org.educa.airline.exceptions.MiValidacionException;
 import org.educa.airline.exceptions.NoTenesPoderAquiException;
 import org.educa.airline.mappers.UserMapper;
-import org.educa.airline.services.UserServiceImpl;
+import org.educa.airline.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 @RestController
 @RequestMapping(path = "/user")
 public class UserController implements IUserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
     private final UserMapper userMapper;
 
     @Autowired
-    UserController(UserServiceImpl userService, UserMapper userMapper) {
+    UserController(UserService userService, UserMapper userMapper) {
         this.userService = userService;
         this.userMapper = userMapper;
     }
@@ -33,7 +39,8 @@ public class UserController implements IUserController {
             } else {
                 return ResponseEntity.status(409).build();
             }
-        } catch (MiValidacionException ex) {
+        } catch (MiValidacionException | NoSuchAlgorithmException | IllegalBlockSizeException | NoSuchPaddingException |
+                 BadPaddingException | InvalidKeyException ex) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -43,12 +50,13 @@ public class UserController implements IUserController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(@PathVariable("id") String id, @RequestBody UserDTO userDTO) {
         try {
-            if (userService.update(id, userMapper.toEntity(userDTO))) {
+            if (userService.update(id, userMapper. toEntity(userDTO))) {
                 return ResponseEntity.ok().build();
             } else {
                 return ResponseEntity.notFound().build();
             }
-        } catch (MiValidacionException ex) {
+        } catch (MiValidacionException | NoSuchAlgorithmException | IllegalBlockSizeException | NoSuchPaddingException |
+                 BadPaddingException | InvalidKeyException ex) {
             return ResponseEntity.badRequest().build();
         } catch (NoTenesPoderAquiException ex) {
             return ResponseEntity.status(403).build();

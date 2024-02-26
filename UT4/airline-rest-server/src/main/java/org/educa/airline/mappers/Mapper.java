@@ -1,6 +1,7 @@
 package org.educa.airline.mappers;
 
 import org.educa.airline.exceptions.MiValidacionException;
+import org.educa.airline.security.SecurityUtil;
 import org.educa.airline.services.validador.ValidadorDeCampos;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ import java.util.Locale;
 @Component
 public abstract class Mapper {
     public final ValidadorDeCampos validadorDeCampos = new ValidadorDeCampos();
+    public final SecurityUtil securityUtil = new SecurityUtil();
 
     public int fromStringToInt(String seatNumber) throws MiValidacionException {
         if (validadorDeCampos.isANumber(seatNumber)) {
@@ -21,7 +23,6 @@ public abstract class Mapper {
         } else {
             throw new MiValidacionException();
         }
-
     }
 
     public String fromIntTOString(int seatNumber) {
