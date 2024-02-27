@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class ClienteLuggage {
     LuggageService luggageService = new LuggageService();
 
-    public void run(Scanner scanner) throws Exception {
+    public void run(Scanner scanner) {
         String opt = "-1";
         while (!"0".equals(opt)) {
             menuLuggage();

@@ -70,4 +70,20 @@ public class Utiles {
         }
         return cadena;
     }
+
+    public boolean confirmaciom(Scanner scanner, String frase) {
+        System.out.println(frase);
+        String elec = "";
+        while (true) {
+            System.out.println("Pulse 1 para aceptar, 2 para cancelar.");
+            elec = scanner.nextLine();
+            if (elec.equals("1")) {
+                return true;
+            } else if (elec.equals("2")) {
+                return false;
+            } else {
+                System.out.println("Opcion no valida.");
+            }
+        }
+    }
 }

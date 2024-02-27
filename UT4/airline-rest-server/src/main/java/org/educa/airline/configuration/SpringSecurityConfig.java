@@ -40,6 +40,9 @@ public class SpringSecurityConfig {
                 .httpBasic(withDefaults()).authorizeHttpRequests((
                         x -> x.requestMatchers("/user").anonymous()
                                 .requestMatchers("/user/{id}").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/user/{id}").hasRole("admin")
+                                .requestMatchers(HttpMethod.PUT, "/user/{id}").hasRole("admin")
+                                .requestMatchers(HttpMethod.GET, "/user/{id}").hasAnyRole("admin", "personal")
                                 .requestMatchers("/user/{id}").hasAnyRole("admin", "personal", "usuario")
                                 .requestMatchers("/flights/add", "/flights/{cod}/delete", "/flights/{cod}/update").hasRole("admin")
                                 .requestMatchers(HttpMethod.GET, "/flights", "/flights/{cod}").authenticated()

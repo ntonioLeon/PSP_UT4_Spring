@@ -3,6 +3,7 @@ package org.educa.airline.services;
 import org.educa.airline.entity.Role;
 import org.educa.airline.entity.User;
 import org.educa.airline.exceptions.NoTenesPoderAquiException;
+import org.educa.airline.exceptions.user.UserDuplicatedException;
 import org.educa.airline.repository.inmemory.InMemoryUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -37,25 +38,33 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public boolean update(String id, User user) throws NoTenesPoderAquiException {
-        Authentication auth = SecurityContextHolder.getContext() .getAuthentication();
-        UserDetails userDetail = (UserDetails) auth.getPrincipal();
-        if (userDetail.getUsername().equals(id) || userDetail.getAuthorities().contains(new Role("ROLE_admin", "Administrador", "El que administra"))) {
-            if (inMemoryUserRepository.existUser(id)) {
-                inMemoryUserRepository.updateUser(user);
-                return true;
+    public boolean update(String id, User user) throws NoTenesPoderAquiException, UserDuplicatedException {
+        UserDetails userDetail = getAutenticated();
+        if (userDetail.getUsername().equals(id) || esAdmin(userDetail)) {
+            if (user.getUsername().equals(id)) {
+                if (inMemoryUserRepository.existUser(id)) {
+                    inMemoryUserRepository.updateUser(user);
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
-                return false;
+                if (!inMemoryUserRepository.existUser(user.getUsername())) {
+                    inMemoryUserRepository.deleteUser(id);
+                    inMemoryUserRepository.createUser(user);
+                } else {
+                    throw new UserDuplicatedException();
+                }
             }
         } else {
         throw new NoTenesPoderAquiException();
         }
+        return false;
     }
 
     public User getUser(String id) throws NoTenesPoderAquiException {
-        Authentication auth = SecurityContextHolder.getContext() .getAuthentication();
-        UserDetails userDetail = (UserDetails) auth.getPrincipal();
-        if (userDetail.getUsername().equals(id) || userDetail.getAuthorities().contains(new Role("ROLE_admin", "Administrador", "El que administra"))) {
+        UserDetails userDetail = getAutenticated();
+        if (userDetail.getUsername().equals(id) || esAdmin(userDetail) || esPersonal(userDetail)) {
             if (inMemoryUserRepository.existUser(id)) {
                 return inMemoryUserRepository.getUser(id);
             } else {
@@ -68,9 +77,8 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean delete(String id) throws NoTenesPoderAquiException {
-        Authentication auth = SecurityContextHolder.getContext() .getAuthentication();
-        UserDetails userDetail = (UserDetails) auth.getPrincipal();
-        if (userDetail.getUsername().equals(id) || userDetail.getAuthorities().contains(new Role("ROLE_admin", "Administrador", "El que administra"))) {
+        UserDetails userDetail = getAutenticated();
+        if (userDetail.getUsername().equals(id) || esAdmin(userDetail)) {
             if (inMemoryUserRepository.existUser(id)) {
                 inMemoryUserRepository.deleteUser(id);
                 return true;
@@ -80,5 +88,18 @@ public class UserService implements UserDetailsService {
         } else {
             throw new NoTenesPoderAquiException();
         }
+    }
+
+    private UserDetails getAutenticated() {
+        Authentication auth = SecurityContextHolder.getContext() .getAuthentication();
+        return  (UserDetails) auth.getPrincipal();
+    }
+
+    private boolean esAdmin(UserDetails userDetail) {
+        return userDetail.getAuthorities().contains(new Role("ROLE_admin", "Administrador", "El que administra"));
+    }
+
+    private boolean esPersonal(UserDetails userDetail) {
+        return userDetail.getAuthorities().contains(new Role("ROLE_personal", "Personal","El que personalea"));
     }
 }

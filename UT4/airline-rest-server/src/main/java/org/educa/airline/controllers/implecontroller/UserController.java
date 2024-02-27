@@ -4,6 +4,7 @@ import org.educa.airline.controllers.IUserController;
 import org.educa.airline.dto.UserDTO;
 import org.educa.airline.exceptions.MiValidacionException;
 import org.educa.airline.exceptions.NoTenesPoderAquiException;
+import org.educa.airline.exceptions.user.UserDuplicatedException;
 import org.educa.airline.mappers.UserMapper;
 import org.educa.airline.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,8 @@ public class UserController implements IUserController {
             return ResponseEntity.badRequest().build();
         } catch (NoTenesPoderAquiException ex) {
             return ResponseEntity.status(403).build();
+        } catch (UserDuplicatedException e) {
+            return ResponseEntity.status(409).build();
         }
     }
 

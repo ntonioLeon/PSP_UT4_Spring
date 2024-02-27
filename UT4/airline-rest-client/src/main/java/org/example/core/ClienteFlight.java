@@ -8,7 +8,7 @@ public class ClienteFlight {
 
     FlightService flightService = new FlightService();
 
-    public void run(Scanner scanner) throws Exception {
+    public void run(Scanner scanner) {
         String opt = "-1";
         while (!"0".equals(opt)) {
             menuFlight();

@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class ClientePassenger {
     PassengerService passengerService = new PassengerService();
 
-    public void run(Scanner scanner) throws Exception {
+    public void run(Scanner scanner) {
         String opt = "-1";
         while (!"0".equals(opt)) {
             menuPassenger();

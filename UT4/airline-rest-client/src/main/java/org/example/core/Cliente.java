@@ -4,14 +4,18 @@ import java.util.Scanner;
 
 public class Cliente {
 
+    public static String userName = "";
+    public static String password = "";
     private ClienteFlight clienteFlight;
     private ClientePassenger clientePassenger;
     private ClienteLuggage clienteLuggage;
+    private ClienteUser clienteUser;
 
     public Cliente() {
         this.clienteFlight = new ClienteFlight();
         this.clientePassenger = new ClientePassenger();
         this.clienteLuggage = new ClienteLuggage();
+        this.clienteUser = new ClienteUser();
     }
 
     public void run() throws Exception {
@@ -39,6 +43,9 @@ public class Cliente {
                     case 3:
                         clienteLuggage.run(scanner);
                         break;
+                    case 4:
+                        clienteUser.run(scanner);
+                        break;
                     default:
                         System.err.println("opción no valida.");
                 }
@@ -52,6 +59,7 @@ public class Cliente {
         System.out.println("1. Menu de vuelos.");
         System.out.println("2. Menu de pasajeros.");
         System.out.println("3. Menu de eqipaje.");
+        System.out.println("4. Menu de usuario.");
         System.out.println("Introduzca una opción:");
     }
 }

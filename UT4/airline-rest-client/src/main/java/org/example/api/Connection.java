@@ -1,13 +1,13 @@
 package org.example.api;
 
-import org.example.exception.BadRequestException;
-import org.example.exception.NotFoundException;
-import org.example.exception.YaExisteException;
+import org.example.core.Cliente;
+import org.example.exception.*;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Base64;
 
 public class Connection {
 
@@ -15,6 +15,7 @@ public class Connection {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .GET()
+                .header("Authorization", getBasicAuthenticationHeader(Cliente.userName, Cliente.password))
                 .build();
 
         try (HttpClient client = HttpClient.newHttpClient()){
@@ -27,6 +28,10 @@ public class Connection {
                 throw new NotFoundException();
             } else if (respuesta.statusCode() == 400) {
                 throw new BadRequestException();
+            } else if (respuesta.statusCode() == 403) {
+                throw new NoTienesPermisoException();
+            } else if (respuesta.statusCode() == 401) {
+                throw new NoAutenticatedException();
             } else {
                 throw new Exception("Error: " + respuesta.statusCode());
             }
@@ -34,6 +39,36 @@ public class Connection {
     }
 
     public void doPost(String body, String url) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .header("Content-Type", "application/json")
+                .header("Authorization", getBasicAuthenticationHeader(Cliente.userName, Cliente.password))
+                .build();
+
+        try (HttpClient client = HttpClient.newHttpClient()) {
+            HttpResponse<String> respuesta = client.send(request, HttpResponse.BodyHandlers.ofString());
+            //System.out.println(respuesta.body());
+
+            if (respuesta.statusCode() == 201) {
+
+            }else if (respuesta.statusCode() == 400) {
+                throw new BadRequestException();
+            } else if (respuesta.statusCode() == 404) {
+                throw new NotFoundException();
+            }else if (respuesta.statusCode() == 409) {
+                throw new YaExisteException();
+            } else if (respuesta.statusCode() == 403) {
+                throw new NoTienesPermisoException();
+            } else if (respuesta.statusCode() == 401) {
+                throw new NoAutenticatedException();
+            } else {
+                throw new Exception();
+            }
+        }
+    }
+
+    public void doPostUser(String body, String url) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .POST(HttpRequest.BodyPublishers.ofString(body))
@@ -52,6 +87,10 @@ public class Connection {
                 throw new NotFoundException();
             }else if (respuesta.statusCode() == 409) {
                 throw new YaExisteException();
+            } else if (respuesta.statusCode() == 403) {
+                throw new NoTienesPermisoException();
+            } else if (respuesta.statusCode() == 401) {
+                throw new NoAutenticatedException();
             } else {
                 throw new Exception();
             }
@@ -63,6 +102,7 @@ public class Connection {
                 .uri(URI.create(url))
                 .PUT(HttpRequest.BodyPublishers.ofString(body))
                 .header("Content-Type", "application/json")
+                .header("Authorization", getBasicAuthenticationHeader(Cliente.userName, Cliente.password))
                 .build();
 
         try (HttpClient client = HttpClient.newHttpClient()){
@@ -77,7 +117,11 @@ public class Connection {
                 throw new NotFoundException();
             } else if (respuesta.statusCode() == 400) {
                 throw new BadRequestException();
-            } else {
+            } else if (respuesta.statusCode() == 403) {
+                throw new NoTienesPermisoException();
+            } else if (respuesta.statusCode() == 401) {
+                throw new NoAutenticatedException();
+            }  else {
                 throw new Exception("Error: " + respuesta.statusCode());
             }
         }
@@ -87,6 +131,7 @@ public class Connection {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .DELETE()
+                .header("Authorization", getBasicAuthenticationHeader(Cliente.userName, Cliente.password))
                 .build();
 
         try (HttpClient client = HttpClient.newHttpClient()){
@@ -99,9 +144,18 @@ public class Connection {
                 throw new NotFoundException();
             } else if (respuesta.statusCode() == 400) {
                 throw new BadRequestException();
-            } else {
+            } else if (respuesta.statusCode() == 403) {
+                throw new NoTienesPermisoException();
+            } else if (respuesta.statusCode() == 401) {
+                throw new NoAutenticatedException();
+            }  else {
                 throw new Exception();
             }
         }
+    }
+
+    private static String getBasicAuthenticationHeader(String username, String password) {
+        String valueToEncode = username + ":" + password;
+        return "Basic " + Base64.getEncoder().encodeToString(valueToEncode.getBytes());
     }
 }
