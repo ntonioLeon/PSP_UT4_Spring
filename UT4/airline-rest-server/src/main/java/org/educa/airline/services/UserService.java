@@ -1,9 +1,12 @@
 package org.educa.airline.services;
 
+import org.educa.airline.entity.Role;
 import org.educa.airline.entity.User;
 import org.educa.airline.exceptions.NoTenesPoderAquiException;
 import org.educa.airline.repository.inmemory.InMemoryUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,28 +38,47 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean update(String id, User user) throws NoTenesPoderAquiException {
-        if (inMemoryUserRepository.existUser(id)) {
-            inMemoryUserRepository.updateUser(user);
-            return true;
+        Authentication auth = SecurityContextHolder.getContext() .getAuthentication();
+        UserDetails userDetail = (UserDetails) auth.getPrincipal();
+        if (userDetail.getUsername().equals(id) || userDetail.getAuthorities().contains(new Role("ROLE_admin", "Administrador", "El que administra"))) {
+            if (inMemoryUserRepository.existUser(id)) {
+                inMemoryUserRepository.updateUser(user);
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            return false;
+        throw new NoTenesPoderAquiException();
         }
     }
 
     public User getUser(String id) throws NoTenesPoderAquiException {
-        if (inMemoryUserRepository.existUser(id)) {
-            return inMemoryUserRepository.getUser(id);
+        Authentication auth = SecurityContextHolder.getContext() .getAuthentication();
+        UserDetails userDetail = (UserDetails) auth.getPrincipal();
+        if (userDetail.getUsername().equals(id) || userDetail.getAuthorities().contains(new Role("ROLE_admin", "Administrador", "El que administra"))) {
+            if (inMemoryUserRepository.existUser(id)) {
+                return inMemoryUserRepository.getUser(id);
+            } else {
+                return null;
+            }
         } else {
-            return null;
+            throw new NoTenesPoderAquiException();
         }
+
     }
 
     public boolean delete(String id) throws NoTenesPoderAquiException {
-        if (inMemoryUserRepository.existUser(id)) {
-            inMemoryUserRepository.deleteUser(id);
-            return true;
+        Authentication auth = SecurityContextHolder.getContext() .getAuthentication();
+        UserDetails userDetail = (UserDetails) auth.getPrincipal();
+        if (userDetail.getUsername().equals(id) || userDetail.getAuthorities().contains(new Role("ROLE_admin", "Administrador", "El que administra"))) {
+            if (inMemoryUserRepository.existUser(id)) {
+                inMemoryUserRepository.deleteUser(id);
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            return false;
+            throw new NoTenesPoderAquiException();
         }
     }
 }

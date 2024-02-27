@@ -6,6 +6,7 @@ import org.educa.airline.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,12 +38,12 @@ public class SpringSecurityConfig {
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(AbstractHttpConfigurer::disable).csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(withDefaults()).authorizeHttpRequests((
-                        x -> x.requestMatchers("/flights/add", "/flights/{cod}/delete", "/flights/{cod}/update").hasRole("admin")
-                                .requestMatchers("/flights/{cod}/passenger", "/flights/{cod}/passenger({nif}", "/flights/{cod}/passengers").hasAnyRole("admin", "personal")
-                                .requestMatchers("/flights", "/flights/{cod}").authenticated()
-                                .requestMatchers("/user").anonymous()
+                        x -> x.requestMatchers("/user").anonymous()
                                 .requestMatchers("/user/{id}").authenticated()
-                                .requestMatchers("/user/{id}").hasRole("admin")
+                                .requestMatchers("/user/{id}").hasAnyRole("admin", "personal", "usuario")
+                                .requestMatchers("/flights/add", "/flights/{cod}/delete", "/flights/{cod}/update").hasRole("admin")
+                                .requestMatchers(HttpMethod.GET, "/flights", "/flights/{cod}").authenticated()
+                                .requestMatchers("/flights/{cod}/passenger", "/flights/{cod}/passenger/{nif}" , "/flights/{cod}/passengers").hasAnyRole("admin", "personal")
                                 .anyRequest().authenticated()
                 ));
 

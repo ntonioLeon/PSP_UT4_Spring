@@ -91,6 +91,9 @@ public class UserController implements IUserController {
             }
         } catch (NoTenesPoderAquiException ex) {
             return ResponseEntity.status(403).build();
+        } catch (IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException | NoSuchAlgorithmException |
+                 InvalidKeyException e) {
+            return ResponseEntity.status(400).build();
         }
     }
 }

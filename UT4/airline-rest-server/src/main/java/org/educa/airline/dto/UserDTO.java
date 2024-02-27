@@ -19,5 +19,5 @@ public class UserDTO {
     private String surname;
     @Email
     private String email;
-    private List<Role> roles;
+    private List<String> roles;
 }
