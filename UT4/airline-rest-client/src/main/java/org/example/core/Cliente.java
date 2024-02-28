@@ -46,11 +46,23 @@ public class Cliente {
                     case 4:
                         clienteUser.run(scanner);
                         break;
+                    case 5:
+                        loggear(scanner);
+                        break;
                     default:
                         System.err.println("opción no valida.");
                 }
             }
         }
+    }
+
+    private void loggear(Scanner scanner) {
+        System.out.println("Username");
+        userName = scanner.nextLine();
+        System.out.println();
+        System.out.println("Contraseña");
+        password = scanner.nextLine();
+        System.out.println();
     }
 
     private void printMenu() {
@@ -60,6 +72,7 @@ public class Cliente {
         System.out.println("2. Menu de pasajeros.");
         System.out.println("3. Menu de eqipaje.");
         System.out.println("4. Menu de usuario.");
+        System.out.println("5. loggearse.");
         System.out.println("Introduzca una opción:");
     }
 }

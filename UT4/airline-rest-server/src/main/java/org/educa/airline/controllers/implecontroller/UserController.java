@@ -48,7 +48,7 @@ public class UserController implements IUserController {
 
     //PUT
     @Override
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}")
     public ResponseEntity<Void> updateUser(@PathVariable("id") String id, @RequestBody UserDTO userDTO) {
         try {
             if (userService.update(id, userMapper. toEntity(userDTO))) {
@@ -68,7 +68,7 @@ public class UserController implements IUserController {
 
     //DELETE
     @Override
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteUse(@PathVariable("id") String id) {
         try {
             if (userService.delete(id)) {
@@ -83,7 +83,7 @@ public class UserController implements IUserController {
 
     //GET
     @Override
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable("id") String id) {
         try {
             UserDTO userDTO = userMapper.toDTO(userService.getUser(id));

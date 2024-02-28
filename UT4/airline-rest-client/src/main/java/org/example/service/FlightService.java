@@ -2,10 +2,7 @@ package org.example.service;
 
 import org.example.api.ApiFlightService;
 import org.example.dto.FlightDTO;
-import org.example.exception.BadRequestException;
-import org.example.exception.NotFoundException;
-import org.example.exception.ValidationFailException;
-import org.example.exception.YaExisteException;
+import org.example.exception.*;
 
 import java.util.Date;
 import java.util.Scanner;
@@ -38,6 +35,10 @@ public class FlightService extends Service {
             System.out.println("Ya existe un vuelo con ese codigo de vuelo.");
         } catch (BadRequestException e) {
             System.out.println("Los campos no son correctos, compruebe que la fecha es valida.");
+        } catch (NoTienesPermisoException ex) {
+            System.out.println("No tienes permiso para hacer esta accion");
+        } catch (NoAutenticatedException ex) {
+            System.out.println("Para realizar esta accion debes estar autenticado");
         } catch (Exception ex) {
             System.out.println("Fallo en la creacion del vuelo.");
         }
@@ -54,9 +55,58 @@ public class FlightService extends Service {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
         }catch  (NotFoundException e) {
             System.out.println("No se encontro el vuelo que se deseaba borrar.");
+        } catch (NoTienesPermisoException ex) {
+            System.out.println("No tienes permiso para hacer esta accion");
+        } catch (NoAutenticatedException ex) {
+            System.out.println("Para realizar esta accion debes estar autenticado");
         } catch(Exception nfe) {
             System.out.println("Ocurrio un error inesperado.");
         }
+    }
+
+    public void updateFlight(Scanner scanner) {
+        FlightDTO flightDTO = null;
+        String cod = "";
+        System.out.println("Introduce el codigo de vuelo del vuelo que desea eliminar.");
+        try {
+            cod = utiles.checkCampo(scanner, "Codigo de vuelo");
+
+            flightDTO = apiFlightService.getAFlightFromCod(cod);
+        } catch (ValidationFailException vfe) {
+            System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
+        }catch  (NotFoundException e) {
+            System.out.println("No se encontro el vuelo que se deseaba borrar.");
+        } catch (NoTienesPermisoException ex) {
+            System.out.println("No tienes permiso para hacer esta accion");
+        } catch (NoAutenticatedException ex) {
+            System.out.println("Para realizar esta accion debes estar autenticado");
+        } catch(Exception nfe) {
+            System.out.println("Ocurrio un error inesperado.");
+        }
+        if (flightDTO != null) {
+            System.out.println("vuelo encontrado");
+            try {
+                modificacion(scanner, flightDTO);
+                apiFlightService.update(cod, flightDTO);
+                System.out.println("Modificacion realizada con existo.");
+            } catch (ValidationFailException ex) {
+                System.out.println("ERROR EN LA MODIFICACION:");
+                System.out.println("Se han fallado cinco veces segidas, modificacion abortada.");
+            } catch (BadRequestException e) {
+                System.out.println("ERROR EN LA MODIFICACION:");
+                System.out.println("Los campos enviados no eran validos.");
+            }  catch (YaExisteException ex) {
+                System.out.println("Ha intentado poner un DNI de un pasajero que existia previamente");
+                System.out.println("ERROR EN LA MODIFICACION:");
+            } catch (Exception ex) {
+                System.out.println("ERROR EN LA MODIFICACION:");
+                System.out.println("Error inesperado.");
+            }
+        }
+    }
+
+    private void modificacion(Scanner scanner, FlightDTO flightDTO) {
+
     }
 
     public void findFlightFromDate(Scanner scanner) {
@@ -76,6 +126,10 @@ public class FlightService extends Service {
             System.out.println("No se encontro el vuelo que se deseaba buscar.");
         } catch (BadRequestException e) {
             System.out.println("Los campos no son correctos, compruebe que la fecha es valida.");
+        } catch (NoTienesPermisoException ex) {
+            System.out.println("No tienes permiso para hacer esta accion");
+        } catch (NoAutenticatedException ex) {
+            System.out.println("Para realizar esta accion debes estar autenticado");
         } catch (Exception e) {
             System.out.println("Ha ocurrido un erro inesperado");
         }
@@ -98,6 +152,10 @@ public class FlightService extends Service {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
         } catch (NotFoundException e) {
             System.out.println("No se encontro el vuelo que se deseaba buscar.");
+        } catch (NoTienesPermisoException ex) {
+            System.out.println("No tienes permiso para hacer esta accion");
+        } catch (NoAutenticatedException ex) {
+            System.out.println("Para realizar esta accion debes estar autenticado");
         } catch (Exception nfe) {
             System.out.println("Un error inesperado a ocurrido");
         }

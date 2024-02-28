@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.api.ApiService;
 import org.example.api.ApiUserService;
+import org.example.core.Cliente;
 import org.example.dto.UserDTO;
 import org.example.exception.*;
 import org.example.utils.Utiles;
@@ -102,12 +103,17 @@ public class UserService extends Service {
             apiUserService.deleteUser(id);
 
             System.out.println("Usuario borrado");
+            if (id.equals(Cliente.userName)) {
+                Cliente.userName = "";
+                Cliente.password = "";
+                System.out.println("Puesto que ha borrado el usuario con el que está loggado se le ha desloggeado automaticamente.");
+            }
         } catch (ValidationFailException ex) {
             System.out.println("Fallaste 5 veces...");
         } catch (BadRequestException ex) {
             System.out.println("Los datos del usuario no son validos.");
         } catch (NotFoundException ex) {
-            System.out.println("No se encontro el endpoint, pobablemente se ha roto la URL por algun caracter raro.");
+            System.out.println("No se encontro el user que queria borrar.");
         } catch (NoTienesPermisoException ex) {
             System.out.println("No tienes permiso para borrar."); //No se usara, es anonimo, pero para que el IDE se calle.
         } catch (NoAutenticatedException ex) {
@@ -125,7 +131,6 @@ public class UserService extends Service {
              id = utiles.checkCampo(scanner,  "Username");
 
             userDTO = apiUserService.getUser(id);
-
             print(userDTO);
         } catch (ValidationFailException ex) {
             System.out.println("Fallaste 5 veces...");
@@ -142,6 +147,7 @@ public class UserService extends Service {
         }
 
         if (userDTO != null) {
+
             try {
                 modificacion(scanner, userDTO);
                 apiUserService.updateUser(id, userDTO);
@@ -153,9 +159,9 @@ public class UserService extends Service {
             } catch (BadRequestException ex) {
                 System.out.println("Los datos del usuario no son validos.");
             } catch (NotFoundException ex) {
-                System.out.println("No se encontro el endpoint, pobablemente se ha roto la URL por algun caracter raro.");
+                System.out.println("No se encontro el user que queria modificar.");
             } catch (NoTienesPermisoException ex) {
-                System.out.println("No tienes permiso para crear."); //No se usara, es anonimo, pero para que el IDE se calle.
+                System.out.println("No tienes permiso para modificar."); //No se usara, es anonimo, pero para que el IDE se calle.
             } catch (NoAutenticatedException ex) {
                 System.out.println("Recuerda que debes estar autenticado.");
             } catch (Exception e) {
@@ -309,7 +315,7 @@ public class UserService extends Service {
         for (String rol : userDTO.getRoles()) {
             System.out.print(rol + " ");
         }
-        System.out.println();
+        System.out.println("\n"); //Doble salto si, para conpensar los print de antes
     }
 
     private void menuModif() {

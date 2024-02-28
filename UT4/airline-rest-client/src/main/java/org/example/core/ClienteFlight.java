@@ -21,9 +21,15 @@ public class ClienteFlight {
                         flightService.createFlight(scanner);
                     break;
                 case "2":
-                        flightService.findFlightFromDate(scanner);
+                    flightService.deleteFlight(scanner);
                     break;
                 case "3":
+                    flightService.updateFlight(scanner);
+                    break;
+                case "4":
+                        flightService.findFlightFromDate(scanner);
+                    break;
+                case "5":
                         flightService.getFlightsFromOriAndDest(scanner);
                     break;
                 default:
@@ -36,8 +42,10 @@ public class ClienteFlight {
         System.out.println("Menu de vuelos:");
         System.out.println("0. Salir.");
         System.out.println("1. Crear vuelo.");
-        System.out.println("2. Encontrar un vuelo por Codigo y Fecha.");
-        System.out.println("3. Encontrar un vuelo por origen y destino.");
+        System.out.println("2. Borrar vuelo.");
+        System.out.println("3. Modificar vuelo.");
+        System.out.println("4. Encontrar un vuelo por Codigo y Fecha.");
+        System.out.println("5. Encontrar un vuelo por origen y destino.");
         System.out.println("Introduzca una opción.");
     }
 }

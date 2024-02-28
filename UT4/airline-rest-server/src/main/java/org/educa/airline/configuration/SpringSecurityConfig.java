@@ -30,6 +30,7 @@ public class SpringSecurityConfig {
         this.securityService = securityService;
     }
 
+    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
@@ -39,10 +40,10 @@ public class SpringSecurityConfig {
         http.cors(AbstractHttpConfigurer::disable).csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(withDefaults()).authorizeHttpRequests((
                         x -> x.requestMatchers("/user").anonymous()
-                                .requestMatchers("/user/{id}").authenticated()
-                                .requestMatchers(HttpMethod.DELETE, "/user/{id}").hasRole("admin")
-                                .requestMatchers(HttpMethod.PUT, "/user/{id}").hasRole("admin")
-                                .requestMatchers(HttpMethod.GET, "/user/{id}").hasAnyRole("admin", "personal")
+                                //.requestMatchers("/user/{id}").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/user/{id}").hasAnyRole("admin", "usuario")
+                                .requestMatchers(HttpMethod.PUT, "/user/{id}").hasAnyRole("admin", "usuario")
+                                .requestMatchers(HttpMethod.GET, "/user/{id}").hasAnyRole("admin", "personal", "usuario")
                                 .requestMatchers("/user/{id}").hasAnyRole("admin", "personal", "usuario")
                                 .requestMatchers("/flights/add", "/flights/{cod}/delete", "/flights/{cod}/update").hasRole("admin")
                                 .requestMatchers(HttpMethod.GET, "/flights", "/flights/{cod}").authenticated()

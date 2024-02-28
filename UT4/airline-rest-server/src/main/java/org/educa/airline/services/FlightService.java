@@ -1,6 +1,7 @@
 package org.educa.airline.services;
 
 import lombok.Getter;
+import org.educa.airline.dto.FlightDTO;
 import org.educa.airline.entity.Flight;
 import org.educa.airline.entity.Passenger;
 import org.educa.airline.exceptions.MiValidacionException;
@@ -65,5 +66,13 @@ public class FlightService{
 
     public boolean delete(String cod) {
         return inMemoryFlightRepository.delete(cod);
+    }
+
+    public Flight getOneFlight(String cod) throws FlightNotFoundException {
+        if (getAFlight(cod)) {
+            return inMemoryFlightRepository.getFlight(cod);
+        } else {
+            throw new FlightNotFoundException();
+        }
     }
 }
