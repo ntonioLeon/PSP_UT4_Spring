@@ -33,7 +33,7 @@ public class UserController implements IUserController {
 
     //POST
     @Override
-    @PostMapping(path = "")
+    @PostMapping
     public ResponseEntity<Void> createUser(@RequestBody UserDTO userDTO) {
         try {
             if (userService.create(userMapper.toEntity(userDTO))) {
