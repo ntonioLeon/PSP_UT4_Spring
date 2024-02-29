@@ -2,10 +2,7 @@ package org.example.service;
 
 import org.example.api.ApiPassengerService;
 import org.example.dto.PassengerDTO;
-import org.example.exception.BadRequestException;
-import org.example.exception.NotFoundException;
-import org.example.exception.ValidationFailException;
-import org.example.exception.YaExisteException;
+import org.example.exception.*;
 
 import java.util.*;
 
@@ -42,6 +39,10 @@ public class PassengerService extends Service {
             System.out.println("Vuelo no encontrado");
         } catch (YaExisteException ex) {
             System.out.println("Ya existe un pasajero con ese NIF en ese vuelo.");
+        } catch (NoTienesPermisoException ex) {
+            System.out.println("No tienes permiso para hacer esta accion");
+        } catch (NoAutenticatedException ex) {
+            System.out.println("Para realizar esta accion debes estar autenticado");
         } catch (Exception ex) {
             System.out.println("Fallo en la creacion del pasajero.");
         }
@@ -62,6 +63,10 @@ public class PassengerService extends Service {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
         } catch (NotFoundException e) {
             System.out.println("No se encontro el vuelo.");
+        } catch (NoTienesPermisoException ex) {
+            System.out.println("No tienes permiso para hacer esta accion");
+        } catch (NoAutenticatedException ex) {
+            System.out.println("Para realizar esta accion debes estar autenticado");
         } catch (Exception ex) {
             System.out.println("Fallo en la creacion del vuelo.");
         }
@@ -89,6 +94,10 @@ public class PassengerService extends Service {
             System.out.println("Error en la integridad de los campos compruebe el dni y el nuemro de asiento");
         } catch (YaExisteException ex) {
             System.out.println("Ha intentado poner un DNI de un pasajero que existia previamente");
+        } catch (NoTienesPermisoException ex) {
+            System.out.println("No tienes permiso para hacer esta accion");
+        } catch (NoAutenticatedException ex) {
+            System.out.println("Para realizar esta accion debes estar autenticado");
         } catch (Exception ex) {
             System.out.println("Fallo en la creacion del vuelo.");
         }
@@ -111,6 +120,12 @@ public class PassengerService extends Service {
             } catch (YaExisteException ex) {
                 System.out.println("Ha intentado poner un DNI de un pasajero que existia previamente");
                 System.out.println("ERROR EN LA MODIFICACION:");
+            } catch (NoTienesPermisoException ex) {
+                System.out.println("ERROR EN LA MODIFICACION:");
+                System.out.println("No tienes permiso para hacer esta accion");
+            } catch (NoAutenticatedException ex) {
+                System.out.println("ERROR EN LA MODIFICACION:");
+                System.out.println("Para realizar esta accion debes estar autenticado");
             } catch (Exception ex) {
                 System.out.println("ERROR EN LA MODIFICACION:");
                 System.out.println("Error inesperado.");
@@ -179,7 +194,11 @@ public class PassengerService extends Service {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
         } catch (NotFoundException e) {
             System.out.println("Vuelo o pasajero no encontrado.");
-        }catch (Exception ex) {
+        } catch (NoTienesPermisoException ex) {
+            System.out.println("No tienes permiso para hacer esta accion");
+        } catch (NoAutenticatedException ex) {
+            System.out.println("Para realizar esta accion debes estar autenticado");
+        } catch (Exception ex) {
             System.out.println("Fallo en la creacion del vuelo.");
         }
     }
@@ -199,7 +218,11 @@ public class PassengerService extends Service {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
         } catch (NotFoundException e) {
             System.out.println("No se encontro el vuelo.");
-        }catch (Exception ex) {
+        } catch (NoTienesPermisoException ex) {
+            System.out.println("No tienes permiso para hacer esta accion");
+        } catch (NoAutenticatedException ex) {
+            System.out.println("Para realizar esta accion debes estar autenticado");
+        } catch (Exception ex) {
             System.out.println("Ha ocurrido un error inesperado.");
         }
     }

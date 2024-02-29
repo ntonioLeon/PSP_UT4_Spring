@@ -5,6 +5,7 @@ import org.educa.airline.dto.UserDTO;
 import org.educa.airline.exceptions.MiValidacionException;
 import org.educa.airline.exceptions.NoTenesPoderAquiException;
 import org.educa.airline.exceptions.user.UserDuplicatedException;
+import org.educa.airline.exceptions.user.UserNotFoundException;
 import org.educa.airline.mappers.UserMapper;
 import org.educa.airline.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,6 +98,8 @@ public class UserController implements IUserController {
         } catch (IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException | NoSuchAlgorithmException |
                  InvalidKeyException e) {
             return ResponseEntity.status(400).build();
+        } catch (UserNotFoundException ex) {
+            return ResponseEntity.notFound().build();
         }
     }
 }

@@ -1,6 +1,5 @@
 package org.example.service;
 
-import org.example.api.ApiService;
 import org.example.api.ApiUserService;
 import org.example.core.Cliente;
 import org.example.dto.UserDTO;
@@ -153,18 +152,25 @@ public class UserService extends Service {
                 apiUserService.updateUser(id, userDTO);
                 System.out.println("Modificacion realizada con existo.");
             } catch (ValidationFailException ex) {
+                System.out.println("ERROR EN LA MODIFICACION:");
                 System.out.println("Fallo 5 veces en la creacion de campos");
             } catch (YaExisteException ex) {
+                System.out.println("ERROR EN LA MODIFICACION:");
                 System.out.println("Ya existe un usuario con esos datos.");
             } catch (BadRequestException ex) {
+                System.out.println("ERROR EN LA MODIFICACION:");
                 System.out.println("Los datos del usuario no son validos.");
             } catch (NotFoundException ex) {
+                System.out.println("ERROR EN LA MODIFICACION:");
                 System.out.println("No se encontro el user que queria modificar.");
             } catch (NoTienesPermisoException ex) {
+                System.out.println("ERROR EN LA MODIFICACION:");
                 System.out.println("No tienes permiso para modificar."); //No se usara, es anonimo, pero para que el IDE se calle.
             } catch (NoAutenticatedException ex) {
+                System.out.println("ERROR EN LA MODIFICACION:");
                 System.out.println("Recuerda que debes estar autenticado.");
             } catch (Exception e) {
+                System.out.println("ERROR EN LA MODIFICACION:");
                 System.out.println("Ha ocurrido un error inesperado.");
             }
         }

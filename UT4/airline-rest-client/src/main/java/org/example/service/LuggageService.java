@@ -3,10 +3,7 @@ package org.example.service;
 import org.example.api.ApiLuggageService;
 import org.example.dto.LuggageDTO;
 import org.example.dto.PassengerDTO;
-import org.example.exception.BadRequestException;
-import org.example.exception.NotFoundException;
-import org.example.exception.ValidationFailException;
-import org.example.exception.YaExisteException;
+import org.example.exception.*;
 
 import java.util.Scanner;
 
@@ -38,6 +35,10 @@ public class LuggageService  extends Service {
             System.out.println("Ya existe un equipaje con ese id.");
         } catch (NotFoundException e) {
             System.out.println("vuelo o pasajero no encontrado.");
+        } catch (NoTienesPermisoException ex) {
+            System.out.println("No tienes permiso para hacer esta accion");
+        } catch (NoAutenticatedException ex) {
+            System.out.println("Para realizar esta accion debes estar autenticado");
         } catch (Exception e) {
             System.out.println("Error inesperado.");
         }
@@ -64,6 +65,10 @@ public class LuggageService  extends Service {
             System.out.println("Ya existe un equipaje con ese id.");
         } catch (NotFoundException e) {
             System.out.println("vuelo, pasajero o equipaje no encontrado.");
+        } catch (NoTienesPermisoException ex) {
+            System.out.println("No tienes permiso para hacer esta accion");
+        } catch (NoAutenticatedException ex) {
+            System.out.println("Para realizar esta accion debes estar autenticado");
         } catch (Exception e) {
             System.out.println("Error inesperado.");
         }
@@ -90,6 +95,10 @@ public class LuggageService  extends Service {
             System.out.println("Ya existe un equipaje con ese id.");
         } catch (NotFoundException e) {
             System.out.println("vuelo, pasajero o equipaje no encontrado.");
+        } catch (NoTienesPermisoException ex) {
+            System.out.println("No tienes permiso para hacer esta accion");
+        } catch (NoAutenticatedException ex) {
+            System.out.println("Para realizar esta accion debes estar autenticado");
         } catch (Exception e) {
             System.out.println("Error inesperado.");
         }
@@ -113,6 +122,10 @@ public class LuggageService  extends Service {
             System.out.println("Ya existe un equipaje con ese id.");
         } catch (NotFoundException e) {
             System.out.println("vuelo no encontrado.");
+        } catch (NoTienesPermisoException ex) {
+            System.out.println("No tienes permiso para hacer esta accion");
+        } catch (NoAutenticatedException ex) {
+            System.out.println("Para realizar esta accion debes estar autenticado");
         } catch (Exception e) {
             System.out.println("Error inesperado.");
         }
@@ -138,6 +151,10 @@ public class LuggageService  extends Service {
             System.out.println("Ya existe un equipaje con ese id.");
         } catch (NotFoundException e) {
             System.out.println("vuelo o pasajero no encontrado.");
+        } catch (NoTienesPermisoException ex) {
+            System.out.println("No tienes permiso para hacer esta accion");
+        } catch (NoAutenticatedException ex) {
+            System.out.println("Para realizar esta accion debes estar autenticado");
         } catch (Exception e) {
             System.out.println("Error inesperado.");
         }

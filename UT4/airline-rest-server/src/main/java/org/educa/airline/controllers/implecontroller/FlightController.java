@@ -11,6 +11,7 @@ import org.educa.airline.entity.Flight;
 import org.educa.airline.entity.Luggage;
 import org.educa.airline.entity.Passenger;
 import org.educa.airline.exceptions.*;
+import org.educa.airline.exceptions.flight.FilightYaExistenteException;
 import org.educa.airline.exceptions.flight.FlightNotFoundException;
 import org.educa.airline.exceptions.luggage.LuggageNotFoundException;
 import org.educa.airline.exceptions.luggage.LuggageYaExisteException;
@@ -124,6 +125,8 @@ public class FlightController implements IFlightController, IPassengerController
             }
         }catch (MiValidacionException ex) {
             return ResponseEntity.badRequest().build();
+        } catch (FilightYaExistenteException e) {
+            return ResponseEntity.status(409).build();
         }
     }
 

@@ -54,14 +54,14 @@ public class UserService implements UserDetailsService {
                 if (!inMemoryUserRepository.existUser(user.getUsername())) {
                     inMemoryUserRepository.deleteUser(id);
                     inMemoryUserRepository.createUser(user);
+                    return true;
                 } else {
                     throw new UserDuplicatedException();
                 }
             }
         } else {
-        throw new NoTenesPoderAquiException();
+            throw new NoTenesPoderAquiException();
         }
-        return false;
     }
 
     public User getUser(String id) throws NoTenesPoderAquiException {
@@ -94,7 +94,7 @@ public class UserService implements UserDetailsService {
 
     private UserDetails getAutenticated() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return  (UserDetails) auth.getPrincipal();
+        return (UserDetails) auth.getPrincipal();
     }
 
     private boolean esAdmin(UserDetails userDetail) {
@@ -102,6 +102,6 @@ public class UserService implements UserDetailsService {
     }
 
     private boolean esPersonal(UserDetails userDetail) {
-        return userDetail.getAuthorities().contains(new Role("ROLE_personal", "Personal","El que personalea"));
+        return userDetail.getAuthorities().contains(new Role("ROLE_personal", "Personal", "El que personalea"));
     }
 }

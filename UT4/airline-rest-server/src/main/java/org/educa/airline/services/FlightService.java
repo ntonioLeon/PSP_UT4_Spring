@@ -5,6 +5,7 @@ import org.educa.airline.dto.FlightDTO;
 import org.educa.airline.entity.Flight;
 import org.educa.airline.entity.Passenger;
 import org.educa.airline.exceptions.MiValidacionException;
+import org.educa.airline.exceptions.flight.FilightYaExistenteException;
 import org.educa.airline.exceptions.flight.FlightNotFoundException;
 import org.educa.airline.exceptions.passenger.PassengerNotFoundException;
 import org.educa.airline.repository.inmemory.InMemoryFlightRepository;
@@ -60,8 +61,17 @@ public class FlightService{
         return inMemoryFlightRepository.add(flight);
     }
 
-    public boolean update(String cod, Flight flight) {
-        return inMemoryFlightRepository.updateFlight(cod, flight);
+    public boolean update(String cod, Flight flight) throws FilightYaExistenteException {
+        if (cod.equals(flight.getCod())) {
+            return inMemoryFlightRepository.updateFlight(cod, flight);
+        } else {
+            if (agregar(flight)) {
+                delete(cod);
+                return true;
+            } else {
+                throw new FilightYaExistenteException();
+            }
+        }
     }
 
     public boolean delete(String cod) {

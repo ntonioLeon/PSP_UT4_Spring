@@ -53,7 +53,7 @@ public class FlightService extends Service {
             System.out.println("Vuelo borrado.");
         } catch (ValidationFailException vfe) {
             System.out.println("Se han fallado cinco veces segidas, creacion abortada.");
-        }catch  (NotFoundException e) {
+        } catch  (NotFoundException e) {
             System.out.println("No se encontro el vuelo que se deseaba borrar.");
         } catch (NoTienesPermisoException ex) {
             System.out.println("No tienes permiso para hacer esta accion");
@@ -96,8 +96,14 @@ public class FlightService extends Service {
                 System.out.println("ERROR EN LA MODIFICACION:");
                 System.out.println("Los campos enviados no eran validos.");
             }  catch (YaExisteException ex) {
-                System.out.println("Ha intentado poner un DNI de un pasajero que existia previamente");
                 System.out.println("ERROR EN LA MODIFICACION:");
+                System.out.println("Ha intentado poner un DNI de un pasajero que existia previamente");
+            } catch (NoTienesPermisoException ex) {
+                System.out.println("ERROR EN LA MODIFICACION:");
+                System.out.println("No tienes permiso para hacer esta accion");
+            } catch (NoAutenticatedException ex) {
+                System.out.println("ERROR EN LA MODIFICACION:");
+                System.out.println("Para realizar esta accion debes estar autenticado");
             } catch (Exception ex) {
                 System.out.println("ERROR EN LA MODIFICACION:");
                 System.out.println("Error inesperado.");
@@ -105,8 +111,41 @@ public class FlightService extends Service {
         }
     }
 
-    private void modificacion(Scanner scanner, FlightDTO flightDTO) {
-
+    private void modificacion(Scanner scanner, FlightDTO flightDTO) throws ValidationFailException {
+        String elec = "";
+        while (!"0".equals(elec)) {
+            menuModif();
+            elec = scanner.nextLine();
+            switch (elec) {
+                case "0":
+                    break;
+                case "1":
+                    String nueCodigo = utiles.checkCampo(scanner, "Codigo de vuelo");
+                    flightDTO.setCod(nueCodigo);
+                    System.out.println("Modificación realizada");
+                    break;
+                case "2":
+                    String nueId = utiles.checkCampo(scanner, "ID de vuelo");
+                    flightDTO.setId(nueId);
+                    System.out.println("Modificación realizada");
+                    break;
+                case "3":
+                    String nuevaOrigen = utiles.checkCampo(scanner, "Origen de vuelo");
+                    flightDTO.setOrigin(nuevaOrigen);
+                    System.out.println("Modificación realizada");
+                    break;
+                case "4":
+                    String nuevaDestino = utiles.checkCampo(scanner, "Destino de vuelo");
+                    flightDTO.setDestination(nuevaDestino);
+                    System.out.println("Modificación realizada");
+                    break;
+                case "5":
+                    String nuevaFecha = utiles.checkCampo(scanner, "Fecha de vuelo");
+                    flightDTO.setDate(nuevaFecha);
+                    System.out.println("Modificación realizada");
+                    break;
+            }
+        }
     }
 
     public void findFlightFromDate(Scanner scanner) {
@@ -168,5 +207,16 @@ public class FlightService extends Service {
         System.out.println("Destino: " + flightDTO.getDestination());
         System.out.println("Fecha: " + flightDTO.getDate());
         System.out.println();
+    }
+
+    private void menuModif() {
+        System.out.println("Menu de modificacion.");
+        System.out.println("1. Para codigo de vuelo.");
+        System.out.println("2. Para id de avion.");
+        System.out.println("3. Para origen de vuelo.");
+        System.out.println("4. Para destino del vuelo.");
+        System.out.println("5. Para fecha de vuelo.");
+        System.out.println("0. Para volver.");
+        System.out.println("Seleccione una opcion:");
     }
 }

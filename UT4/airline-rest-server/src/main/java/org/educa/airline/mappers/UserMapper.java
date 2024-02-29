@@ -4,6 +4,7 @@ import org.educa.airline.dto.UserDTO;
 import org.educa.airline.entity.Role;
 import org.educa.airline.entity.User;
 import org.educa.airline.exceptions.MiValidacionException;
+import org.educa.airline.exceptions.user.UserNotFoundException;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.BadPaddingException;
@@ -21,8 +22,13 @@ public class UserMapper extends Mapper {
         return new User(userDTO.getUsername(), securityUtil.createHash(userDTO.getPassword()), securityUtil.crypt(validadorDeCampos.checkDni(userDTO.getNif())), userDTO.getName(), userDTO.getSurname(), securityUtil.crypt(userDTO.getEmail()), fromStringToRole(userDTO.getRoles()));
     }
 
-    public UserDTO toDTO(User user) throws IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException, InvalidKeyException {
-        return new UserDTO(user.getUsername(), user.getPassword(), securityUtil.decrypt(user.getNif()), user.getName(), user.getSurname(), securityUtil.decrypt(user.getEmail()), fromRoleToString(user.getRoles()));
+    public UserDTO toDTO(User user) throws IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException, InvalidKeyException, UserNotFoundException {
+        if (user != null) {
+            return new UserDTO(user.getUsername(), user.getPassword(), securityUtil.decrypt(user.getNif()), user.getName(), user.getSurname(), securityUtil.decrypt(user.getEmail()), fromRoleToString(user.getRoles()));
+        } else {
+            throw new UserNotFoundException();
+        }
+
     }
 
     private List<Role> fromStringToRole(List<String> strRoles) {
