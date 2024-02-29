@@ -68,6 +68,10 @@ public class UserService extends Service {
                         System.out.println("Rol agregado.");
                     } else {
                         System.out.println("El usuario ya es administrador");
+                        if (utiles.confirmaciom(scanner, "Desea eliminar el rol admin del usuario?")) {
+                            roles.remove("ROLE_admin");
+                            System.out.println("Rol retirado");
+                        }
                     }
                     break;
                 case "2":
@@ -76,14 +80,10 @@ public class UserService extends Service {
                         System.out.println("Rol agregado.");
                     } else {
                         System.out.println("El usuario ya es personal");
-                    }
-                    break;
-                case "3":
-                    if (!roles.contains("ROLE_usuario")) {
-                        roles.add("ROLE_usuario");
-                        System.out.println("Rol agregado.");
-                    } else {
-                        System.out.println("El usuario ya es usuario");
+                        if (utiles.confirmaciom(scanner, "Desea eliminar el rol personal del usuario?")) {
+                            roles.remove("ROLE_personal");
+                            System.out.println("Rol retirado");
+                        }
                     }
                     break;
                 default:
@@ -91,6 +91,7 @@ public class UserService extends Service {
                     break;
             }
         }
+        roles.add("ROLE_usuario");
         return roles;
     }
 
@@ -260,17 +261,6 @@ public class UserService extends Service {
                         }
                     }
                     break;
-                case "3":
-                    if (!roles.contains("ROLE_usuario")) {
-                        roles.add("ROLE_usuario");
-                        System.out.println("Rol agregado.");
-                    } else {
-                        if (utiles.confirmaciom(scanner, "Seguro que desea eliminar el rol usuario del usuario?")) {
-                            roles.remove("ROLE_usuario");
-                            System.out.println("Rol retirado.");
-                        }
-                    }
-                    break;
                 default:
                     System.out.println("Opcion no valida");
                     break;
@@ -306,7 +296,6 @@ public class UserService extends Service {
         System.out.println("Asignacion de roles.");
         System.out.println("1. Administrador");
         System.out.println("2. Personal");
-        System.out.println("3. usuario.");
         System.out.println("0. salir");
         System.out.println("Elija una opcion:");
     }

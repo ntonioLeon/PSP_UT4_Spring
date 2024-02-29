@@ -39,13 +39,21 @@ public class Connection {
     }
 
     public void doPost(String body, String url) throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .POST(HttpRequest.BodyPublishers.ofString(body))
-                .header("Content-Type", "application/json")
-                .header("Authorization", getBasicAuthenticationHeader(Cliente.userName, Cliente.password))
-                .build();
-
+        HttpRequest request;
+        if ("".equals(Cliente.userName)  || "".equals(Cliente.password)) {
+            request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .POST(HttpRequest.BodyPublishers.ofString(body))
+                    .header("Content-Type", "application/json")
+                    .build();
+        } else {
+            request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .POST(HttpRequest.BodyPublishers.ofString(body))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", getBasicAuthenticationHeader(Cliente.userName, Cliente.password))
+                    .build();
+        }
         try (HttpClient client = HttpClient.newHttpClient()) {
             HttpResponse<String> respuesta = client.send(request, HttpResponse.BodyHandlers.ofString());
             //System.out.println(respuesta.body());

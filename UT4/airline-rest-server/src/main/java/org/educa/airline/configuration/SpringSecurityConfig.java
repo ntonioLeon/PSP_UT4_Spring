@@ -43,7 +43,6 @@ public class SpringSecurityConfig {
                                 .requestMatchers(HttpMethod.DELETE, "/user/{id}").hasAnyRole("admin", "usuario")
                                 .requestMatchers(HttpMethod.PUT, "/user/{id}").hasAnyRole("admin", "usuario")
                                 .requestMatchers(HttpMethod.GET, "/user/{id}").hasAnyRole("admin", "personal", "usuario")
-                                //.requestMatchers("/user/{id}").hasAnyRole("admin", "personal", "usuario")
                                 .requestMatchers("/flights/add", "/flights/{cod}/delete", "/flights/{cod}/update").hasRole("admin")
                                 .requestMatchers(HttpMethod.GET, "/flights", "/flights/{cod}").authenticated()
                                 .requestMatchers("/flights/{cod}/passenger", "/flights/{cod}/passenger/{nif}" , "/flights/{cod}/passengers").hasAnyRole("admin", "personal")
