@@ -279,7 +279,7 @@ public class UserService extends Service {
         return roles;
     }
 
-    public void ReadUser(Scanner scanner) {
+    public void readUser(Scanner scanner) {
         try {
             System.out.println("Introduzca el usarname del usuario que desea buscar.");
             String id = utiles.checkCampo(scanner,  "Username");

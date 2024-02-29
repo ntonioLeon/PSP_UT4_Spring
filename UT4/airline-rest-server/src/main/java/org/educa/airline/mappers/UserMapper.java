@@ -24,7 +24,7 @@ public class UserMapper extends Mapper {
 
     public UserDTO toDTO(User user) throws IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException, InvalidKeyException, UserNotFoundException {
         if (user != null) {
-            return new UserDTO(user.getUsername(), user.getPassword(), securityUtil.decrypt(user.getNif()), user.getName(), user.getSurname(), securityUtil.decrypt(user.getEmail()), fromRoleToString(user.getRoles()));
+            return new UserDTO(user.getUsername(), null, securityUtil.decrypt(user.getNif()), user.getName(), user.getSurname(), securityUtil.decrypt(user.getEmail()), fromRoleToString(user.getRoles()));
         } else {
             throw new UserNotFoundException();
         }

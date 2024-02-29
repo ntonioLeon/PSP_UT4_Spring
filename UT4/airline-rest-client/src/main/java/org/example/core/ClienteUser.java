@@ -27,7 +27,7 @@ public class ClienteUser {
                     userService.updateUser(scanner);
                     break;
                 case "4":
-                    userService.ReadUser(scanner);
+                    userService.readUser(scanner);
                     break;
                 default:
                     System.err.println("opción no valida.");

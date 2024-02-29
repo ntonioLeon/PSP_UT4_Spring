@@ -28,7 +28,7 @@ public class FlightService{
         this.inMemoryFlightRepository = inMemoryFlightRepository;
     }
 
-    public Flight UnVueloPorFecha(String cod, String date) throws MiValidacionException, FlightNotFoundException, ParseException {
+    public Flight unVueloPorFecha(String cod, String date) throws MiValidacionException, FlightNotFoundException, ParseException {
         Flight vuelo = inMemoryFlightRepository.getFlight(cod);
         if (vuelo != null) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);

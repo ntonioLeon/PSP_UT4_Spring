@@ -75,9 +75,9 @@ public class FlightController implements IFlightController, IPassengerController
      */
     @Override
     @GetMapping(path = "/{cod}")
-    public ResponseEntity<FlightDTO> getOneFlightByDate(@PathVariable("cod") String cod, @RequestParam(value = "date") String date) {
+    public ResponseEntity<FlightDTO> getOneFlightByDate(@PathVariable("cod") String cod, @Valid @RequestParam(value = "date") String date) {
         try {
-            return ResponseEntity.ok(flightMapper.toDTO(flightService.UnVueloPorFecha(cod, date)));
+            return ResponseEntity.ok(flightMapper.toDTO(flightService.unVueloPorFecha(cod, date)));
         } catch (MiValidacionException | ParseException e) {
             return ResponseEntity.badRequest().build();
         } catch (FlightNotFoundException e) {
@@ -116,7 +116,7 @@ public class FlightController implements IFlightController, IPassengerController
 
     @Override
     @PutMapping(path = "/{cod}/update")
-    public ResponseEntity<Void> updateFlight(@PathVariable("cod") String cod, @RequestBody FlightDTO flightDTO) {
+    public ResponseEntity<Void> updateFlight(@PathVariable("cod") String cod, @Valid @RequestBody FlightDTO flightDTO) {
         try {
             if (flightService.update(cod, flightMapper.toEntity(flightDTO))) {
                 return ResponseEntity.ok().build();
@@ -149,7 +149,7 @@ public class FlightController implements IFlightController, IPassengerController
      */
     @Override
     @PostMapping(path = "/{cod}/passenger")
-    public ResponseEntity<Void> associatePassengerToFlight(@PathVariable("cod")String cod, @RequestBody PassengerDTO passengerDTO) {
+    public ResponseEntity<Void> associatePassengerToFlight(@PathVariable("cod")String cod, @Valid @RequestBody PassengerDTO passengerDTO) {
         try {
             if (flightService.getAFlight(cod)) {
                 if (passengerService.asociarVueloYPasagero(cod, passengerMapper.toEntity(passengerDTO))) {
@@ -322,7 +322,7 @@ public class FlightController implements IFlightController, IPassengerController
      */
     @Override
     @PostMapping(path = "/{cod}/passengers/{nif}/luggage")
-    public ResponseEntity<Void> addALuggageFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif, @RequestBody LuggageDTO luggageDTO) {
+    public ResponseEntity<Void> addALuggageFromAFlight(@PathVariable("cod") String cod, @PathVariable("nif") String nif, @Valid @RequestBody LuggageDTO luggageDTO) {
         try {
             if (flightService.getAFlight(cod) && passengerService.existPassenger(cod, nif)) {
                 if (luggageService.create(cod, nif, luggageMapper.toEntity(luggageDTO))) {
