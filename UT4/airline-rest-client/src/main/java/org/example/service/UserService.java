@@ -47,7 +47,7 @@ public class UserService extends Service {
         } catch (NoTienesPermisoException ex) {
             System.out.println("No tienes permiso para crear."); //No se usara, es anonimo, pero para que el IDE se calle.
         } catch (NoAutenticatedException ex) {
-            System.out.println("Recuerda que debes estar autenticado.");
+            System.out.println("User no valido. Recuerde, nif y email valido.");
         } catch (Exception e) {
             System.out.println("Ha ocurrido un error inesperado.");
         }
@@ -150,7 +150,13 @@ public class UserService extends Service {
 
             try {
                 modificacion(scanner, userDTO);
+                if (userDTO.getPassword() == null) {
+                    userDTO.setPassword("");
+                }
                 apiUserService.updateUser(id, userDTO);
+                if (id.equals(Cliente.userName)) {
+                    System.out.println("Recuerde que si ha cambiado el username o password de la cuenta que actualmente esta usando como loggin debera volver a loggearse o recibira un 401.");
+                }
                 System.out.println("Modificacion realizada con existo.");
             } catch (ValidationFailException ex) {
                 System.out.println("ERROR EN LA MODIFICACION:");

@@ -49,7 +49,7 @@ public class SpringSecurityConfig {
                                 .requestMatchers("/flights/{cod}/passengers/{nif}/luggage/{id}").hasRole("personal")
                                 .requestMatchers("/flights/{cod}/passengers/{nif}/luggage").hasRole("personal")
                                 .requestMatchers("/flights/{cod}/passengers/luggages").hasRole("personal")
-                                .anyRequest().authenticated()
+                                //.anyRequest().authenticated()
                 ));
 
         return http.build();

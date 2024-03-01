@@ -5,7 +5,7 @@ import org.example.dto.UserDTO;
 public class ApiUserService extends ApiService {
     private final String URL = super.URL + "/user";
     public void createUser(UserDTO userDTO) throws Exception {
-        connection.doPostUser(super.gson.toJson(userDTO), URL);
+        connection.doPost(super.gson.toJson(userDTO), URL);
     }
 
     public void deleteUser(String id) throws Exception {

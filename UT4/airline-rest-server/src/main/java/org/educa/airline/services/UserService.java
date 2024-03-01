@@ -45,6 +45,9 @@ public class UserService implements UserDetailsService {
         if (userDetail.getUsername().equals(id) || esAdmin(userDetail)) {
             if (user.getUsername().equals(id)) {
                 if (inMemoryUserRepository.existUser(id)) {
+                    if ("z4PhNX7vuL3xVChQ1m2AB9Yg5AULVxXcg_SpIdNs6c5H0NE8XYXysP-DGNKHfuwvY7kxvUdBeoGlODJ6-SfaPg==".equals(user.getPassword())) {
+                        user.setPassword(inMemoryUserRepository.getUser(id).getPassword());
+                    }
                     inMemoryUserRepository.updateUser(user);
                     return true;
                 } else {
@@ -52,6 +55,9 @@ public class UserService implements UserDetailsService {
                 }
             } else {
                 if (!inMemoryUserRepository.existUser(user.getUsername())) {
+                    if ("z4PhNX7vuL3xVChQ1m2AB9Yg5AULVxXcg_SpIdNs6c5H0NE8XYXysP-DGNKHfuwvY7kxvUdBeoGlODJ6-SfaPg==".equals(user.getPassword())) {
+                        user.setPassword(inMemoryUserRepository.getUser(id).getPassword());
+                    }
                     inMemoryUserRepository.deleteUser(id);
                     inMemoryUserRepository.createUser(user);
                     return true;

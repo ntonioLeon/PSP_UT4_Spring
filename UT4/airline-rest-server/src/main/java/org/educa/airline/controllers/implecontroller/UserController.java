@@ -1,5 +1,6 @@
 package org.educa.airline.controllers.implecontroller;
 
+import jakarta.validation.Valid;
 import org.educa.airline.controllers.IUserController;
 import org.educa.airline.dto.UserDTO;
 import org.educa.airline.exceptions.MiValidacionException;
@@ -34,7 +35,7 @@ public class UserController implements IUserController {
     //POST
     @Override
     @PostMapping
-    public ResponseEntity<Void> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<Void> createUser(@Valid @RequestBody UserDTO userDTO) {
         try {
             if (userService.create(userMapper.toEntity(userDTO))) {
                 return ResponseEntity.status(201).build();
@@ -50,7 +51,7 @@ public class UserController implements IUserController {
     //PUT
     @Override
     @PutMapping(path = "/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable("id") String id, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<Void> updateUser(@PathVariable("id") String id, @Valid @RequestBody UserDTO userDTO) {
         try {
             if (userService.update(id, userMapper. toEntity(userDTO))) {
                 return ResponseEntity.ok().build();

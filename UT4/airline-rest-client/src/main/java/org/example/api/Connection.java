@@ -76,35 +76,6 @@ public class Connection {
         }
     }
 
-    public void doPostUser(String body, String url) throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .POST(HttpRequest.BodyPublishers.ofString(body))
-                .header("Content-Type", "application/json")
-                .build();
-
-        try (HttpClient client = HttpClient.newHttpClient()) {
-            HttpResponse<String> respuesta = client.send(request, HttpResponse.BodyHandlers.ofString());
-            //System.out.println(respuesta.body());
-
-            if (respuesta.statusCode() == 201) {
-
-            }else if (respuesta.statusCode() == 400) {
-                throw new BadRequestException();
-            } else if (respuesta.statusCode() == 404) {
-                throw new NotFoundException();
-            }else if (respuesta.statusCode() == 409) {
-                throw new YaExisteException();
-            } else if (respuesta.statusCode() == 403) {
-                throw new NoTienesPermisoException();
-            } else if (respuesta.statusCode() == 401) {
-                throw new NoAutenticatedException();
-            } else {
-                throw new Exception();
-            }
-        }
-    }
-
     public void doUpdate(String body, String url) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
