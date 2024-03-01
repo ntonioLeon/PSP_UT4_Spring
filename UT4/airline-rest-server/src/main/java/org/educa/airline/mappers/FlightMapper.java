@@ -5,13 +5,8 @@ import org.educa.airline.entity.Flight;
 import org.educa.airline.exceptions.MiValidacionException;
 import org.springframework.stereotype.Component;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 @Component
 public class FlightMapper extends Mapper{

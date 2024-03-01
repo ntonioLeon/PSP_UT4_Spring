@@ -1,17 +1,14 @@
 package org.educa.airline.services;
 
 import lombok.Getter;
-import org.educa.airline.entity.Luggage;
 import org.educa.airline.entity.Passenger;
 import org.educa.airline.exceptions.MiValidacionException;
 import org.educa.airline.exceptions.passenger.PassengerNotFoundException;
 import org.educa.airline.exceptions.passenger.PassengerYaExisteException;
-import org.educa.airline.repository.inmemory.InMemoryFlightRepository;
-import org.educa.airline.repository.inmemory.InMemoryLuggageRepository;
 import org.educa.airline.repository.inmemory.InMemoryPassengerRepository;
-import org.educa.airline.services.validador.ValidadorDeCampos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service

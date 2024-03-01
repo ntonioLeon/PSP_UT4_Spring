@@ -5,7 +5,6 @@ import org.educa.airline.entity.Passenger;
 import org.educa.airline.exceptions.MiValidacionException;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -2,17 +2,16 @@ package org.educa.airline.services;
 
 import org.educa.airline.entity.Role;
 import org.educa.airline.entity.User;
+import org.educa.airline.exceptions.NoAutenticadoException;
 import org.educa.airline.exceptions.NoTenesPoderAquiException;
 import org.educa.airline.exceptions.user.UserDuplicatedException;
 import org.educa.airline.repository.inmemory.InMemoryUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,61 +39,73 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public boolean update(String id, User user) throws NoTenesPoderAquiException, UserDuplicatedException {
+    public boolean update(String id, User user) throws NoTenesPoderAquiException, UserDuplicatedException, NoAutenticadoException {
         UserDetails userDetail = getAutenticated();
-        if (userDetail.getUsername().equals(id) || esAdmin(userDetail)) {
-            if (user.getUsername().equals(id)) {
-                if (inMemoryUserRepository.existUser(id)) {
-                    if ("z4PhNX7vuL3xVChQ1m2AB9Yg5AULVxXcg_SpIdNs6c5H0NE8XYXysP-DGNKHfuwvY7kxvUdBeoGlODJ6-SfaPg==".equals(user.getPassword())) {
-                        user.setPassword(inMemoryUserRepository.getUser(id).getPassword());
+        if (userDetail == null) {
+            if (userDetail.getUsername().equals(id) || esAdmin(userDetail)) {
+                if (user.getUsername().equals(id)) {
+                    if (inMemoryUserRepository.existUser(id)) {
+                        if ("z4PhNX7vuL3xVChQ1m2AB9Yg5AULVxXcg_SpIdNs6c5H0NE8XYXysP-DGNKHfuwvY7kxvUdBeoGlODJ6-SfaPg==".equals(user.getPassword())) {
+                            user.setPassword(inMemoryUserRepository.getUser(id).getPassword());
+                        }
+                        inMemoryUserRepository.updateUser(user);
+                        return true;
+                    } else {
+                        return false;
                     }
-                    inMemoryUserRepository.updateUser(user);
+                } else {
+                    if (!inMemoryUserRepository.existUser(user.getUsername())) {
+                        if ("z4PhNX7vuL3xVChQ1m2AB9Yg5AULVxXcg_SpIdNs6c5H0NE8XYXysP-DGNKHfuwvY7kxvUdBeoGlODJ6-SfaPg==".equals(user.getPassword())) {
+                            user.setPassword(inMemoryUserRepository.getUser(id).getPassword());
+                        }
+                        inMemoryUserRepository.deleteUser(id);
+                        inMemoryUserRepository.createUser(user);
+                        return true;
+                    } else {
+                        throw new UserDuplicatedException();
+                    }
+                }
+            } else {
+                throw new NoTenesPoderAquiException();
+            }
+        } else {
+            throw new NoAutenticadoException();
+        }
+    }
+
+    public User getUser(String id) throws NoTenesPoderAquiException, NoAutenticadoException {
+        UserDetails userDetail = getAutenticated();
+        if (userDetail == null) {
+            if (userDetail.getUsername().equals(id) || esAdmin(userDetail) || esPersonal(userDetail)) {
+                if (inMemoryUserRepository.existUser(id)) {
+                    return inMemoryUserRepository.getUser(id);
+                } else {
+                    return null;
+                }
+            } else {
+                throw new NoTenesPoderAquiException();
+            }
+        } else {
+            throw new NoAutenticadoException();
+        }
+
+    }
+
+    public boolean delete(String id) throws NoTenesPoderAquiException, NoAutenticadoException {
+        UserDetails userDetail = getAutenticated();
+        if (userDetail == null) {
+            if (userDetail.getUsername().equals(id) || esAdmin(userDetail)) {
+                if (inMemoryUserRepository.existUser(id)) {
+                    inMemoryUserRepository.deleteUser(id);
                     return true;
                 } else {
                     return false;
                 }
             } else {
-                if (!inMemoryUserRepository.existUser(user.getUsername())) {
-                    if ("z4PhNX7vuL3xVChQ1m2AB9Yg5AULVxXcg_SpIdNs6c5H0NE8XYXysP-DGNKHfuwvY7kxvUdBeoGlODJ6-SfaPg==".equals(user.getPassword())) {
-                        user.setPassword(inMemoryUserRepository.getUser(id).getPassword());
-                    }
-                    inMemoryUserRepository.deleteUser(id);
-                    inMemoryUserRepository.createUser(user);
-                    return true;
-                } else {
-                    throw new UserDuplicatedException();
-                }
+                throw new NoTenesPoderAquiException();
             }
         } else {
-            throw new NoTenesPoderAquiException();
-        }
-    }
-
-    public User getUser(String id) throws NoTenesPoderAquiException {
-        UserDetails userDetail = getAutenticated();
-        if (userDetail.getUsername().equals(id) || esAdmin(userDetail) || esPersonal(userDetail)) {
-            if (inMemoryUserRepository.existUser(id)) {
-                return inMemoryUserRepository.getUser(id);
-            } else {
-                return null;
-            }
-        } else {
-            throw new NoTenesPoderAquiException();
-        }
-
-    }
-
-    public boolean delete(String id) throws NoTenesPoderAquiException {
-        UserDetails userDetail = getAutenticated();
-        if (userDetail.getUsername().equals(id) || esAdmin(userDetail)) {
-            if (inMemoryUserRepository.existUser(id)) {
-                inMemoryUserRepository.deleteUser(id);
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            throw new NoTenesPoderAquiException();
+            throw new NoAutenticadoException();
         }
     }
 

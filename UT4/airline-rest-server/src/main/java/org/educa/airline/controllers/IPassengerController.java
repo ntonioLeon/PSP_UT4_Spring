@@ -1,6 +1,5 @@
 package org.educa.airline.controllers;
 
-import org.educa.airline.dto.FlightDTO;
 import org.educa.airline.dto.PassengerDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;

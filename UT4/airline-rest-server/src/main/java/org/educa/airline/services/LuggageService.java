@@ -2,7 +2,6 @@ package org.educa.airline.services;
 
 import lombok.Getter;
 import org.educa.airline.entity.Luggage;
-import org.educa.airline.entity.Passenger;
 import org.educa.airline.exceptions.luggage.LuggageNotFoundException;
 import org.educa.airline.exceptions.luggage.LuggageYaExisteException;
 import org.educa.airline.repository.inmemory.InMemoryLuggageRepository;

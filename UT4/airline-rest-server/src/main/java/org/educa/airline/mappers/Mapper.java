@@ -5,7 +5,6 @@ import org.educa.airline.security.SecurityUtil;
 import org.educa.airline.services.validador.ValidadorDeCampos;
 import org.springframework.stereotype.Component;
 
-import java.sql.SQLOutput;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

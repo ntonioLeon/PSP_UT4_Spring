@@ -10,7 +10,7 @@ import org.educa.airline.dto.PassengerDTO;
 import org.educa.airline.entity.Flight;
 import org.educa.airline.entity.Luggage;
 import org.educa.airline.entity.Passenger;
-import org.educa.airline.exceptions.*;
+import org.educa.airline.exceptions.MiValidacionException;
 import org.educa.airline.exceptions.flight.FilightYaExistenteException;
 import org.educa.airline.exceptions.flight.FlightNotFoundException;
 import org.educa.airline.exceptions.luggage.LuggageNotFoundException;

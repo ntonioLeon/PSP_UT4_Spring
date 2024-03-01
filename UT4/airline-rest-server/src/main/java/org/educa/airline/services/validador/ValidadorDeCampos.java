@@ -3,8 +3,6 @@ package org.educa.airline.services.validador;
 import org.educa.airline.exceptions.MiValidacionException;
 import org.springframework.stereotype.Component;
 
-import java.util.Scanner;
-
 @Component
 public class ValidadorDeCampos {
 

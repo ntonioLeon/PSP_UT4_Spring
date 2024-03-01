@@ -2,7 +2,6 @@ package org.educa.airline.repository.inmemory;
 
 import org.educa.airline.entity.Passenger;
 import org.educa.airline.repository.PassengerRepository;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

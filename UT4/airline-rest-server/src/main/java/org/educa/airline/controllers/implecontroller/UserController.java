@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.educa.airline.controllers.IUserController;
 import org.educa.airline.dto.UserDTO;
 import org.educa.airline.exceptions.MiValidacionException;
+import org.educa.airline.exceptions.NoAutenticadoException;
 import org.educa.airline.exceptions.NoTenesPoderAquiException;
 import org.educa.airline.exceptions.user.UserDuplicatedException;
 import org.educa.airline.exceptions.user.UserNotFoundException;
@@ -32,7 +33,11 @@ public class UserController implements IUserController {
         this.userMapper = userMapper;
     }
 
-    //POST
+    /**
+     * Metodo que crea usuarios. Controla los duplicados por medio del servuce.
+     * @param userDTO a agregar en el repositotio
+     * @return Un response entity con la respuesta que se desea dar al cliente.
+     */
     @Override
     @PostMapping
     public ResponseEntity<Void> createUser(@Valid @RequestBody UserDTO userDTO) {
@@ -48,7 +53,12 @@ public class UserController implements IUserController {
         }
     }
 
-    //PUT
+    /**
+     * Metodo que actualiza la informacion de un usuario
+     * @param id del user a remplazar
+     * @param userDTO los nuevos datos del user.
+     * @return Un response entity con la respuesta que se desea dar al cliente.
+     */
     @Override
     @PutMapping(path = "/{id}")
     public ResponseEntity<Void> updateUser(@PathVariable("id") String id, @Valid @RequestBody UserDTO userDTO) {
@@ -65,10 +75,16 @@ public class UserController implements IUserController {
             return ResponseEntity.status(403).build();
         } catch (UserDuplicatedException e) {
             return ResponseEntity.status(409).build();
+        } catch (NoAutenticadoException ex) {
+            return ResponseEntity.status(401).build();
         }
     }
 
-    //DELETE
+    /**
+     * Metodo que borra a un usuario del repositorio
+     * @param id del user
+     * @return Un response entity con la respuesta que se desea dar al cliente.
+     */
     @Override
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteUse(@PathVariable("id") String id) {
@@ -80,10 +96,16 @@ public class UserController implements IUserController {
             }
         } catch (NoTenesPoderAquiException ex) {
             return ResponseEntity.status(403).build();
+        } catch (NoAutenticadoException ex) {
+            return ResponseEntity.status(401).build();
         }
     }
 
-    //GET
+    /**
+     * Metodo que busca un usuario en el repositorio
+     * @param id del user
+     * @return Un response entity con el DTO del user al que se busca.
+     */
     @Override
     @GetMapping(path = "/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable("id") String id) {
@@ -101,6 +123,8 @@ public class UserController implements IUserController {
             return ResponseEntity.status(400).build();
         } catch (UserNotFoundException ex) {
             return ResponseEntity.notFound().build();
+        } catch (NoAutenticadoException ex) {
+            return ResponseEntity.status(401).build();
         }
     }
 }

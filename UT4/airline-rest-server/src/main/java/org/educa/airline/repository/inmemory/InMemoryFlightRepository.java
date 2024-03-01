@@ -2,7 +2,6 @@ package org.educa.airline.repository.inmemory;
 
 import org.educa.airline.entity.Flight;
 import org.educa.airline.repository.FlightRepository;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;

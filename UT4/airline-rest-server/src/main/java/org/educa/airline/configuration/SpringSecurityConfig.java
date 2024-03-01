@@ -45,7 +45,7 @@ public class SpringSecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/user/{id}").hasAnyRole("admin", "personal", "usuario")
                                 .requestMatchers("/flights/add", "/flights/{cod}/delete", "/flights/{cod}/update").hasRole("admin")
                                 .requestMatchers(HttpMethod.GET, "/flights", "/flights/{cod}").authenticated()
-                                .requestMatchers("/flights/{cod}/passenger", "/flights/{cod}/passenger/{nif}" , "/flights/{cod}/passengers").hasAnyRole("admin", "personal")
+                                .requestMatchers("/flights/{cod}/passenger", "/flights/{cod}/passenger/{nif}" , "/flights/{cod}/passengers").hasRole("personal")
                                 .requestMatchers("/flights/{cod}/passengers/{nif}/luggage/{id}").hasRole("personal")
                                 .requestMatchers("/flights/{cod}/passengers/{nif}/luggage").hasRole("personal")
                                 .requestMatchers("/flights/{cod}/passengers/luggages").hasRole("personal")

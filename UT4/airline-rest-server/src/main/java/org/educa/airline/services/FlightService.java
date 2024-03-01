@@ -1,13 +1,10 @@
 package org.educa.airline.services;
 
 import lombok.Getter;
-import org.educa.airline.dto.FlightDTO;
 import org.educa.airline.entity.Flight;
-import org.educa.airline.entity.Passenger;
 import org.educa.airline.exceptions.MiValidacionException;
 import org.educa.airline.exceptions.flight.FilightYaExistenteException;
 import org.educa.airline.exceptions.flight.FlightNotFoundException;
-import org.educa.airline.exceptions.passenger.PassengerNotFoundException;
 import org.educa.airline.repository.inmemory.InMemoryFlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
